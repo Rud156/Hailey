@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MemoryManager.h"
 #include <cstdlib>
+#include "Utilities.h"
 
 namespace Memory
 {
@@ -108,8 +109,16 @@ namespace Memory
 
 		// Assign Each Part of Memory
 		memoryAddress = head; // Assign the Block Descriptor Pointer
+
 		void* userMemoryAddress = static_cast<void*>(static_cast<char*>(memoryAddress) +
 			this->_blockDescriptorPointerSize + this->GuardBlockSize); // Assign the User Address
+		// Just assign Empty Block Data to the User Memory
+		// Ease of Debugging and to validate data sent back by the Manager
+		// TODO: Check if sizeof(int) is correct
+		for (size_t i = 0; i < contiguousMemorySizeRequired; i += sizeof(int))
+		{
+			*(static_cast<int*>(userMemoryAddress) + i) = EmptyBlockData;
+		}
 
 		void* firstGuardPosition = static_cast<void*>(static_cast<char*>(memoryAddress) +
 			this->_blockDescriptorPointerSize);
@@ -122,13 +131,67 @@ namespace Memory
 		return userMemoryAddress;
 	}
 
-	void* MemoryManager::allocate(size_t contiguousMemorySizeRequired, unsigned alignment)
+	void* MemoryManager::allocate(size_t contiguousMemorySizeRequired, unsigned int alignment)
 	{
 		// Return NullPtr if there are no BlockDescriptors available
 		if (_availableDescriptors == nullptr)
 		{
 			return nullptr;
 		}
+
+		const size_t totalRequiredMemorySize = this->_blockDescriptorPointerSize + this->GuardBlockSize * 2 +
+			contiguousMemorySizeRequired;
+		const size_t adjustedMemorySize = Utils::Utilities::GetRoundNextMultiple(totalRequiredMemorySize, alignment);
+
+		void* memoryAddress = this->getFirstFreeBlock(adjustedMemorySize);
+
+		// Return NullPtr if there is no consecutive memory fit available
+		if (memoryAddress == nullptr)
+		{
+			return nullptr;
+		}
+
+		// At this point we are definitely sure that memory can be provided
+
+		// Get the head BlockDescriptor address to send to the user
+		BlockDescriptor* head = this->_availableDescriptors;
+		this->_availableDescriptors = head->nextBlockDescriptor;
+
+		head->memorySize = contiguousMemorySizeRequired;
+		head->memoryStartAddress = this->_blockDescriptorPointerSize + this->GuardBlockSize;
+
+		// Assign Each Part of Memory
+		memoryAddress = head; // Assign the Block Descriptor Pointer
+
+		void* userMemoryAddress = static_cast<void*>(static_cast<char*>(memoryAddress) +
+			this->_blockDescriptorPointerSize + this->GuardBlockSize); // Assign the User Address
+		// Just assign Empty Block Data to the User Memory
+		// Ease of Debugging and to validate data sent back by the Manager
+		// TODO: Check if sizeof(int) is correct
+		for (size_t i = 0; i < contiguousMemorySizeRequired; i += sizeof(int))
+		{
+			*(static_cast<int*>(userMemoryAddress) + i) = EmptyBlockData;
+		}
+
+		void* firstGuardPosition = static_cast<void*>(static_cast<char*>(memoryAddress) +
+			this->_blockDescriptorPointerSize);
+		*static_cast<int*>(firstGuardPosition) = this->DeadBlockData; // Assign the First Guard Block
+
+		void* secondGuardPosition = static_cast<void*>(static_cast<char*>(memoryAddress) +
+			this->_blockDescriptorPointerSize + this->GuardBlockSize + contiguousMemorySizeRequired);
+		*static_cast<int*>(secondGuardPosition) = this->DeadBlockData; // Assign the Second Guard Block
+
+		//Assign EmptyBlockData to the Alignment Bytes
+		const size_t adjustedMemoryDiff = adjustedMemorySize - totalRequiredMemorySize;
+		for (size_t i = 0; i < adjustedMemoryDiff; i += sizeof(int))
+		{
+			*(static_cast<int*>(secondGuardPosition) + this->GuardBlockSize + i) = this->EmptyBlockData;
+		}
+
+		// The rest of the memory that is left is just void memory for the alignment
+
+
+		return userMemoryAddress;
 	}
 
 	void* MemoryManager::getFirstFreeBlock(const size_t sizeRequired)

@@ -32,7 +32,7 @@ int main()
 
 		Math::Point2D P7 = (((P1 + P2) * 2.0f) - -P3) / 2.0f;
 
-		bool bArentEqual = P6 != P4;
+		const bool bArentEqual = P6 != P4;
 		std::cout << bArentEqual << std::endl;
 
 		Engine::ShutDown();
