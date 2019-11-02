@@ -1,39 +1,75 @@
 // MonsterChase.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "pch.h"
 #include "Engine.h"
-#include "Point2D.h"
 #include <conio.h>
-#include <iostream>
+#include "HeapManagerUnitTest.h"
+#include "MemoryManager.h"
+#include <Windows.h>
+#include <cassert>
+#include <cstdio>
 
 int main()
 {
 	{
 		Engine::Init();
 
-		Math::Point2D P1(0.0f, 0.0f);
-		Math::Point2D P2(0.0f, 0.0f);
+		// const size_t sizeHeap = 1024 * 1024;
+		// const unsigned int numDescriptors = 6;
+		//
+		// SYSTEM_INFO SysInfo;
+		// GetSystemInfo(&SysInfo);
+		// // round our size to a multiple of memory page size
+		// assert(SysInfo.dwPageSize > 0);
+		// const size_t sizeHeapInPageMultiples = SysInfo.dwPageSize * ((sizeHeap + SysInfo.dwPageSize) /
+		// 	SysInfo.dwPageSize);
+		// void* pHeapMemory = VirtualAlloc(nullptr, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+		//
+		// Memory::MemoryManager* heapManager = Memory::MemoryManager::Instance();
+		// heapManager->create(pHeapMemory, sizeHeap, numDescriptors);
+		//
+		// heapManager->showAvailableBlocks();
+		// heapManager->showFreeBlocks();
+		// heapManager->showOutstandingMemory();
+		//
+		// const size_t largestBeforeAlloc = heapManager->getLargestFreeBlockSize();
+		// void* pPtr_1 = heapManager->allocate(10);
+		// pPtr_1 = heapManager->reallocate(pPtr_1, 1022);
+		// void* pPtr_2 = heapManager->allocate(1022);
+		// pPtr_2 = heapManager->reallocate(pPtr_2, 1022);
+		// void* pPtr_3 = heapManager->allocate(10);
+		//
+		// heapManager->showAvailableBlocks();
+		// heapManager->showFreeBlocks();
+		// heapManager->showOutstandingMemory();
+		//
+		// heapManager->freeMem(pPtr_3);
+		// heapManager->freeMem(pPtr_1);
+		// heapManager->freeMem(pPtr_2);
+		//
+		// heapManager->showAvailableBlocks();
+		// heapManager->showFreeBlocks();
+		// heapManager->showOutstandingMemory();
+		//
+		// heapManager->collect();
+		//
+		// heapManager->showAvailableBlocks();
+		// heapManager->showFreeBlocks();
+		// heapManager->showOutstandingMemory();
 
-		Math::Point2D P3 = P1 + P2;
-		P3 = P1 - P2;
+		const auto heapManagerUnitTest = new HeapManagerUnitTest();
+		const bool success = heapManagerUnitTest->HeapManager_UnitTest();
 
-		Math::Point2D P4 = P1 * 0.5f;
+		if (success)
+		{
+			printf_s("Testing Complete\n");
+		}
+		else
+		{
+			printf_s("Testing Failed\n");
+		}
 
-		Math::Point2D P5 = P1 / 2.0f;
-
-		Math::Point2D P6 = -P4;
-
-		P6 *= 2.0f;
-		P5 /= 4.0f;
-
-		P2 += P1;
-		P3 -= P1;
-
-		Math::Point2D P7 = (((P1 + P2) * 2.0f) - -P3) / 2.0f;
-
-		const bool bArentEqual = P6 != P4;
-		std::cout << bArentEqual << std::endl;
+		delete heapManagerUnitTest;
 
 		Engine::ShutDown();
 	}
