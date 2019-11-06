@@ -18,8 +18,7 @@ namespace HeapManagerProxy
 	{
 		assert(i_pManager);
 
-		// TODO: Enable this after function is created
-		// i_pManager->destroy();
+		delete i_pManager;
 	}
 
 	void* alloc(Memory::MemoryManager* i_pManager, size_t i_size)

@@ -1,5 +1,4 @@
 #include "Point2D.h"
-#include <iostream>
 
 namespace Math
 {
@@ -69,12 +68,6 @@ namespace Math
 		_y /= operation;
 
 		return *this;
-	}
-
-	std::ostream& operator<<(std::ostream& stream, const Point2D& point2d)
-	{
-		stream << "( " << point2d._x << ", " << point2d._y << " )";
-		return stream;
 	}
 
 	void Point2D::set(const Point2D& point2d)

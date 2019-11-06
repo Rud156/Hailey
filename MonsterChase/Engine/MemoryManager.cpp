@@ -1,8 +1,8 @@
 #include "MemoryManager.h"
 #include <cstdlib>
 #include "Utilities.h"
-#include <cstdio>
 #include <memory>
+#include <cassert>
 
 namespace Memory
 {
@@ -100,11 +100,7 @@ namespace Memory
 	{
 		// Completely exit if no descriptors are available
 		// This should never happen
-		if (this->_availableDescriptors == nullptr)
-		{
-			// TODO: Change this later on...
-			exit(1);
-		}
+		assert(this->_availableDescriptors != nullptr);
 
 		BlockDescriptor* freeMemoryBlockDescriptor = this->_availableDescriptors;
 		this->_availableDescriptors = this->_availableDescriptors->nextBlockDescriptor;
@@ -247,11 +243,6 @@ namespace Memory
 
 	void* MemoryManager::reallocate(void* pointer, const size_t contiguousMemorySizeRequired)
 	{
-		if (this->_availableDescriptors == nullptr)
-		{
-			return nullptr;
-		}
-
 		void* userMemoryAddress = this->allocate(contiguousMemorySizeRequired);
 
 		if (userMemoryAddress == nullptr)
@@ -284,13 +275,9 @@ namespace Memory
 		return userMemoryAddress;
 	}
 
-	void* MemoryManager::reallocate(void* pointer, const size_t contiguousMemorySizeRequired, const unsigned int alignment)
+	void* MemoryManager::reallocate(void* pointer, const size_t contiguousMemorySizeRequired,
+	                                const unsigned int alignment)
 	{
-		if (this->_availableDescriptors == nullptr)
-		{
-			return nullptr;
-		}
-
 		void* userMemoryAddress = this->allocate(contiguousMemorySizeRequired, alignment);
 
 		if (userMemoryAddress == nullptr)
@@ -537,7 +524,7 @@ namespace Memory
 		{
 			// Make the next the head as the current one was the First one in the list
 			nextBlockDescriptor->previousBlockDescriptor = nullptr;
-			_inUseBlockDescriptors = nextBlockDescriptor;
+			this->_inUseBlockDescriptors = nextBlockDescriptor;
 		}
 			// This means that the current BlockDescriptor is the tail
 		else if (nextBlockDescriptor == nullptr && previousBlockDescriptor != nullptr)
@@ -549,7 +536,7 @@ namespace Memory
 		else if (nextBlockDescriptor == nullptr && previousBlockDescriptor == nullptr)
 		{
 			// Don't care just clear the list
-			_inUseBlockDescriptors = nullptr;
+			this->_inUseBlockDescriptors = nullptr;
 		}
 			// This means that the BlockDescriptor was somewhere in the middle of the list
 		else if (nextBlockDescriptor != nullptr && previousBlockDescriptor != nullptr)

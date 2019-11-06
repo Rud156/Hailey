@@ -8,7 +8,7 @@
 #include <vector>
 #include <ctime>
 
-#define SUPPORTS_REALLOC
+// #define SUPPORTS_REALLOC
 #define SUPPORTS_ALIGNMENT
 #define SUPPORTS_SHOWFREEBLOCKS
 #define SUPPORTS_SHOWOUTSTANDINGALLOCATIONS

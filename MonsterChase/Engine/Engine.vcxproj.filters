@@ -51,6 +51,12 @@
     <ClInclude Include="Utilities.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryManager_Inl.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Point2D_Inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

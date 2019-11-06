@@ -3,19 +3,28 @@
 
 #include "Engine.h"
 #include <conio.h>
+#include "Point2D.h"
+#include <iostream>
 #include "HeapManagerUnitTest.h"
-#include "MemoryManager.h"
+#include <ctime>
+#include <vector>
 #include <Windows.h>
 #include <cassert>
-#include <cstdio>
+#include "MemoryManager.h"
 
 int main()
 {
 	{
 		Engine::Init();
 
+
+		// srand(static_cast<unsigned int>(time(nullptr)));
+		//
+		// std::vector<int> comparisonVector;
+		//
+		// const size_t maxRandomValue = 50000;
 		// const size_t sizeHeap = 1024 * 1024;
-		// const unsigned int numDescriptors = 6;
+		// const unsigned int numDescriptors = 2048;
 		//
 		// SYSTEM_INFO SysInfo;
 		// GetSystemInfo(&SysInfo);
@@ -25,37 +34,40 @@ int main()
 		// 	SysInfo.dwPageSize);
 		// void* pHeapMemory = VirtualAlloc(nullptr, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
 		//
-		// Memory::MemoryManager* heapManager = Memory::MemoryManager::Instance();
-		// heapManager->create(pHeapMemory, sizeHeap, numDescriptors);
+		// Memory::MemoryManager* memoryManager = Memory::MemoryManager::Instance();
+		// memoryManager->create(pHeapMemory, sizeHeap, numDescriptors);
 		//
-		// heapManager->showAvailableBlocks();
-		// heapManager->showFreeBlocks();
-		// heapManager->showOutstandingMemory();
+		// memoryManager->showOutstandingMemory();
+		// memoryManager->showFreeBlocks();
 		//
-		// const size_t largestBeforeAlloc = heapManager->getLargestFreeBlockSize();
-		// void* pPtr_1 = heapManager->allocate(10);
-		// pPtr_1 = heapManager->reallocate(pPtr_1, 1022);
-		// void* pPtr_2 = heapManager->allocate(1022);
-		// pPtr_2 = heapManager->reallocate(pPtr_2, 1022);
-		// void* pPtr_3 = heapManager->allocate(10);
+		// const size_t totalIntSize = 512;
+		// size_t currentArraySize = 0;
+		// int* testArray = static_cast<int*>(memoryManager->allocate(sizeof(int)));
+		// while (currentArraySize != totalIntSize)
+		// {
+		// 	testArray = static_cast<int*>(memoryManager->reallocate(testArray, sizeof(int) * (currentArraySize + 1)));
+		// 	int randomNumber = (rand() & maxRandomValue - 1) + 1;
 		//
-		// heapManager->showAvailableBlocks();
-		// heapManager->showFreeBlocks();
-		// heapManager->showOutstandingMemory();
+		// 	comparisonVector.push_back(randomNumber);
+		// 	testArray[currentArraySize] = randomNumber;
 		//
-		// heapManager->freeMem(pPtr_3);
-		// heapManager->freeMem(pPtr_1);
-		// heapManager->freeMem(pPtr_2);
+		// 	currentArraySize += 1;
+		// }
 		//
-		// heapManager->showAvailableBlocks();
-		// heapManager->showFreeBlocks();
-		// heapManager->showOutstandingMemory();
+		// for (size_t i = 0; i < currentArraySize; i++)
+		// {
+		// 	printf_s("Array Value: %d, Vector Value: %d\n", testArray[i], comparisonVector[i]);
+		// 	assert(testArray[i] == comparisonVector[i]);
+		// }
+		// printf_s("Wowser. Testing Complete\n");
 		//
-		// heapManager->collect();
+		// memoryManager->freeMem(testArray);
+		// memoryManager->collect();
 		//
-		// heapManager->showAvailableBlocks();
-		// heapManager->showFreeBlocks();
-		// heapManager->showOutstandingMemory();
+		// memoryManager->showOutstandingMemory();
+		// memoryManager->showFreeBlocks();
+		//
+		// delete memoryManager;
 
 		const auto heapManagerUnitTest = new HeapManagerUnitTest();
 		const bool success = heapManagerUnitTest->HeapManager_UnitTest();
@@ -68,11 +80,13 @@ int main()
 		{
 			printf_s("Testing Failed\n");
 		}
-
+		
 		delete heapManagerUnitTest;
 
 		Engine::ShutDown();
 	}
+
+	_CrtDumpMemoryLeaks();
 
 	_getch();
 

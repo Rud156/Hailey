@@ -153,7 +153,9 @@
   <ItemGroup>
     <ClInclude Include="Engine.h" />
     <ClInclude Include="MemoryManager.h" />
+    <ClInclude Include="MemoryManager_Inl.h" />
     <ClInclude Include="Point2D.h" />
+    <ClInclude Include="Point2D_Inl.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Utilities.h" />
