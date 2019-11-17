@@ -29,7 +29,8 @@ namespace Memory
 	{
 		if (_instance == nullptr)
 		{
-			_instance = new MemoryManager();
+			_instance = static_cast<MemoryManager*>(malloc(sizeof(MemoryManager)));
+			new(_instance)MemoryManager();
 		}
 
 		return _instance;
@@ -510,6 +511,11 @@ namespace Memory
 
 	void MemoryManager::freeMem(void* pointer)
 	{
+		if (pointer == nullptr)
+		{
+			return;
+		}
+
 		void* blockDescriptorMemory = static_cast<void*>(static_cast<char*>(pointer) -
 			this->_intSize - this->_blockDescriptorPointerSize
 		);

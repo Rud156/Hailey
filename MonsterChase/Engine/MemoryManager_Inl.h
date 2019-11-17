@@ -104,16 +104,16 @@ namespace Memory
 	inline void MemoryManager::printList(const char* headerString, BlockDescriptor* head)
 	{
 		printf_s("%s\n", headerString);
+		printf_s("=====================================\n");
 
 		BlockDescriptor* headBlock = head;
 		while (headBlock != nullptr)
 		{
-			printf_s("Size: %zu\n", headBlock->memorySize);
-			printf_s("Address: %p\n", &headBlock->memoryStartPointer);
-			printf_s("================\n");
+			printf_s("Address => %p\t||\tSize => %zu\n", &headBlock->memoryStartPointer, headBlock->memorySize);
 
 			headBlock = headBlock->nextBlockDescriptor;
 		}
+		printf_s("\n");
 	}
 
 	// Helper Methods

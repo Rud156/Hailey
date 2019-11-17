@@ -183,12 +183,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GameMain.h" />
+    <ClInclude Include="GridActorController.h" />
     <ClInclude Include="HeapManager-Sample.h" />
     <ClInclude Include="HeapManagerProxy.h" />
     <ClInclude Include="HeapManagerUnitTest.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="GridActorController.cpp" />
     <ClCompile Include="HeapManagerProxy.cpp" />
     <ClCompile Include="HeapManagerUnitTest.cpp" />
     <ClCompile Include="MonsterChase.cpp" />

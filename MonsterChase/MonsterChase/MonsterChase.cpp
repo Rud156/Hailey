@@ -3,85 +3,79 @@
 
 #include "Engine.h"
 #include <conio.h>
-#include "Point2D.h"
 #include <iostream>
-#include "HeapManagerUnitTest.h"
-#include <ctime>
-#include <vector>
-#include <Windows.h>
-#include <cassert>
+#include "GameMain.h"
+#include "Node2D.h"
 #include "MemoryManager.h"
+#include  <Windows.h>
+#include <cassert>
+
+Memory::MemoryManager* memoryManager = nullptr;
+
+void* operator new(size_t size)
+{
+	if (memoryManager == nullptr)
+	{
+		return malloc(size);
+	}
+
+	return memoryManager->allocate(size);
+}
+
+void* operator new[](size_t size)
+{
+	if (memoryManager == nullptr)
+	{
+		return malloc(size);
+	}
+
+	return memoryManager->allocate(size);
+}
+
+void operator delete(void* pointer)
+{
+	memoryManager->freeMem(pointer);
+}
+
+void operator delete[](void* pointer)
+{
+	memoryManager->freeMem(pointer);
+}
 
 int main()
 {
 	{
 		Engine::Init();
 
+		const size_t maxRandomValue = 50000;
+		const size_t sizeHeap = 1024 * 1024;
+		const unsigned int numDescriptors = 2048;
 
-		// srand(static_cast<unsigned int>(time(nullptr)));
-		//
-		// std::vector<int> comparisonVector;
-		//
-		// const size_t maxRandomValue = 50000;
-		// const size_t sizeHeap = 1024 * 1024;
-		// const unsigned int numDescriptors = 2048;
-		//
-		// SYSTEM_INFO SysInfo;
-		// GetSystemInfo(&SysInfo);
-		// // round our size to a multiple of memory page size
-		// assert(SysInfo.dwPageSize > 0);
-		// const size_t sizeHeapInPageMultiples = SysInfo.dwPageSize * ((sizeHeap + SysInfo.dwPageSize) /
-		// 	SysInfo.dwPageSize);
-		// void* pHeapMemory = VirtualAlloc(nullptr, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
-		//
-		// Memory::MemoryManager* memoryManager = Memory::MemoryManager::Instance();
-		// memoryManager->create(pHeapMemory, sizeHeap, numDescriptors);
-		//
-		// memoryManager->showOutstandingMemory();
-		// memoryManager->showFreeBlocks();
-		//
-		// const size_t totalIntSize = 512;
-		// size_t currentArraySize = 0;
-		// int* testArray = static_cast<int*>(memoryManager->allocate(sizeof(int)));
-		// while (currentArraySize != totalIntSize)
-		// {
-		// 	testArray = static_cast<int*>(memoryManager->reallocate(testArray, sizeof(int) * (currentArraySize + 1)));
-		// 	int randomNumber = (rand() & maxRandomValue - 1) + 1;
-		//
-		// 	comparisonVector.push_back(randomNumber);
-		// 	testArray[currentArraySize] = randomNumber;
-		//
-		// 	currentArraySize += 1;
-		// }
-		//
-		// for (size_t i = 0; i < currentArraySize; i++)
-		// {
-		// 	printf_s("Array Value: %d, Vector Value: %d\n", testArray[i], comparisonVector[i]);
-		// 	assert(testArray[i] == comparisonVector[i]);
-		// }
-		// printf_s("Wowser. Testing Complete\n");
-		//
-		// memoryManager->freeMem(testArray);
-		// memoryManager->collect();
-		//
-		// memoryManager->showOutstandingMemory();
-		// memoryManager->showFreeBlocks();
-		//
-		// delete memoryManager;
+		SYSTEM_INFO SysInfo;
+		GetSystemInfo(&SysInfo);
+		// round our size to a multiple of memory page size
+		assert(SysInfo.dwPageSize > 0);
+		const size_t sizeHeapInPageMultiples = SysInfo.dwPageSize * ((sizeHeap + SysInfo.dwPageSize) /
+			SysInfo.dwPageSize);
+		void* pHeapMemory = VirtualAlloc(nullptr, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
 
-		const auto heapManagerUnitTest = new HeapManagerUnitTest();
-		const bool success = heapManagerUnitTest->HeapManager_UnitTest();
+		memoryManager = Memory::MemoryManager::Instance();
+		memoryManager->create(pHeapMemory, sizeHeap, numDescriptors);
 
-		if (success)
-		{
-			printf_s("Testing Complete\n");
-		}
-		else
-		{
-			printf_s("Testing Failed\n");
-		}
-		
-		delete heapManagerUnitTest;
+		memoryManager->showOutstandingMemory();
+		memoryManager->showFreeBlocks();
+
+		auto gameMain = new Game::GameMain();
+		gameMain->InitializeAndRun();
+		delete gameMain;
+
+		memoryManager->showOutstandingMemory();
+		memoryManager->showFreeBlocks();
+
+		memoryManager->collect();
+		memoryManager->showFreeBlocks();
+
+		free(memoryManager);
 
 		Engine::ShutDown();
 	}

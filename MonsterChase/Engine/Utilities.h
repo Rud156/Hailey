@@ -10,5 +10,6 @@ namespace Utils
 
 	public:
 		static size_t GetRoundNextMultiple(size_t number, unsigned int multiple);
+		
 	};
 }

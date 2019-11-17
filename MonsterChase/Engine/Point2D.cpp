@@ -82,13 +82,29 @@ namespace Math
 		_y = y;
 	}
 
+	void Point2D::set(int x, const int y)
+	{
+		_x = static_cast<float>(x);
+		_y = static_cast<float>(y);
+	}
+
 	void Point2D::setX(const float x)
 	{
 		_x = x;
 	}
 
+	void Point2D::setX(int x)
+	{
+		_x = static_cast<float>(x);
+	}
+
 	void Point2D::setY(const float y)
 	{
 		_y = y;
+	}
+
+	void Point2D::setY(int y)
+	{
+		_y = static_cast<float>(y);
 	}
 }

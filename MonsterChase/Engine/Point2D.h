@@ -48,8 +48,11 @@ namespace Math
 		// Utility Methods
 		void set(const Point2D& point2d);
 		void set(float x, float y);
+		void set(int x, int y);
 		void setX(float x);
+		void setX(int x);
 		void setY(float y);
+		void setY(int y);
 
 		inline bool isZero() const;
 
