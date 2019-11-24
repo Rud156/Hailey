@@ -9,7 +9,7 @@ namespace Game
 	{
 		_gridGameObject = new Core::Node();
 		_gridGameObject->AddComponent<Core::Components::Transform::Node2D>();
-		
+
 		_gridActorName = nullptr;
 		_gridActorHealth = 0;
 	}

@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include "MemoryManager.h"
+#include "MemoryManager_Extern.h"
 
 #define __TRACK_ALLOCATIONS
 
@@ -10,15 +11,13 @@ namespace HeapManagerProxy
 	Memory::MemoryManager* CreateMemoryManager(void* i_pMemory, size_t i_sizeMemory,
 	                                           unsigned int i_numDescriptors)
 	{
-		Memory::MemoryManager::Instance()->create(i_pMemory, i_sizeMemory, i_numDescriptors);
-		return Memory::MemoryManager::Instance();
+		Memory::MemoryManager::create(i_pMemory, i_sizeMemory, i_numDescriptors);
+		return memoryManager;
 	}
 
 	void Destroy(Memory::MemoryManager* i_pManager)
 	{
 		assert(i_pManager);
-
-		delete i_pManager;
 	}
 
 	void* alloc(Memory::MemoryManager* i_pManager, size_t i_size)

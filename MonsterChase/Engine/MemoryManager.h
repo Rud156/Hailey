@@ -35,6 +35,7 @@ namespace Memory
 		// Construction
 		static MemoryManager* _instance;
 		MemoryManager();
+		~MemoryManager();
 
 		// Creation
 		void createBlockDescriptors();
@@ -55,15 +56,11 @@ namespace Memory
 		inline static void printList(const char* headerString, BlockDescriptor* head);
 
 	public:
-		// Singleton
-		static MemoryManager* Instance();
-		~MemoryManager();
-
 		// Variables
 		size_t getMinimumToLeave() const;
 
 		// Creation
-		void create(void* heapMemoryStartAddress, size_t heapMemoryTotalSize, size_t maxBlockDescriptors);
+		static void create(void* heapMemoryStartAddress, size_t heapMemoryTotalSize, size_t maxBlockDescriptors);
 
 		// Allocation
 		void* allocate(size_t contiguousMemorySizeRequired);

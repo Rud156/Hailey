@@ -9,80 +9,75 @@
 #include "MemoryManager.h"
 #include  <Windows.h>
 #include <cassert>
+#include "MemoryManager_Extern.h"
+#include "HeapManagerUnitTest.h"
 
-Memory::MemoryManager* memoryManager = nullptr;
-
-void* operator new(size_t size)
-{
-	if (memoryManager == nullptr)
-	{
-		return malloc(size);
-	}
-
-	return memoryManager->allocate(size);
-}
-
-void* operator new[](size_t size)
-{
-	if (memoryManager == nullptr)
-	{
-		return malloc(size);
-	}
-
-	return memoryManager->allocate(size);
-}
-
-void operator delete(void* pointer)
-{
-	memoryManager->freeMem(pointer);
-}
-
-void operator delete[](void* pointer)
-{
-	memoryManager->freeMem(pointer);
-}
+// _Ret_notnull_ _Post_writable_byte_size_(_Size)
+// _VCRT_ALLOCATOR void* __CRTDECL operator new(
+// 	size_t _Size
+// )
+// {
+// 	return memoryManager->allocate(_Size);
+// }
+//
+// _Ret_notnull_ _Post_writable_byte_size_(_Size)
+// _VCRT_ALLOCATOR void* __CRTDECL operator new[](
+// 	size_t _Size
+// )
+// {
+// 	return memoryManager->allocate(_Size);
+// }
+//
+// void operator delete(void* pointer)
+// {
+// 	memoryManager->freeMem(pointer);
+// }
+//
+// void operator delete[](void* pointer)
+// {
+// 	memoryManager->freeMem(pointer);
+// }
 
 int main()
 {
 	{
 		Engine::Init();
 
-		const size_t maxRandomValue = 50000;
-		const size_t sizeHeap = 1024 * 1024;
-		const unsigned int numDescriptors = 2048;
+		// const size_t sizeHeap = 1024 * 1024;
+		// const unsigned int numDescriptors = 2048;
+		//
+		// SYSTEM_INFO SysInfo;
+		// GetSystemInfo(&SysInfo);
+		// // round our size to a multiple of memory page size
+		// assert(SysInfo.dwPageSize > 0);
+		// const size_t sizeHeapInPageMultiples = SysInfo.dwPageSize * ((sizeHeap + SysInfo.dwPageSize) / SysInfo.dwPageSize);
+		// void* pHeapMemory = VirtualAlloc(nullptr, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+		//
+		// Memory::MemoryManager::create(pHeapMemory, sizeHeap, numDescriptors);
+		//
+		// memoryManager->showOutstandingMemory();
+		// memoryManager->showFreeBlocks();
+		//
+		// auto gameMain = new Game::GameMain();
+		// gameMain->InitializeAndRun();
+		// delete gameMain;
+		//
+		// memoryManager->showOutstandingMemory();
+		// memoryManager->showFreeBlocks();
+		//
+		// memoryManager->collect();
+		// memoryManager->showFreeBlocks();
 
-		SYSTEM_INFO SysInfo;
-		GetSystemInfo(&SysInfo);
-		// round our size to a multiple of memory page size
-		assert(SysInfo.dwPageSize > 0);
-		const size_t sizeHeapInPageMultiples = SysInfo.dwPageSize * ((sizeHeap + SysInfo.dwPageSize) /
-			SysInfo.dwPageSize);
-		void* pHeapMemory = VirtualAlloc(nullptr, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
-
-		memoryManager = Memory::MemoryManager::Instance();
-		memoryManager->create(pHeapMemory, sizeHeap, numDescriptors);
-
-		memoryManager->showOutstandingMemory();
-		memoryManager->showFreeBlocks();
-
-		auto gameMain = new Game::GameMain();
-		gameMain->InitializeAndRun();
-		delete gameMain;
-
-		memoryManager->showOutstandingMemory();
-		memoryManager->showFreeBlocks();
-
-		memoryManager->collect();
-		memoryManager->showFreeBlocks();
-
-		free(memoryManager);
+		const auto heapManager = new HeapManagerUnitTest();
+		heapManager->HeapManager_UnitTest();
+		delete heapManager;
 
 		Engine::ShutDown();
 	}
 
 	_CrtDumpMemoryLeaks();
 
-	_getch();
+	(void)_getch();
 
 	return 0;
 }

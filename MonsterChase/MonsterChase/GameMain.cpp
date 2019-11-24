@@ -3,6 +3,7 @@
 #include "Node2D.h"
 #include <ctime>
 #include <conio.h>
+#include "MemoryManager_Extern.h"
 
 #define KeyUp 72
 #define KeyDown 80
@@ -29,7 +30,7 @@ namespace Game
 		{
 			delete this->_monsters[i];
 		}
-		delete this->_monsters;
+		delete[] this->_monsters;
 	}
 
 	// Constructor and Destructor
@@ -40,16 +41,16 @@ namespace Game
 	{
 		// Player
 		printf_s("Enter You Name: ");
-		char* input = static_cast<char*>(malloc(sizeof(char)));
+		char* input = static_cast<char*>(memoryManager->allocate(sizeof(char)));
 		int inputLength = 0;
 		int inputCharacter;
 		while ((inputCharacter = getchar()) != '\n' && inputCharacter != EOF)
 		{
-			input = static_cast<char*>(realloc(input, sizeof(char) * (inputLength + 1)));
+			input = static_cast<char*>(memoryManager->reallocate(input, sizeof(char) * (inputLength + 1)));
 			input[inputLength] = static_cast<char>(inputCharacter);
 			inputLength += 1;
 		}
-		input = static_cast<char*>(realloc(input, sizeof(char) * (inputLength + 1)));
+		input = static_cast<char*>(memoryManager->reallocate(input, sizeof(char) * (inputLength + 1)));
 		input[inputLength] = '\0';
 
 		const size_t maxStringLength = strlen(input) > MaxStringSize - 1 ? MaxStringSize - 1 : strlen(input);
@@ -59,7 +60,7 @@ namespace Game
 			playerName[i] = input[i];
 		}
 		playerName[maxStringLength] = '\0';
-		free(input);
+		memoryManager->freeMem(input);
 
 		this->_player = new GridActorController();
 		this->_player->SetActorName(playerName);
@@ -81,19 +82,19 @@ namespace Game
 		{
 			initialMonsterCount = MaxMonsters;
 		}
-		getchar();
+		(void)getchar();
 
 		// Input Monster Base Name
 		printf_s("Enter starting characters of Monster Name: ");
-		input = static_cast<char*>(malloc(sizeof(char)));
+		input = static_cast<char*>(memoryManager->allocate(sizeof(char)));
 		inputLength = 0;
 		while ((inputCharacter = getchar()) != '\n' && inputCharacter != EOF)
 		{
-			input = static_cast<char*>(realloc(input, sizeof(char) * (inputLength + 1)));
+			input = static_cast<char*>(memoryManager->reallocate(input, sizeof(char) * (inputLength + 1)));
 			input[inputLength] = static_cast<char>(inputCharacter);
 			inputLength += 1;
 		}
-		input = static_cast<char*>(realloc(input, sizeof(char) * (inputLength + 1)));
+		input = static_cast<char*>(memoryManager->reallocate(input, sizeof(char) * (inputLength + 1)));
 		input[inputLength] = '\0';
 
 		const size_t maxMonsterBaseNameLength = strlen(input) > MaxInputStringSize ? MaxInputStringSize : strlen(input);
@@ -103,7 +104,7 @@ namespace Game
 			this->_monsterBaseName[i] = input[i];
 		}
 		this->_monsterBaseName[maxMonsterBaseNameLength] = '\0'; // Terminate the string after copying
-		free(input);
+		memoryManager->freeMem(input);
 
 		this->_monsters = new GridActorController*[MaxMonsters];
 		for (int i = 0; i < MaxMonsters; i++)

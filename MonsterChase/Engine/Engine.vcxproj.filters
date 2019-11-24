@@ -87,6 +87,9 @@
     <ClInclude Include="Node2D.h">
       <Filter>Header Files\Core\Components\Transform</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryManager_Extern.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

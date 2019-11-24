@@ -3,6 +3,10 @@
 #include "Utilities.h"
 #include <memory>
 #include <cassert>
+#include <chrono>
+#include "MemoryManager_Extern.h"
+
+Memory::MemoryManager* memoryManager = nullptr;
 
 namespace Memory
 {
@@ -10,7 +14,12 @@ namespace Memory
 
 	MemoryManager* MemoryManager::_instance = nullptr;
 
-	MemoryManager::MemoryManager()
+	MemoryManager::MemoryManager(): _intSize(0), _maxBlockDescriptors(0), _blockDescriptorSize(0), _blockDescriptorPointerSize(0), _memoryStartPointer(nullptr),
+	                                _maxMemorySize(0),
+	                                _userMemoryStartPointer(nullptr),
+	                                _availableDescriptors(nullptr),
+	                                _freeBlocks(nullptr),
+	                                _inUseBlockDescriptors(nullptr)
 	{
 		// Constructor must be empty and not call any reference
 		// Or a recursive StackOverflow exception will occur
@@ -21,44 +30,38 @@ namespace Memory
 
 	size_t MemoryManager::getMinimumToLeave() const
 	{
-		return this->_blockDescriptorPointerSize + this->_intSize * 2;
-	}
-
-	// TODO: Probably need to remove. Not Sure...
-	MemoryManager* MemoryManager::Instance()
-	{
-		if (_instance == nullptr)
-		{
-			_instance = static_cast<MemoryManager*>(malloc(sizeof(MemoryManager)));
-			new(_instance)MemoryManager();
-		}
-
-		return _instance;
+		return sizeof(MemoryManager) + this->_blockDescriptorSize * this->_maxBlockDescriptors;
 	}
 
 	// Singleton
 
 	// Creation
-
 	void MemoryManager::create(void* heapMemoryStartAddress, const size_t heapMemoryTotalSize,
 	                           const size_t maxBlockDescriptors)
 	{
-		this->_maxBlockDescriptors = maxBlockDescriptors;
-		this->_blockDescriptorSize = sizeof(BlockDescriptor);
-		this->_blockDescriptorPointerSize = sizeof(BlockDescriptor*);
-		this->_intSize = sizeof(int);
+		const size_t memoryManagerSize = sizeof(MemoryManager);
+		_instance = new(heapMemoryStartAddress)MemoryManager();
 
-		this->_maxMemorySize = heapMemoryTotalSize;
-		this->_userMemoryStartPointer = static_cast<char*>(heapMemoryStartAddress) +
-			maxBlockDescriptors * this->_blockDescriptorSize;
-		this->_memoryStartPointer = heapMemoryStartAddress;
+		_instance->_maxBlockDescriptors = maxBlockDescriptors;
+		_instance->_blockDescriptorSize = sizeof(BlockDescriptor);
+		_instance->_blockDescriptorPointerSize = sizeof(BlockDescriptor*);
+		_instance->_intSize = sizeof(int);
 
-		this->_availableDescriptors = nullptr;
-		this->_freeBlocks = nullptr;
-		this->_inUseBlockDescriptors = nullptr;
+		_instance->_maxMemorySize = heapMemoryTotalSize - memoryManagerSize;
+		_instance->_userMemoryStartPointer = static_cast<char*>(heapMemoryStartAddress) +
+			maxBlockDescriptors * _instance->_blockDescriptorSize + memoryManagerSize;
+		_instance->_memoryStartPointer = static_cast<void*>(static_cast<char*>(heapMemoryStartAddress) + memoryManagerSize);
 
-		this->createBlockDescriptors();
-		this->createFreeBlock();
+		_instance->_availableDescriptors = nullptr;
+		_instance->_freeBlocks = nullptr;
+		_instance->_inUseBlockDescriptors = nullptr;
+
+		_instance->createBlockDescriptors();
+		_instance->createFreeBlock();
+
+		memoryManager = _instance;
+
+		// memoryManager = _instance;
 	}
 
 	void MemoryManager::createBlockDescriptors()
@@ -125,7 +128,12 @@ namespace Memory
 		// Return NullPtr if there are no BlockDescriptors available
 		if (_availableDescriptors == nullptr)
 		{
-			return nullptr;
+			this->collect();
+
+			if (_availableDescriptors == nullptr)
+			{
+				return nullptr;
+			}
 		}
 
 		const size_t totalRequiredMemorySize = this->_blockDescriptorPointerSize + this->_intSize * 2 +
@@ -184,7 +192,12 @@ namespace Memory
 		// Return NullPtr if there are no BlockDescriptors available
 		if (_availableDescriptors == nullptr)
 		{
-			return nullptr;
+			this->collect();
+
+			if (_availableDescriptors == nullptr)
+			{
+				return nullptr;
+			}
 		}
 
 		const size_t initialSizeToLeave = this->_blockDescriptorPointerSize + this->_intSize;
@@ -244,6 +257,12 @@ namespace Memory
 
 	void* MemoryManager::reallocate(void* pointer, const size_t contiguousMemorySizeRequired)
 	{
+		if (pointer == nullptr)
+		{
+			printf_s("\nTrying to reallocate NULLPTR\n");
+			return nullptr;
+		}
+
 		void* userMemoryAddress = this->allocate(contiguousMemorySizeRequired);
 
 		if (userMemoryAddress == nullptr)
@@ -279,6 +298,12 @@ namespace Memory
 	void* MemoryManager::reallocate(void* pointer, const size_t contiguousMemorySizeRequired,
 	                                const unsigned int alignment)
 	{
+		if (pointer == nullptr)
+		{
+			printf_s("\nTrying to reallocate NULLPTR\n");
+			return nullptr;
+		}
+
 		void* userMemoryAddress = this->allocate(contiguousMemorySizeRequired, alignment);
 
 		if (userMemoryAddress == nullptr)
@@ -513,6 +538,7 @@ namespace Memory
 	{
 		if (pointer == nullptr)
 		{
+			printf_s("\nTrying to free a NULLPTR\n");
 			return;
 		}
 
@@ -571,8 +597,15 @@ namespace Memory
 
 	void MemoryManager::collect()
 	{
+		printf_s("\nCollecting Freed Memory\n");
+		const auto startTime = std::chrono::high_resolution_clock::now();
+
 		BlockDescriptor* head = getLastBlockDescriptor(this->_freeBlocks);
 		quickSort(this->_freeBlocks, head);
+
+		const auto quickSortStopTime = std::chrono::high_resolution_clock::now();
+		const auto quickSortDuration = std::chrono::duration_cast<std::chrono::microseconds>(quickSortStopTime - startTime);
+		printf_s("Quick Sort took %lld\n", quickSortDuration.count());
 
 		BlockDescriptor* current = this->_freeBlocks;
 
@@ -612,6 +645,10 @@ namespace Memory
 				current = current->nextBlockDescriptor;
 			}
 		}
+
+		const auto stopTime = std::chrono::high_resolution_clock::now();
+		const auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stopTime - startTime);
+		printf_s("Collection of Freed Memory took: %lld\n", duration.count());
 	}
 
 	// Collection and Combination
