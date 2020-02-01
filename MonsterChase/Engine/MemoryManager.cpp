@@ -1,5 +1,4 @@
 #include "MemoryManager.h"
-#include <cstdlib>
 #include "Utilities.h"
 #include <memory>
 #include <cassert>
@@ -14,7 +13,8 @@ namespace Memory
 
 	MemoryManager* MemoryManager::_instance = nullptr;
 
-	MemoryManager::MemoryManager(): _intSize(0), _maxBlockDescriptors(0), _blockDescriptorSize(0), _blockDescriptorPointerSize(0), _memoryStartPointer(nullptr),
+	MemoryManager::MemoryManager(): _intSize(0), _maxBlockDescriptors(0), _blockDescriptorSize(0),
+	                                _blockDescriptorPointerSize(0), _memoryStartPointer(nullptr),
 	                                _maxMemorySize(0),
 	                                _userMemoryStartPointer(nullptr),
 	                                _availableDescriptors(nullptr),
@@ -50,7 +50,8 @@ namespace Memory
 		_instance->_maxMemorySize = heapMemoryTotalSize - memoryManagerSize;
 		_instance->_userMemoryStartPointer = static_cast<char*>(heapMemoryStartAddress) +
 			maxBlockDescriptors * _instance->_blockDescriptorSize + memoryManagerSize;
-		_instance->_memoryStartPointer = static_cast<void*>(static_cast<char*>(heapMemoryStartAddress) + memoryManagerSize);
+		_instance->_memoryStartPointer = static_cast<void*>(static_cast<char*>(heapMemoryStartAddress) +
+			memoryManagerSize);
 
 		_instance->_availableDescriptors = nullptr;
 		_instance->_freeBlocks = nullptr;
@@ -60,8 +61,6 @@ namespace Memory
 		_instance->createFreeBlock();
 
 		memoryManager = _instance;
-
-		// memoryManager = _instance;
 	}
 
 	void MemoryManager::createBlockDescriptors()
@@ -604,7 +603,8 @@ namespace Memory
 		quickSort(this->_freeBlocks, head);
 
 		const auto quickSortStopTime = std::chrono::high_resolution_clock::now();
-		const auto quickSortDuration = std::chrono::duration_cast<std::chrono::microseconds>(quickSortStopTime - startTime);
+		const auto quickSortDuration = std::chrono::duration_cast<std::chrono::microseconds>(
+			quickSortStopTime - startTime);
 		printf_s("Quick Sort took %lld\n", quickSortDuration.count());
 
 		BlockDescriptor* current = this->_freeBlocks;

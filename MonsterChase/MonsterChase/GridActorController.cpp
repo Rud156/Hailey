@@ -7,7 +7,7 @@ namespace Game
 
 	GridActorController::GridActorController()
 	{
-		_gridGameObject = new Core::Node();
+		_gridGameObject = new Core::BaseComponents::Node();
 		_gridGameObject->AddComponent<Core::Components::Transform::Node2D>();
 
 		_gridActorName = nullptr;
@@ -67,7 +67,7 @@ namespace Game
 
 	// GameObject
 
-	Core::Node* GridActorController::GetGameObject() const
+	Core::BaseComponents::Node* GridActorController::GetGameObject() const
 	{
 		return _gridGameObject;
 	}

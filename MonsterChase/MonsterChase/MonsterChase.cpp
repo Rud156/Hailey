@@ -2,83 +2,90 @@
 //
 
 #include "Engine.h"
-#include <conio.h>
-#include <iostream>
-#include "GameMain.h"
-#include "Node2D.h"
-#include "MemoryManager.h"
-#include  <Windows.h>
-#include <cassert>
-#include "MemoryManager_Extern.h"
-#include "HeapManagerUnitTest.h"
+#include <SFML/Graphics.hpp>
+#include "Allocators.h"
 
-// _Ret_notnull_ _Post_writable_byte_size_(_Size)
-// _VCRT_ALLOCATOR void* __CRTDECL operator new(
-// 	size_t _Size
-// )
-// {
-// 	return memoryManager->allocate(_Size);
-// }
-//
-// _Ret_notnull_ _Post_writable_byte_size_(_Size)
-// _VCRT_ALLOCATOR void* __CRTDECL operator new[](
-// 	size_t _Size
-// )
-// {
-// 	return memoryManager->allocate(_Size);
-// }
-//
-// void operator delete(void* pointer)
-// {
-// 	memoryManager->freeMem(pointer);
-// }
-//
-// void operator delete[](void* pointer)
-// {
-// 	memoryManager->freeMem(pointer);
-// }
+#include <conio.h>
+#include <cassert>
+#include <iostream>
+
+// Super Hacky But Works
+class RunBeforeMain
+{
+public:
+	RunBeforeMain() = default;
+
+	~RunBeforeMain()
+	{
+		Memory::MemorySystem::destroy();
+	}
+};
+
+RunBeforeMain runBeforeMain;
 
 int main()
 {
+	// SFML Sprites. Origin Point is Top Right Corner. Don't keep this here...
 	{
-		Engine::Init();
+		const auto solutionDir = SOLUTION_DIR;
+		// This won't work in release builds as SOLUTION_DIR does not exist then
+		std::string goodGuyPath = solutionDir;
+		goodGuyPath += "Assets/GoodGuy.png";
+		std::string badGuyPath = solutionDir;
+		badGuyPath += "Assets/BadGuy.png";
 
-		// const size_t sizeHeap = 1024 * 1024;
-		// const unsigned int numDescriptors = 2048;
-		//
-		// SYSTEM_INFO SysInfo;
-		// GetSystemInfo(&SysInfo);
-		// // round our size to a multiple of memory page size
-		// assert(SysInfo.dwPageSize > 0);
-		// const size_t sizeHeapInPageMultiples = SysInfo.dwPageSize * ((sizeHeap + SysInfo.dwPageSize) / SysInfo.dwPageSize);
-		// void* pHeapMemory = VirtualAlloc(nullptr, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
-		//
-		// Memory::MemoryManager::create(pHeapMemory, sizeHeap, numDescriptors);
-		//
-		// memoryManager->showOutstandingMemory();
-		// memoryManager->showFreeBlocks();
-		//
-		// auto gameMain = new Game::GameMain();
-		// gameMain->InitializeAndRun();
-		// delete gameMain;
-		//
-		// memoryManager->showOutstandingMemory();
-		// memoryManager->showFreeBlocks();
-		//
-		// memoryManager->collect();
-		// memoryManager->showFreeBlocks();
+		auto engine = new Engine::Engine();
+		sf::RenderWindow* window = engine->Init(800, 640, "SFML Renderer!!!");
 
-		const auto heapManager = new HeapManagerUnitTest();
-		heapManager->HeapManager_UnitTest();
-		delete heapManager;
+		sf::Texture goodGuyTexture;
+		sf::Texture badGuyTexture;
 
-		Engine::ShutDown();
+		if (!goodGuyTexture.loadFromFile(goodGuyPath))
+		{
+			std::cout << "Invalid File Path. Unable to load texture" << std::endl;
+		}
+		if (!badGuyTexture.loadFromFile(badGuyPath))
+		{
+			std::cout << "Invalid File Path. Unable to load texture" << std::endl;
+		}
+
+		sf::Sprite goodGuySprite;
+		goodGuySprite.setTexture(goodGuyTexture);
+		goodGuySprite.setPosition(400, 320);
+		sf::Sprite badGuySprite;
+		badGuySprite.setTexture(badGuyTexture);
+		badGuySprite.setPosition(10, 100);
+
+		while (window->isOpen())
+		{
+			sf::Event event{};
+			while (window->pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+				{
+					window->close();
+				}
+			}
+
+			window->clear();
+
+			engine->Run();
+			window->draw(goodGuySprite);
+			window->draw(badGuySprite);
+
+			window->display();
+		}
+
+		engine->ShutDown();
+		delete window;
+		delete engine;
 	}
 
+#ifdef _DEBUG
 	_CrtDumpMemoryLeaks();
+#endif
 
 	(void)_getch();
-
 	return 0;
 }
 

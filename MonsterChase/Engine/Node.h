@@ -4,22 +4,39 @@
 
 namespace Core
 {
-	class Node
+	namespace BaseComponents
 	{
-	private:
-		std::vector<Component*> _components;
+		class Node
+		{
+		private:
+			std::vector<Component*> _components;
 
-		void SortComponents();
-		static bool ComparePriority(Component* a, Component* b);
+			void SortComponents();
+			static bool ComparePriority(Component* a, Component* b);
 
-	public:
-		// Constructor and Destructor
-		Node();
-		~Node();
+		public:
+			// Constructor and Destructor
+			Node();
+			~Node();
 
-		// Component
+			// Component
+			template <class T>
+			T* AddComponent();
+
+			template <class T>
+			void RemoveComponent();
+
+			template <class T>
+			T* GetComponent();
+
+			// LifeCycle Methods
+			void Ready();
+			void Process(float deltaTime);
+			void Exit();
+		};
+
 		template <class T>
-		T* AddComponent()
+		T* Node::AddComponent()
 		{
 			T* t = new T();
 			_components.push_back(t);
@@ -30,7 +47,7 @@ namespace Core
 		}
 
 		template <class T>
-		void RemoveComponent()
+		void Node::RemoveComponent()
 		{
 			int componentIndex = -1;
 			for (Component* component : _components)
@@ -50,7 +67,7 @@ namespace Core
 		}
 
 		template <class T>
-		T* GetComponent()
+		T* Node::GetComponent()
 		{
 			for (Component* component : _components)
 			{
@@ -62,10 +79,5 @@ namespace Core
 
 			return nullptr;
 		}
-
-		// LifeCycle Methods
-		void Ready();
-		void Process();
-		void Exit();
-	};
+	}
 }

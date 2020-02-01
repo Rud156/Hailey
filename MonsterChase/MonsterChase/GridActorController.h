@@ -8,7 +8,7 @@ namespace Game
 	private:
 		char* _gridActorName;
 		int _gridActorHealth;
-		Core::Node* _gridGameObject;
+		Core::BaseComponents::Node* _gridGameObject;
 
 	public:
 		// Constructor And Destructor
@@ -27,6 +27,6 @@ namespace Game
 		int GetActorHealth() const;
 
 		// GameObject
-		Core::Node* GetGameObject() const;
+		Core::BaseComponents::Node* GetGameObject() const;
 	};
 }

@@ -1,21 +1,21 @@
 #include "Node.h"
 #include <algorithm>
+#include "GameObjectUpdater_Extern.h"
 
 namespace Core
 {
+	namespace BaseComponents
+	{
 	// Constructor And Destructor
 
 	Node::Node()
 	{
+		gameObjectUpdater->AddGameObject(this);
 	}
 
 	Node::~Node()
 	{
-		for (Component* component : _components)
-		{
-			delete component;
-		}
-
+		Exit();
 		_components.clear();
 	}
 
@@ -45,11 +45,11 @@ namespace Core
 		}
 	}
 
-	void Node::Process()
+	void Node::Process(float deltaTime)
 	{
 		for (Component* component : _components)
 		{
-			component->Process();
+			component->Process(deltaTime);
 		}
 	}
 
@@ -62,4 +62,5 @@ namespace Core
 	}
 
 	// LifeCycle Methods
+	}
 }

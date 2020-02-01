@@ -2,18 +2,21 @@
 
 namespace Core
 {
-	class Component
+	namespace BaseComponents
 	{
-	public:
-		Component();
-		virtual ~Component();
+		class Component
+		{
+		public:
+			Component();
+			virtual ~Component();
 
-		// Priority
-		virtual int GetComponentPriority();
+			// Priority
+			virtual int GetComponentPriority();
 
-		//LifeCycle Functions
-		virtual void Ready();
-		virtual void Process();
-		virtual void Exit();
-	};
+			//LifeCycle Functions
+			virtual void Ready();
+			virtual void Process(float);
+			virtual void Exit();
+		};
+	}
 }

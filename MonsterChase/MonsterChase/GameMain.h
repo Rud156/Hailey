@@ -25,7 +25,7 @@ namespace Game
 		int _currentMonsterIndex = 1;
 		int _currentMonsterTurnTimer = MonsterTurnTimer;
 
-		enum GameState
+		enum class GameState
 		{
 			GameRunning,
 			PlayerDead

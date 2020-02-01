@@ -8,7 +8,7 @@ namespace Core
 	{
 		namespace Transform
 		{
-			class Node2D final : public Component
+			class Node2D final : public BaseComponents::Component
 			{
 			private:
 				Math::Point2D* _position;

@@ -49,6 +49,30 @@
     <Filter Include="Source Files\Core\Components\Transform">
       <UniqueIdentifier>{2204fe2a-141e-4f7e-97b8-4a7fdcc9606e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Containers">
+      <UniqueIdentifier>{d66667fa-2239-4edf-ab3f-4cd262c5b84e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Containers">
+      <UniqueIdentifier>{e3b53854-5917-4d9e-834a-92b0e49fee47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Containers\Tests">
+      <UniqueIdentifier>{343fcf73-e69f-4f66-b0f2-0b27b01ed3a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Containers\Tests">
+      <UniqueIdentifier>{0b7bb3b2-05cf-4b8c-986c-52ae90a9b626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\BaseComponents">
+      <UniqueIdentifier>{573509a0-810c-4633-b0cd-f9246bd0db14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Controllers">
+      <UniqueIdentifier>{39938eb5-127c-48a9-a7dd-46c6f41ce433}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\BaseComponents">
+      <UniqueIdentifier>{0d8b592f-eec2-4823-8e3c-ca76bf5d6844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Controllers">
+      <UniqueIdentifier>{9b8451e5-45d4-47cf-ab12-ab93939dc829}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -78,17 +102,56 @@
     <ClInclude Include="Random.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Node2D.h">
       <Filter>Header Files\Core\Components\Transform</Filter>
     </ClInclude>
     <ClInclude Include="MemoryManager_Extern.h">
       <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedMemoryManager.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedMemoryManager_Inl.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="BitArray.h">
+      <Filter>Header Files\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySystem.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySystem_Inl.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySystem_Extern.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="BitArrayTest.h">
+      <Filter>Header Files\Containers\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Point3D.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Point3D_Inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Node3D.h">
+      <Filter>Header Files\Core\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Header Files\Core\BaseComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files\Core\BaseComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectUpdater.h">
+      <Filter>Header Files\Core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectUpdater_Extern.h">
+      <Filter>Header Files\Core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreLoop.h">
+      <Filter>Header Files\Core\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,14 +173,38 @@
     <ClCompile Include="Random.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Node.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Node2D.cpp">
       <Filter>Source Files\Core\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="FixedMemoryManager.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="BitArray.cpp">
+      <Filter>Source Files\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="MemorySystem.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="BitArrayTest.cpp">
+      <Filter>Source Files\Containers\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Point3D.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Node3D.cpp">
+      <Filter>Source Files\Core\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Source Files\Core\BaseComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files\Core\BaseComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectUpdater.cpp">
+      <Filter>Source Files\Core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreLoop.cpp">
+      <Filter>Source Files\Core\Controllers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

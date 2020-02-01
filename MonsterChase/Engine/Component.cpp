@@ -2,6 +2,8 @@
 
 namespace Core
 {
+	namespace BaseComponents
+	{
 	// Constructor And Destructor
 
 	Component::Component()
@@ -29,7 +31,7 @@ namespace Core
 	{
 	}
 
-	void Component::Process()
+	void Component::Process(float)
 	{
 	}
 
@@ -38,4 +40,5 @@ namespace Core
 	}
 
 	// LifeCycle Functions
+	}
 }
