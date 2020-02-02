@@ -21,7 +21,7 @@ void customFree(void* pointer)
 	Memory::MemorySystem::freeMem(pointer);
 }
 
-_VCRT_ALLOCATOR
+_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(_Size) _VCRT_ALLOCATOR
 void* __CRTDECL operator new(
 	size_t _Size
 )

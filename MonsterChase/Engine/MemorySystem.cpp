@@ -60,19 +60,23 @@ namespace Memory
 			switch (_instance->AllowedFixedAllocators[i])
 			{
 			case 16:
+				totalBlockSize = 500;
+				break;
+
+			case 20:
+				totalBlockSize = 500;
+				break;
+
+			case 44:
+				totalBlockSize = 500;
+				break;
+
+			case 60:
 				totalBlockSize = 100;
 				break;
 
-			case 32:
-				totalBlockSize = 200;
-				break;
-
-			case 96:
-				totalBlockSize = 400;
-				break;
-
 			default:
-				totalBlockSize = 1000;
+				totalBlockSize = 500;
 				break;
 			}
 
@@ -148,6 +152,13 @@ namespace Memory
 
 	void MemorySystem::freeMem(void* pointer)
 	{
+		if (_instance == nullptr)
+		{
+			// At this point the Memory has been returned to the system.
+			// So don't care about freeing Memory
+			return;
+		}
+
 		for (size_t i = 0; i < TotalFixedAllocators; i++)
 		{
 			if (_instance->_fixedMemoryManagers[i]->contains(pointer))

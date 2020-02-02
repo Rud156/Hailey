@@ -10,12 +10,12 @@ namespace Engine
 
 	Engine::~Engine() = default;
 
-	sf::RenderWindow* Engine::Init(const int windowWidth, const int windowHeight, const std::string& windowTitle)
+	void Engine::Init()
 	{
 		std::cout << "Engine Initialized" << std::endl;
 
 		_coreLoop = new Core::Controllers::CoreLoop();
-		return _coreLoop->Setup(windowWidth, windowHeight, windowTitle);
+		_coreLoop->Setup();
 	}
 
 	void Engine::Run() const

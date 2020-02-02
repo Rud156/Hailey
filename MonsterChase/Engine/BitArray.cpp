@@ -8,17 +8,19 @@ namespace Containers
 {
 #pragma region Construction and Destruction
 
-	BitArray::BitArray(const size_t numBits, bool startClear)
+	BitArray::BitArray(const size_t numBits, bool startSet)
 	{
 		assert(numBits != 0);
 
 #ifdef _WIN64
 		this->_uintSize = sizeof(uint64_t);
+		this->_bitSize = 64;
 #else
 		this->_uintSize = sizeof(uint32_t);
+		this->_bitSize = 32;
 #endif
 
-		this->_bitArraySize = static_cast<size_t>(ceil(numBits / this->_uintSize));
+		this->_bitArraySize = static_cast<size_t>(ceil(numBits / this->_bitSize));
 
 #ifdef _WIN64
 		this->_bitArray64 = new uint64_t[this->_bitArraySize];
@@ -27,7 +29,7 @@ namespace Containers
 #endif
 
 
-		if (!startClear)
+		if (startSet)
 		{
 			for (size_t i = 0; i < this->_bitArraySize; i++)
 			{
@@ -40,17 +42,19 @@ namespace Containers
 		}
 	}
 
-	BitArray::BitArray(size_t numBits, Memory::MemoryManager* memoryManager, bool startClear)
+	BitArray::BitArray(size_t numBits, Memory::MemoryManager* memoryManager, bool startSet)
 	{
 		assert(numBits != 0);
 
 #ifdef _WIN64
 		this->_uintSize = sizeof(uint64_t);
+		this->_bitSize = 64;
 #else
 		this->_uintSize = sizeof(uint32_t);
+		this->_bitSize = 32;
 #endif
 
-		this->_bitArraySize = static_cast<size_t>(ceil(numBits / this->_uintSize));
+		this->_bitArraySize = static_cast<size_t>(ceil(numBits / this->_bitSize));
 		void* arrayMemory = memoryManager->allocate(this->_uintSize * this->_bitArraySize);
 
 #ifdef _WIN64
@@ -60,7 +64,7 @@ namespace Containers
 #endif
 
 
-		if (!startClear)
+		if (startSet)
 		{
 			for (size_t i = 0; i < this->_bitArraySize; i++)
 			{
@@ -261,24 +265,29 @@ namespace Containers
 		_BitScanForward(&bitIndex, arrayValue32);
 #endif
 
-		index = arrayIndex * this->_uintSize + bitIndex;
+		index = arrayIndex * this->_bitSize + bitIndex;
 		return isValidPlatform;
 	}
 
-	bool BitArray::test(const size_t index) const
+	bool BitArray::test(size_t index) const
 	{
-		const size_t arrayIndex = index / this->_uintSize;
-		const size_t bitIndex = index % this->_uintSize;
+		const size_t arrayIndex = index / this->_bitSize;
+		const size_t bitIndex = index % this->_bitSize;
 
 		assert(arrayIndex < this->_bitArraySize);
 
-		uint8_t finalValue = 1;
-		finalValue = finalValue << bitIndex;
-
 #ifdef _WIN64
-		return finalValue & this->_bitArray64[arrayIndex];
+		const auto arrayValue64 = this->_bitArray64[arrayIndex];
+		uint64_t finalValue = 1;
+
+		finalValue = finalValue << bitIndex;
+		return finalValue & arrayValue64;
 #else
-		return finalValue & this->_bitArray32[arrayIndex];
+		const auto arrayValue32 = this->_bitArray32[arrayIndex];
+		uint32_t finalValue = 1;
+
+		finalValue = finalValue << bitIndex;
+		return finalValue & arrayValue32;
 #endif
 	}
 
@@ -291,10 +300,10 @@ namespace Containers
 
 #pragma region Affect Single Bit
 
-	void BitArray::set(const size_t index, const bool value) const
+	void BitArray::set(size_t index, const bool value) const
 	{
-		const size_t arrayIndex = index / this->_uintSize;
-		const size_t bitIndex = index % this->_uintSize;
+		const size_t arrayIndex = index / this->_bitSize;
+		const size_t bitIndex = index % this->_bitSize;
 
 		assert(arrayIndex < this->_bitArraySize);
 		if (value)

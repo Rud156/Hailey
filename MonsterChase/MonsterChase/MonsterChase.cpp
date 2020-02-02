@@ -2,8 +2,8 @@
 //
 
 #include "Engine.h"
-#include <SFML/Graphics.hpp>
 #include "Allocators.h"
+#include <SFML/Graphics.hpp>
 
 #include <conio.h>
 #include <cassert>
@@ -35,7 +35,8 @@ int main()
 		badGuyPath += "Assets/BadGuy.png";
 
 		auto engine = new Engine::Engine();
-		sf::RenderWindow* window = engine->Init(800, 640, "SFML Renderer!!!");
+		engine->Init();
+		auto window = new sf::RenderWindow(sf::VideoMode(800, 640), "SFML Renderer!!!");
 
 		sf::Texture goodGuyTexture;
 		sf::Texture badGuyTexture;
@@ -80,6 +81,7 @@ int main()
 		delete window;
 		delete engine;
 	}
+
 
 #ifdef _DEBUG
 	_CrtDumpMemoryLeaks();

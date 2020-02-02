@@ -39,6 +39,8 @@ namespace Core
 		T* Node::AddComponent()
 		{
 			T* t = new T();
+
+			static_cast<Component*>(t)->Ready(this); // TODO: fix this...
 			_components.push_back(t);
 
 			SortComponents();
@@ -54,6 +56,7 @@ namespace Core
 			{
 				if (dynamic_cast<T*>(component))
 				{
+					component->Exit();
 					break;
 				}
 

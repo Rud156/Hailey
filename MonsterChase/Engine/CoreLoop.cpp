@@ -6,8 +6,7 @@ namespace Core
 {
 	namespace Controllers
 	{
-		CoreLoop::CoreLoop()
-		= default;
+		CoreLoop::CoreLoop() = default;
 
 		CoreLoop::~CoreLoop()
 		{
@@ -15,14 +14,10 @@ namespace Core
 			delete _gameObjectUpdater;
 		}
 
-		sf::RenderWindow* CoreLoop::Setup(const int windowWidth, const int windowHeight, const std::string& windowTitle)
+		void CoreLoop::Setup()
 		{
 			this->_gameObjectUpdater = new GameObjectUpdater();
-
-			this->_windowContext = new sf::RenderWindow(sf::VideoMode(windowWidth, windowHeight), windowTitle);
 			this->_clock = new sf::Clock();
-
-			return this->_windowContext;
 		}
 
 		void CoreLoop::Run() const

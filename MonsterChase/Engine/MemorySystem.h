@@ -10,7 +10,7 @@ namespace Memory
 	private:
 		// Fixed Allocators
 		static const size_t TotalFixedAllocators = 4;
-		const int AllowedFixedAllocators[TotalFixedAllocators] = {20, 44, 60, 76};
+		const int AllowedFixedAllocators[TotalFixedAllocators] = {16, 20, 44, 60};
 
 		// Memory
 		void* _heapMemory;

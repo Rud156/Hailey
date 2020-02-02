@@ -73,6 +73,12 @@
     <Filter Include="Source Files\Core\Controllers">
       <UniqueIdentifier>{9b8451e5-45d4-47cf-ab12-ab93939dc829}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Components\Rendering">
+      <UniqueIdentifier>{595281db-1ee6-473f-a789-76aa6968a579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Components\Rendering">
+      <UniqueIdentifier>{c5752157-b182-4719-bc98-b33603e227a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -153,6 +159,9 @@
     <ClInclude Include="CoreLoop.h">
       <Filter>Header Files\Core\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Header Files\Core\Components\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -205,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="CoreLoop.cpp">
       <Filter>Source Files\Core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>Source Files\Core\Components\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

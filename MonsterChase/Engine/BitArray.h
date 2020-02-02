@@ -18,11 +18,12 @@ namespace Containers
 #endif
 
 		size_t _uintSize;
+		size_t _bitSize;
 		size_t _bitArraySize;
 
 	public:
-		BitArray(size_t numBits, bool startClear = true);
-		BitArray(size_t numBits, Memory::MemoryManager* memoryManager, bool startClear = true);
+		BitArray(size_t numBits, bool startSet = true);
+		BitArray(size_t numBits, Memory::MemoryManager* memoryManager, bool startSet = true);
 		~BitArray();
 
 		// Affect All Bits

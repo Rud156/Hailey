@@ -4,41 +4,43 @@ namespace Core
 {
 	namespace BaseComponents
 	{
-	// Constructor And Destructor
+		// Constructor And Destructor
 
-	Component::Component()
-	{
-	}
+		Component::Component()
+		= default;
 
-	Component::~Component()
-	{
-	}
+		Component::~Component()
+		= default;
 
-	// Constructor And Destructor
+		// Constructor And Destructor
 
-	// Priority
+		// Priority
 
-	int Component::GetComponentPriority()
-	{
-		return 0;
-	}
+		int Component::GetComponentPriority()
+		{
+			return 0;
+		}
 
-	// Priority
+		// Priority
 
-	// LifeCycle Functions
+		// LifeCycle Functions
 
-	void Component::Ready()
-	{
-	}
+		void Component::Ready(Node*)
+		{
+		}
 
-	void Component::Process(float)
-	{
-	}
+		void Component::Process(float)
+		{
+		}
 
-	void Component::Exit()
-	{
-	}
+		void Component::Render(sf::RenderWindow*)
+		{
+		}
 
-	// LifeCycle Functions
+		void Component::Exit()
+		{
+		}
+
+		// LifeCycle Functions
 	}
 }

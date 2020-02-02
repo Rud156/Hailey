@@ -13,9 +13,7 @@ namespace Memory
 	{
 	}
 
-	FixedMemoryManager::~FixedMemoryManager()
-	= default;
-
+	FixedMemoryManager::~FixedMemoryManager() = default;
 
 #pragma endregion
 
