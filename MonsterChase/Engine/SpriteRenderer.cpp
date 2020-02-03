@@ -15,7 +15,10 @@ namespace Core
 			}
 
 			SpriteRenderer::~SpriteRenderer()
-			= default;
+			{
+				delete this->_texture;
+				delete this->_sprite;
+			}
 
 			void SpriteRenderer::Ready(BaseComponents::Node* node)
 			{
@@ -45,12 +48,6 @@ namespace Core
 				const auto position = this->_node3d->GetPosition();
 				this->_sprite->setPosition(position->X(), position->Y());
 				window->draw(*this->_sprite);
-			}
-
-			void SpriteRenderer::Exit()
-			{
-				delete this->_texture;
-				delete this->_sprite;
 			}
 
 			sf::Sprite* SpriteRenderer::GetSprite() const

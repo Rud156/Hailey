@@ -34,6 +34,7 @@ namespace Memory
 	void MemorySystem::returnMemoryToWindows()
 	{
 		HeapFree(GetProcessHeap(), 0, _instance->_heapMemory);
+		_instance = nullptr;
 	}
 
 #pragma endregion

@@ -12,6 +12,7 @@
 #include <conio.h>
 #include <cassert>
 #include <iostream>
+#include <string>
 
 // Super Hacky But Works
 class RunBeforeMain

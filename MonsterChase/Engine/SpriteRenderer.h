@@ -40,7 +40,6 @@ namespace Core
 				void LoadTexture(const std::string& filePath);
 
 				void Render(sf::RenderWindow* window) override;
-				void Exit() override;
 
 				sf::Sprite* GetSprite() const;
 			};
