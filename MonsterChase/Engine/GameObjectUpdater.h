@@ -2,6 +2,11 @@
 #include <vector>
 #include "Node.h"
 
+namespace sf
+{
+	class RenderWindow;
+}
+
 namespace Core
 {
 	namespace Controllers
@@ -22,6 +27,7 @@ namespace Core
 
 			// LifeCycle Functions
 			void Process(float deltaTime);
+			void Render(sf::RenderWindow* window);
 			void Exit();
 		};
 	}

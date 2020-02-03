@@ -5,6 +5,10 @@
 #include "Allocators.h"
 #include <SFML/Graphics.hpp>
 
+#include "Node.h"
+#include "Node3D.h"
+#include "SpriteRenderer.h"
+
 #include <conio.h>
 #include <cassert>
 #include <iostream>
@@ -35,27 +39,19 @@ int main()
 		badGuyPath += "Assets/BadGuy.png";
 
 		auto engine = new Engine::Engine();
-		engine->Init();
 		auto window = new sf::RenderWindow(sf::VideoMode(800, 640), "SFML Renderer!!!");
+		engine->Init(window);
 
-		sf::Texture goodGuyTexture;
-		sf::Texture badGuyTexture;
-
-		if (!goodGuyTexture.loadFromFile(goodGuyPath))
-		{
-			std::cout << "Invalid File Path. Unable to load texture" << std::endl;
-		}
-		if (!badGuyTexture.loadFromFile(badGuyPath))
-		{
-			std::cout << "Invalid File Path. Unable to load texture" << std::endl;
-		}
-
-		sf::Sprite goodGuySprite;
-		goodGuySprite.setTexture(goodGuyTexture);
-		goodGuySprite.setPosition(400, 320);
-		sf::Sprite badGuySprite;
-		badGuySprite.setTexture(badGuyTexture);
-		badGuySprite.setPosition(10, 100);
+		auto goodGuy = new Core::BaseComponents::Node(); // Good Guy GameObject
+		auto badGuy = new Core::BaseComponents::Node(); // Bad Guy GameObject
+		const auto goodGuyPosition = goodGuy->AddComponent<Core::Components::Transform::Node3D>();
+		goodGuyPosition->GetPosition()->set(400, 320, 0);
+		const auto badGuyPosition = badGuy->AddComponent<Core::Components::Transform::Node3D>();
+		badGuyPosition->GetPosition()->set(10, 100, 0);
+		const auto goodGuySprite = goodGuy->AddComponent<Core::Components::Rendering::SpriteRenderer>();
+		goodGuySprite->LoadTexture(goodGuyPath);
+		const auto badGuySprite = badGuy->AddComponent<Core::Components::Rendering::SpriteRenderer>();
+		badGuySprite->LoadTexture(badGuyPath);
 
 		while (window->isOpen())
 		{
@@ -66,19 +62,66 @@ int main()
 				{
 					window->close();
 				}
+
+				switch (event.type)
+				{
+				case sf::Event::Closed:
+					window->close();
+					break;
+
+				case sf::Event::KeyPressed:
+					{
+						switch (event.key.code)
+						{
+						case sf::Keyboard::A:
+							{
+								const auto position = goodGuyPosition->GetPosition();
+								position->setX(position->X() - 1);
+							}
+							break;
+
+						case sf::Keyboard::D:
+							{
+								const auto position = goodGuyPosition->GetPosition();
+								position->setX(position->X() + 1);
+							}
+							break;
+
+						case sf::Keyboard::Left:
+							{
+								const auto position = badGuyPosition->GetPosition();
+								position->setX(position->X() - 1);
+							}
+							break;
+
+						case sf::Keyboard::Right:
+							{
+								const auto position = badGuyPosition->GetPosition();
+								position->setX(position->X() + 1);
+							}
+							break;
+
+						default:
+							// Do nothing here...
+							break;
+						}
+					}
+					break;
+
+				default:
+					// Do nothing here...
+					break;
+				}
 			}
 
 			window->clear();
-
 			engine->Run();
-			window->draw(goodGuySprite);
-			window->draw(badGuySprite);
-
 			window->display();
 		}
 
 		engine->ShutDown();
-		delete window;
+		delete goodGuy;
+		delete badGuy;
 		delete engine;
 	}
 

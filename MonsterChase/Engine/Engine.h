@@ -1,5 +1,10 @@
 ﻿#pragma once
 
+namespace sf
+{
+	class RenderWindow;
+}
+
 namespace Core
 {
 	namespace Controllers
@@ -20,7 +25,7 @@ namespace Engine
 		Engine();
 		~Engine();
 
-		void Init();
+		void Init(sf::RenderWindow* window);
 		void Run() const;
 		void ShutDown() const;
 	};

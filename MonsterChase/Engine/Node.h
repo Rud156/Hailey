@@ -2,6 +2,11 @@
 #include "Component.h"
 #include <vector>
 
+namespace sf
+{
+	class RenderWindow;
+}
+
 namespace Core
 {
 	namespace BaseComponents
@@ -32,6 +37,7 @@ namespace Core
 			// LifeCycle Methods
 			void Ready();
 			void Process(float deltaTime);
+			void Render(sf::RenderWindow* window);
 			void Exit();
 		};
 

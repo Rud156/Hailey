@@ -53,6 +53,15 @@ namespace Core
 			}
 		}
 
+		void Node::Render(sf::RenderWindow* window)
+		{
+			for (Component* component : _components)
+			{
+				component->Render(window);
+			}
+		}
+
+
 		void Node::Exit()
 		{
 			for (Component* component : _components)

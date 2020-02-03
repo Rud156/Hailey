@@ -1,6 +1,5 @@
 ﻿#include "stdafx.h"
 #include "Engine.h"
-#include <SFML/Graphics.hpp>
 #include "CoreLoop.h"
 #include <iostream>
 
@@ -10,12 +9,12 @@ namespace Engine
 
 	Engine::~Engine() = default;
 
-	void Engine::Init()
+	void Engine::Init(sf::RenderWindow* window)
 	{
 		std::cout << "Engine Initialized" << std::endl;
 
 		_coreLoop = new Core::Controllers::CoreLoop();
-		_coreLoop->Setup();
+		_coreLoop->Setup(window);
 	}
 
 	void Engine::Run() const

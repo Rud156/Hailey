@@ -10,12 +10,15 @@ namespace Core
 #pragma region Constructor and Destructor
 
 		GameObjectUpdater::GameObjectUpdater()
-		= default;
+		{
+			gameObjectUpdater = this;
+		}
 
 		GameObjectUpdater::~GameObjectUpdater()
 		{
 			Exit();
 			this->_gameObjects.clear();
+			gameObjectUpdater = nullptr;
 		}
 
 #pragma endregion
@@ -48,6 +51,15 @@ namespace Core
 				node->Process(deltaTime);
 			}
 		}
+
+		void GameObjectUpdater::Render(sf::RenderWindow* window)
+		{
+			for (auto node : this->_gameObjects)
+			{
+				node->Render(window);
+			}
+		}
+
 
 		void GameObjectUpdater::Exit()
 		{

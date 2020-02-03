@@ -42,6 +42,8 @@ namespace Core
 
 			void SpriteRenderer::Render(sf::RenderWindow* window)
 			{
+				const auto position = this->_node3d->GetPosition();
+				this->_sprite->setPosition(position->X(), position->Y());
 				window->draw(*this->_sprite);
 			}
 

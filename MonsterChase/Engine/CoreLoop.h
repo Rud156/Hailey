@@ -2,6 +2,7 @@
 
 namespace sf
 {
+	class RenderWindow;
 	class Clock;
 }
 
@@ -20,6 +21,7 @@ namespace Core
 		class CoreLoop
 		{
 		private:
+			sf::RenderWindow* _window{};
 			sf::Clock* _clock{};
 			GameObjectUpdater* _gameObjectUpdater{};
 
@@ -27,7 +29,7 @@ namespace Core
 			CoreLoop();
 			~CoreLoop();
 
-			void Setup();
+			void Setup(sf::RenderWindow* window);
 			void Run() const;
 		};
 	}
