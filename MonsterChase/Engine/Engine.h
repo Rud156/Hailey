@@ -25,7 +25,7 @@ namespace Engine
 		Engine();
 		~Engine();
 
-		void Init(sf::RenderWindow* window);
+		void Init(sf::RenderWindow* i_window);
 		void Run() const;
 		void ShutDown() const;
 	};

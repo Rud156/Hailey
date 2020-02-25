@@ -79,6 +79,30 @@
     <Filter Include="Source Files\Core\Components\Rendering">
       <UniqueIdentifier>{c5752157-b182-4719-bc98-b33603e227a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Components\Physics">
+      <UniqueIdentifier>{3ecd3698-72a9-4e63-8a58-cd7a647b44eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Components\Physics">
+      <UniqueIdentifier>{d0b11fd5-62ca-438e-a5ed-e97c6bd6cc36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Components\Physics\Colliders">
+      <UniqueIdentifier>{38465bb4-8e04-47ab-ad73-4c9b76db7e59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Components\Physics\Colliders">
+      <UniqueIdentifier>{99e1bb4f-8d4f-4ba5-86ee-83abf1aa5f53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Controllers\Rendering">
+      <UniqueIdentifier>{cd7a3bce-f710-4e89-b032-9bc5f3b127be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Controllers\Rendering">
+      <UniqueIdentifier>{e59d97e9-c0f1-4fda-9ce0-c3f63e933386}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Controllers\Physics">
+      <UniqueIdentifier>{ed221154-d7ce-43d6-b176-55d41afb3aad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Controllers\Physics">
+      <UniqueIdentifier>{e595178a-c67a-43a0-a5cf-77282dc55e96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -162,6 +186,51 @@
     <ClInclude Include="SpriteRenderer.h">
       <Filter>Header Files\Core\Components\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="LoopTimer.h">
+      <Filter>Header Files\Core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteAnimationSI.h">
+      <Filter>Header Files\Core\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteAnimationSS.h">
+      <Filter>Header Files\Core\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody2D.h">
+      <Filter>Header Files\Core\Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleCollider.h">
+      <Filter>Header Files\Core\Components\Physics\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="RectangleCollider.h">
+      <Filter>Header Files\Core\Components\Physics\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCollider.h">
+      <Filter>Header Files\Core\Components\Physics\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Rotate2D.h">
+      <Filter>Header Files\Core\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Scale2D.h">
+      <Filter>Header Files\Core\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="MathUtils.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldPhysicsController.h">
+      <Filter>Header Files\Core\Controllers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldPhysicsController_Extern.h">
+      <Filter>Header Files\Core\Controllers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderController.h">
+      <Filter>Header Files\Core\Controllers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderController_Extern.h">
+      <Filter>Header Files\Core\Controllers\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -217,6 +286,45 @@
     </ClCompile>
     <ClCompile Include="SpriteRenderer.cpp">
       <Filter>Source Files\Core\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="LoopTimer.cpp">
+      <Filter>Source Files\Core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteAnimationSI.cpp">
+      <Filter>Source Files\Core\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteAnimationSS.cpp">
+      <Filter>Source Files\Core\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigidbody2D.cpp">
+      <Filter>Source Files\Core\Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleCollider.cpp">
+      <Filter>Source Files\Core\Components\Physics\Colliders</Filter>
+    </ClCompile>
+    <ClCompile Include="RectangleCollider.cpp">
+      <Filter>Source Files\Core\Components\Physics\Colliders</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseCollider.cpp">
+      <Filter>Source Files\Core\Components\Physics\Colliders</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Rotate2D.cpp">
+      <Filter>Source Files\Core\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Scale2D.cpp">
+      <Filter>Source Files\Core\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="MathUtils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldPhysicsController.cpp">
+      <Filter>Source Files\Core\Controllers\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderController.cpp">
+      <Filter>Source Files\Core\Controllers\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

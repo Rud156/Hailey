@@ -8,19 +8,19 @@ namespace Utils
 	Utilities::~Utilities()
 	= default;
 
-	size_t Utilities::GetRoundNextMultiple(const size_t number, const unsigned int multiple)
+	size_t Utilities::GetRoundNextMultiple(const size_t i_number, const unsigned int i_multiple)
 	{
-		if (multiple == 0)
+		if (i_multiple == 0)
 		{
-			return number;
+			return i_number;
 		}
 
-		const size_t remainder = number % multiple;
+		const size_t remainder = i_number % i_multiple;
 		if (remainder == 0)
 		{
-			return number;
+			return i_number;
 		}
 
-		return number + multiple - remainder;
+		return i_number + i_multiple - remainder;
 	}
 }

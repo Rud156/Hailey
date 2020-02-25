@@ -1,27 +1,22 @@
 #include "Allocators.h"
 #include "MemorySystem_Extern.h"
 
-#define malloc(x) customMalloc(x)
-#define realloc(x, y) customRealloc(x, y)
-#define free(x) customFree(x)
-
-void* customMalloc(size_t size)
+void* cMalloc(size_t _Size)
 {
-	printf("malloc %zu\n", size);
-	return Memory::MemorySystem::allocate(size);
+	return Memory::MemorySystem::allocate(_Size);
 }
 
-void* customRealloc(void* pointer, size_t contiguousMemorySizeRequired)
+void cFree(void* _Block)
 {
-	return Memory::MemorySystem::reallocate(pointer, contiguousMemorySizeRequired);
+	Memory::MemorySystem::freeMem(_Block);
 }
 
-void customFree(void* pointer)
+void* cRealloc(void* _Block, size_t _Size)
 {
-	Memory::MemorySystem::freeMem(pointer);
+	return Memory::MemorySystem::reallocate(_Block, _Size);
 }
 
-_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(_Size) _VCRT_ALLOCATOR
+_VCRT_ALLOCATOR
 void* __CRTDECL operator new(
 	size_t _Size
 )

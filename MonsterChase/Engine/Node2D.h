@@ -17,7 +17,7 @@ namespace Core
 				Node2D();
 				~Node2D();
 
-				Math::Point2D* GetPosition() const;
+				[[nodiscard]] Math::Point2D* GetPosition() const;
 			};
 		}
 	}

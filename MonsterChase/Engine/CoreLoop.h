@@ -3,7 +3,6 @@
 namespace sf
 {
 	class RenderWindow;
-	class Clock;
 }
 
 namespace Core
@@ -11,6 +10,7 @@ namespace Core
 	namespace Controllers
 	{
 		class GameObjectUpdater;
+		class LoopTimer;
 	}
 }
 
@@ -22,14 +22,14 @@ namespace Core
 		{
 		private:
 			sf::RenderWindow* _window{};
-			sf::Clock* _clock{};
+			LoopTimer* _loopTimer{};
 			GameObjectUpdater* _gameObjectUpdater{};
 
 		public:
 			CoreLoop();
 			~CoreLoop();
 
-			void Setup(sf::RenderWindow* window);
+			void Setup(sf::RenderWindow* i_window);
 			void Run() const;
 		};
 	}

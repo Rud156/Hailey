@@ -8,9 +8,9 @@ namespace Containers
 {
 #pragma region Construction and Destruction
 
-	BitArray::BitArray(const size_t numBits, bool startSet)
+	BitArray::BitArray(const size_t i_numBits, bool i_startSet)
 	{
-		assert(numBits != 0);
+		assert(i_numBits != 0);
 
 #ifdef _WIN64
 		this->_uintSize = sizeof(uint64_t);
@@ -20,7 +20,7 @@ namespace Containers
 		this->_bitSize = 32;
 #endif
 
-		this->_bitArraySize = static_cast<size_t>(ceil(numBits / this->_bitSize));
+		this->_bitArraySize = static_cast<size_t>(ceil(i_numBits / this->_bitSize));
 
 #ifdef _WIN64
 		this->_bitArray64 = new uint64_t[this->_bitArraySize];
@@ -29,7 +29,7 @@ namespace Containers
 #endif
 
 
-		if (startSet)
+		if (i_startSet)
 		{
 			for (size_t i = 0; i < this->_bitArraySize; i++)
 			{
@@ -42,9 +42,9 @@ namespace Containers
 		}
 	}
 
-	BitArray::BitArray(size_t numBits, Memory::MemoryManager* memoryManager, bool startSet)
+	BitArray::BitArray(size_t i_numBits, Memory::MemoryManager* i_memoryManager, bool i_startSet)
 	{
-		assert(numBits != 0);
+		assert(i_numBits != 0);
 
 #ifdef _WIN64
 		this->_uintSize = sizeof(uint64_t);
@@ -54,8 +54,8 @@ namespace Containers
 		this->_bitSize = 32;
 #endif
 
-		this->_bitArraySize = static_cast<size_t>(ceil(numBits / this->_bitSize));
-		void* arrayMemory = memoryManager->allocate(this->_uintSize * this->_bitArraySize);
+		this->_bitArraySize = static_cast<size_t>(ceil(i_numBits / this->_bitSize));
+		void* arrayMemory = i_memoryManager->allocate(this->_uintSize * this->_bitArraySize);
 
 #ifdef _WIN64
 		this->_bitArray64 = static_cast<uint64_t*>(arrayMemory);
@@ -64,7 +64,7 @@ namespace Containers
 #endif
 
 
-		if (startSet)
+		if (i_startSet)
 		{
 			for (size_t i = 0; i < this->_bitArraySize; i++)
 			{
@@ -162,7 +162,7 @@ namespace Containers
 
 #pragma region Get Bit Data
 
-	bool BitArray::getFirstClearBit(size_t& index) const
+	bool BitArray::getFirstClearBit(size_t& o_index) const
 	{
 		int arrayIndex = -1;
 		for (size_t i = 0; i < this->_bitArraySize; i++)
@@ -221,11 +221,11 @@ namespace Containers
 		}
 #endif
 
-		index = bitIndex;
+		o_index = bitIndex;
 		return true;
 	}
 
-	bool BitArray::getFirstSetBit(size_t& index) const
+	bool BitArray::getFirstSetBit(size_t& o_index) const
 	{
 		int arrayIndex = -1;
 		for (size_t i = 0; i < this->_bitArraySize; i++)
@@ -265,14 +265,14 @@ namespace Containers
 		_BitScanForward(&bitIndex, arrayValue32);
 #endif
 
-		index = arrayIndex * this->_bitSize + bitIndex;
+		o_index = arrayIndex * this->_bitSize + bitIndex;
 		return isValidPlatform;
 	}
 
-	bool BitArray::test(size_t index) const
+	bool BitArray::test(size_t i_index) const
 	{
-		const size_t arrayIndex = index / this->_bitSize;
-		const size_t bitIndex = index % this->_bitSize;
+		const size_t arrayIndex = i_index / this->_bitSize;
+		const size_t bitIndex = i_index % this->_bitSize;
 
 		assert(arrayIndex < this->_bitArraySize);
 
@@ -291,22 +291,22 @@ namespace Containers
 #endif
 	}
 
-	bool BitArray::operator[](const size_t index) const
+	bool BitArray::operator[](const size_t i_index) const
 	{
-		return test(index);
+		return test(i_index);
 	}
 
 #pragma endregion
 
 #pragma region Affect Single Bit
 
-	void BitArray::set(size_t index, const bool value) const
+	void BitArray::set(size_t i_index, const bool i_value) const
 	{
-		const size_t arrayIndex = index / this->_bitSize;
-		const size_t bitIndex = index % this->_bitSize;
+		const size_t arrayIndex = i_index / this->_bitSize;
+		const size_t bitIndex = i_index % this->_bitSize;
 
 		assert(arrayIndex < this->_bitArraySize);
-		if (value)
+		if (i_value)
 		{
 #ifdef _WIN64
 			uint64_t arrayValue64 = this->_bitArray64[arrayIndex];
@@ -348,17 +348,17 @@ namespace Containers
 		}
 	}
 
-	void BitArray::flip(const size_t index) const
+	void BitArray::flip(const size_t i_index) const
 	{
-		const bool bitValue = test(index);
+		const bool bitValue = test(i_index);
 
 		if (bitValue)
 		{
-			set(index, false);
+			set(i_index, false);
 		}
 		else
 		{
-			set(index, true);
+			set(i_index, true);
 		}
 	}
 
@@ -366,12 +366,12 @@ namespace Containers
 
 #pragma region Destroy
 
-	void BitArray::destroy(Memory::MemoryManager* memoryManager) const
+	void BitArray::destroy(Memory::MemoryManager* i_memoryManager) const
 	{
 #ifdef _WIN64
-		memoryManager->freeMem(this->_bitArray64);
+		i_memoryManager->freeMem(this->_bitArray64);
 #else
-		memoryManager->freeMem(this->_bitArray32);
+		i_memoryManager->freeMem(this->_bitArray32);
 #endif
 	}
 

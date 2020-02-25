@@ -36,21 +36,21 @@ namespace Memory
 	// Singleton
 
 	// Creation
-	void MemoryManager::create(void* heapMemoryStartAddress, const size_t heapMemoryTotalSize,
-	                           const size_t maxBlockDescriptors)
+	void MemoryManager::create(void* i_heapMemoryStartAddress, const size_t i_heapMemoryTotalSize,
+	                           const size_t i_maxBlockDescriptors)
 	{
 		const size_t memoryManagerSize = sizeof(MemoryManager);
-		_instance = new(heapMemoryStartAddress)MemoryManager();
+		_instance = new(i_heapMemoryStartAddress)MemoryManager();
 
-		_instance->_maxBlockDescriptors = maxBlockDescriptors;
+		_instance->_maxBlockDescriptors = i_maxBlockDescriptors;
 		_instance->_blockDescriptorSize = sizeof(BlockDescriptor);
 		_instance->_blockDescriptorPointerSize = sizeof(BlockDescriptor*);
 		_instance->_intSize = sizeof(int);
 
-		_instance->_maxMemorySize = heapMemoryTotalSize - memoryManagerSize;
-		_instance->_userMemoryStartPointer = static_cast<char*>(heapMemoryStartAddress) +
-			maxBlockDescriptors * _instance->_blockDescriptorSize + memoryManagerSize;
-		_instance->_memoryStartPointer = static_cast<void*>(static_cast<char*>(heapMemoryStartAddress) +
+		_instance->_maxMemorySize = i_heapMemoryTotalSize - memoryManagerSize;
+		_instance->_userMemoryStartPointer = static_cast<char*>(i_heapMemoryStartAddress) +
+			i_maxBlockDescriptors * _instance->_blockDescriptorSize + memoryManagerSize;
+		_instance->_memoryStartPointer = static_cast<void*>(static_cast<char*>(i_heapMemoryStartAddress) +
 			memoryManagerSize);
 
 		_instance->_availableDescriptors = nullptr;
@@ -84,10 +84,10 @@ namespace Memory
 
 	// Allocates Memory for BlockDescriptor from the Initial Heap Memory and returns it
 	MemoryManager::BlockDescriptor* MemoryManager::createAndGetEmptyBlockDescriptor(
-		const size_t descriptorOffsetPosition) const
+		const size_t i_descriptorOffsetPosition) const
 	{
 		const auto blockDescriptor = new(static_cast<void*>(
-				static_cast<char*>(this->_memoryStartPointer) + descriptorOffsetPosition
+				static_cast<char*>(this->_memoryStartPointer) + i_descriptorOffsetPosition
 			))
 			BlockDescriptor();
 
@@ -122,7 +122,7 @@ namespace Memory
 
 	// Allocation
 
-	void* MemoryManager::allocate(const size_t contiguousMemorySizeRequired)
+	void* MemoryManager::allocate(const size_t i_contiguousMemorySizeRequired)
 	{
 		// Return NullPtr if there are no BlockDescriptors available
 		if (_availableDescriptors == nullptr)
@@ -136,7 +136,7 @@ namespace Memory
 		}
 
 		const size_t totalRequiredMemorySize = this->_blockDescriptorPointerSize + this->_intSize * 2 +
-			contiguousMemorySizeRequired;
+			i_contiguousMemorySizeRequired;
 		void* memoryAddress = this->getFirstFittingFreeBlock(totalRequiredMemorySize);
 
 		// Return NullPtr if there is no consecutive memory fit available
@@ -180,13 +180,13 @@ namespace Memory
 		*static_cast<int*>(firstGuardPosition) = this->DeadBlockData; // Assign the First Guard Block
 
 		void* secondGuardPosition = static_cast<void*>(static_cast<char*>(memoryAddress) +
-			this->_blockDescriptorPointerSize + this->_intSize + contiguousMemorySizeRequired);
+			this->_blockDescriptorPointerSize + this->_intSize + i_contiguousMemorySizeRequired);
 		*static_cast<int*>(secondGuardPosition) = this->DeadBlockData; // Assign the Second Guard Block
 
 		return userMemoryAddress;
 	}
 
-	void* MemoryManager::allocate(const size_t contiguousMemorySizeRequired, const unsigned int alignment)
+	void* MemoryManager::allocate(const size_t i_contiguousMemorySizeRequired, const unsigned int i_alignment)
 	{
 		// Return NullPtr if there are no BlockDescriptors available
 		if (_availableDescriptors == nullptr)
@@ -200,9 +200,9 @@ namespace Memory
 		}
 
 		const size_t initialSizeToLeave = this->_blockDescriptorPointerSize + this->_intSize;
-		const size_t totalMemorySize = initialSizeToLeave + contiguousMemorySizeRequired + this->_intSize;
+		const size_t totalMemorySize = initialSizeToLeave + i_contiguousMemorySizeRequired + this->_intSize;
 
-		void* memoryAddress = this->getFirstFittingFreeBlockAligned(totalMemorySize, initialSizeToLeave, alignment);
+		void* memoryAddress = this->getFirstFittingFreeBlockAligned(totalMemorySize, initialSizeToLeave, i_alignment);
 
 		if (memoryAddress == nullptr)
 		{
@@ -248,21 +248,21 @@ namespace Memory
 		*static_cast<int*>(firstGuardPosition) = this->DeadBlockData; // Assign the First Guard Block
 
 		void* secondGuardPosition = static_cast<void*>(static_cast<char*>(memoryAddress) +
-			this->_blockDescriptorPointerSize + this->_intSize + contiguousMemorySizeRequired + alignmentAmount);
+			this->_blockDescriptorPointerSize + this->_intSize + i_contiguousMemorySizeRequired + alignmentAmount);
 		*static_cast<int*>(secondGuardPosition) = this->DeadBlockData; // Assign the Second Guard Block
 
 		return userMemoryAddress;
 	}
 
-	void* MemoryManager::reallocate(void* pointer, const size_t contiguousMemorySizeRequired)
+	void* MemoryManager::reallocate(void* i_pointer, const size_t i_contiguousMemorySizeRequired)
 	{
-		if (pointer == nullptr)
+		if (i_pointer == nullptr)
 		{
 			printf_s("\nTrying to reallocate NULLPTR\n");
 			return nullptr;
 		}
 
-		void* userMemoryAddress = this->allocate(contiguousMemorySizeRequired);
+		void* userMemoryAddress = this->allocate(i_contiguousMemorySizeRequired);
 
 		if (userMemoryAddress == nullptr)
 		{
@@ -274,7 +274,7 @@ namespace Memory
 		while (true)
 		{
 			// This is given such that the data does not overflow into the older pointers
-			const int deadBlockCheck = *static_cast<int*>(static_cast<void*>(static_cast<char*>(pointer) +
+			const int deadBlockCheck = *static_cast<int*>(static_cast<void*>(static_cast<char*>(i_pointer) +
 				pointerIndex));
 			const int newMemoryDeadBlockCheck = *static_cast<int*>(static_cast<void*>(
 				static_cast<char*>(userMemoryAddress) + pointerIndex));
@@ -284,26 +284,26 @@ namespace Memory
 			}
 
 			// Copy data between pointers
-			*(static_cast<char*>(userMemoryAddress) + pointerIndex) = *(static_cast<char*>(pointer) + pointerIndex);
+			*(static_cast<char*>(userMemoryAddress) + pointerIndex) = *(static_cast<char*>(i_pointer) + pointerIndex);
 			pointerIndex += 1;
 		}
 
 		// Free the Old Pointer and Return New Pointer
-		this->freeMem(pointer);
+		this->freeMem(i_pointer);
 
 		return userMemoryAddress;
 	}
 
-	void* MemoryManager::reallocate(void* pointer, const size_t contiguousMemorySizeRequired,
-	                                const unsigned int alignment)
+	void* MemoryManager::reallocate(void* i_pointer, const size_t i_contiguousMemorySizeRequired,
+	                                const unsigned int i_alignment)
 	{
-		if (pointer == nullptr)
+		if (i_pointer == nullptr)
 		{
 			printf_s("\nTrying to reallocate NULLPTR\n");
 			return nullptr;
 		}
 
-		void* userMemoryAddress = this->allocate(contiguousMemorySizeRequired, alignment);
+		void* userMemoryAddress = this->allocate(i_contiguousMemorySizeRequired, i_alignment);
 
 		if (userMemoryAddress == nullptr)
 		{
@@ -315,7 +315,7 @@ namespace Memory
 		while (true)
 		{
 			// This is given such that the data does not overflow into the older pointers
-			const int deadBlockCheck = *static_cast<int*>(static_cast<void*>(static_cast<char*>(pointer) +
+			const int deadBlockCheck = *static_cast<int*>(static_cast<void*>(static_cast<char*>(i_pointer) +
 				pointerIndex));
 			const int newMemoryDeadBlockCheck = *static_cast<int*>(static_cast<void*>(
 				static_cast<char*>(userMemoryAddress) + pointerIndex));
@@ -325,17 +325,17 @@ namespace Memory
 			}
 
 			// Copy data between pointers
-			*(static_cast<char*>(userMemoryAddress) + pointerIndex) = *(static_cast<char*>(pointer) + pointerIndex);
+			*(static_cast<char*>(userMemoryAddress) + pointerIndex) = *(static_cast<char*>(i_pointer) + pointerIndex);
 			pointerIndex += 1;
 		}
 
 		// Free the Old Pointer and Return New Pointer
-		this->freeMem(pointer);
+		this->freeMem(i_pointer);
 
 		return userMemoryAddress;
 	}
 
-	void* MemoryManager::getFirstFittingFreeBlock(const size_t sizeRequired)
+	void* MemoryManager::getFirstFittingFreeBlock(const size_t i_sizeRequired)
 	{
 		// Return NULL if there are no FreeBlock available
 		if (this->_freeBlocks == nullptr)
@@ -349,7 +349,7 @@ namespace Memory
 		// Basically (First Fit)
 		while (freeBlockPointer != nullptr)
 		{
-			if (freeBlockPointer->memorySize < sizeRequired)
+			if (freeBlockPointer->memorySize < i_sizeRequired)
 			{
 				freeBlockPointer = freeBlockPointer->nextBlockDescriptor;
 				continue;
@@ -368,7 +368,7 @@ namespace Memory
 		// freeBlockPointerPrevious points to the previous BlockDescriptor
 
 		// Calculate the amount of memory left in the FreeBlock after user memory is subtracted
-		const size_t freeBlockMemorySizeLeft = freeBlockPointer->memorySize - sizeRequired;
+		const size_t freeBlockMemorySizeLeft = freeBlockPointer->memorySize - i_sizeRequired;
 
 		// Find the user memory as this is the one that will be returned
 		void* userMemory = freeBlockPointer->memoryStartPointer;
@@ -378,7 +378,7 @@ namespace Memory
 		{
 			freeBlockPointer->memorySize = freeBlockMemorySizeLeft;
 			freeBlockPointer->memoryStartPointer = static_cast<void*>(static_cast<char*>(
-				freeBlockPointer->memoryStartPointer) + sizeRequired);
+				freeBlockPointer->memoryStartPointer) + i_sizeRequired);
 		}
 			// In Case the whole is Used...
 		else
@@ -420,8 +420,8 @@ namespace Memory
 		return userMemory;
 	}
 
-	void* MemoryManager::getFirstFittingFreeBlockAligned(const size_t sizeRequired, const size_t initialSizeToLeave,
-	                                                     const unsigned int alignment)
+	void* MemoryManager::getFirstFittingFreeBlockAligned(const size_t i_sizeRequired, const size_t i_initialSizeToLeave,
+	                                                     const unsigned int i_alignment)
 	{
 		// Return NULL if there are no FreeBlock available
 		if (this->_freeBlocks == nullptr)
@@ -436,7 +436,7 @@ namespace Memory
 		// Basically (First Fit)
 		while (freeBlockPointer != nullptr)
 		{
-			if (freeBlockPointer->memorySize < sizeRequired)
+			if (freeBlockPointer->memorySize < i_sizeRequired)
 			{
 				freeBlockPointer = freeBlockPointer->nextBlockDescriptor;
 				continue;
@@ -449,13 +449,13 @@ namespace Memory
 
 			void* startPosition = freeBlockPointer->memoryStartPointer;
 			void* probableUserMemoryStartPosition = static_cast<void*>(static_cast<char*>(startPosition) +
-				initialSizeToLeave);
+				i_initialSizeToLeave);
 
 			const auto pointerAddress = reinterpret_cast<size_t>(probableUserMemoryStartPosition);
-			const size_t nextClosestMultiple = Utils::Utilities::GetRoundNextMultiple(pointerAddress, alignment);
+			const size_t nextClosestMultiple = Utils::Utilities::GetRoundNextMultiple(pointerAddress, i_alignment);
 			alignmentAmount = nextClosestMultiple - pointerAddress;
 
-			const size_t totalAdjustedSize = sizeRequired + alignmentAmount;
+			const size_t totalAdjustedSize = i_sizeRequired + alignmentAmount;
 			if (freeBlockPointer->memorySize >= totalAdjustedSize)
 			{
 				break;
@@ -469,7 +469,7 @@ namespace Memory
 			return nullptr;
 		}
 
-		const size_t totalSizeRequired = sizeRequired + alignmentAmount;
+		const size_t totalSizeRequired = i_sizeRequired + alignmentAmount;
 
 		// freeBlockPointer now points towards the BlockDescriptor that has the required Size
 		// freeBlockPointerPrevious points to the previous BlockDescriptor
@@ -533,15 +533,15 @@ namespace Memory
 
 	// Free Memory
 
-	void MemoryManager::freeMem(void* pointer)
+	void MemoryManager::freeMem(void* i_pointer)
 	{
-		if (pointer == nullptr)
+		if (i_pointer == nullptr)
 		{
 			printf_s("\nTrying to free a NULLPTR\n");
 			return;
 		}
 
-		void* blockDescriptorMemory = static_cast<void*>(static_cast<char*>(pointer) -
+		void* blockDescriptorMemory = static_cast<void*>(static_cast<char*>(i_pointer) -
 			this->_intSize - this->_blockDescriptorPointerSize
 		);
 		const auto actualBlockDescriptor = *(static_cast<BlockDescriptor**>(blockDescriptorMemory));
@@ -655,55 +655,55 @@ namespace Memory
 
 	// Quick Sort
 
-	MemoryManager::BlockDescriptor* MemoryManager::getLastBlockDescriptor(BlockDescriptor* head)
+	MemoryManager::BlockDescriptor* MemoryManager::getLastBlockDescriptor(BlockDescriptor* i_head)
 	{
-		while (head && head->nextBlockDescriptor != nullptr)
+		while (i_head && i_head->nextBlockDescriptor != nullptr)
 		{
-			head = head->nextBlockDescriptor;
+			i_head = i_head->nextBlockDescriptor;
 		}
 
-		return head;
+		return i_head;
 	}
 
-	void MemoryManager::swap(BlockDescriptor* first, BlockDescriptor* second)
+	void MemoryManager::swap(BlockDescriptor* i_first, BlockDescriptor* i_second)
 	{
-		void* firstMemoryAddress = first->memoryStartPointer;
-		const size_t firstAddressSize = first->memorySize;
+		void* firstMemoryAddress = i_first->memoryStartPointer;
+		const size_t firstAddressSize = i_first->memorySize;
 
-		first->memoryStartPointer = second->memoryStartPointer;
-		first->memorySize = second->memorySize;
+		i_first->memoryStartPointer = i_second->memoryStartPointer;
+		i_first->memorySize = i_second->memorySize;
 
-		second->memoryStartPointer = firstMemoryAddress;
-		second->memorySize = firstAddressSize;
+		i_second->memoryStartPointer = firstMemoryAddress;
+		i_second->memorySize = firstAddressSize;
 	}
 
-	MemoryManager::BlockDescriptor* MemoryManager::partition(BlockDescriptor* left, BlockDescriptor* head) const
+	MemoryManager::BlockDescriptor* MemoryManager::partition(BlockDescriptor* i_left, BlockDescriptor* i_head) const
 	{
-		void* compareAddress = head->memoryStartPointer;
-		BlockDescriptor* current = left->previousBlockDescriptor;
+		void* compareAddress = i_head->memoryStartPointer;
+		BlockDescriptor* current = i_left->previousBlockDescriptor;
 
-		for (BlockDescriptor* j = left; j != head; j = j->nextBlockDescriptor)
+		for (BlockDescriptor* j = i_left; j != i_head; j = j->nextBlockDescriptor)
 		{
 			if (j->memoryStartPointer <= compareAddress)
 			{
-				current = (current == nullptr) ? left : current->nextBlockDescriptor;
+				current = (current == nullptr) ? i_left : current->nextBlockDescriptor;
 				this->swap(current, j);
 			}
 		}
 
-		current = (current == nullptr) ? left : current->nextBlockDescriptor;
-		this->swap(current, head);
+		current = (current == nullptr) ? i_left : current->nextBlockDescriptor;
+		this->swap(current, i_head);
 
 		return current;
 	}
 
-	void MemoryManager::quickSort(BlockDescriptor* left, BlockDescriptor* head) const
+	void MemoryManager::quickSort(BlockDescriptor* i_left, BlockDescriptor* i_head) const
 	{
-		if (head != nullptr && left != head && left != head->nextBlockDescriptor)
+		if (i_head != nullptr && i_left != i_head && i_left != i_head->nextBlockDescriptor)
 		{
-			BlockDescriptor* partitionValue = this->partition(left, head);
-			this->quickSort(left, partitionValue->previousBlockDescriptor);
-			this->quickSort(partitionValue->nextBlockDescriptor, head);
+			BlockDescriptor* partitionValue = this->partition(i_left, i_head);
+			this->quickSort(i_left, partitionValue->previousBlockDescriptor);
+			this->quickSort(partitionValue->nextBlockDescriptor, i_head);
 		}
 	}
 

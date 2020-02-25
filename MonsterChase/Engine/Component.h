@@ -23,7 +23,9 @@ namespace Core
 			//LifeCycle Functions
 			virtual void Ready(Node*);
 			virtual void Process(float);
-			virtual void Render(sf::RenderWindow*);
+			virtual void PhysicsProcess(float);
+			virtual void SetupRender();
+			virtual void Render(sf::RenderWindow* i_window);
 			virtual void Exit();
 		};
 	}

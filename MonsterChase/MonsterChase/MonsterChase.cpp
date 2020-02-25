@@ -5,21 +5,27 @@
 #include "Allocators.h"
 #include <SFML/Graphics.hpp>
 
+#include "Point2D.h"
 #include "Node.h"
-#include "Node3D.h"
+#include "Node2D.h"
+#include "Rotate2D.h"
+#include "Scale2D.h"
 #include "SpriteRenderer.h"
+#include "Rigidbody2D.h"
+#include "Debug.h"
 
 #include <conio.h>
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <Windows.h>
+
+#pragma region RunBeforeMain
 
 // Super Hacky But Works
 class RunBeforeMain
 {
 public:
-	RunBeforeMain() = default;
-
 	~RunBeforeMain()
 	{
 		Memory::MemorySystem::destroy();
@@ -28,111 +34,147 @@ public:
 
 RunBeforeMain runBeforeMain;
 
-int main()
+#pragma endregion
+
+LRESULT CALLBACK onEvent(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	// SFML Sprites. Origin Point is Top Right Corner. Don't keep this here...
+	switch (message)
 	{
-		const auto solutionDir = SOLUTION_DIR;
-		// This won't work in release builds as SOLUTION_DIR does not exist then
+		// Quit when we close the main window
+	case WM_CLOSE:
+		{
+			PostQuitMessage(0);
+			return 0;
+		}
+
+	default:
+		break;
+	}
+
+	return DefWindowProc(handle, message, wParam, lParam);
+}
+
+INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
+{
+	{
+		// Define a class for our main window
+		WNDCLASS windowClass;
+		windowClass.style = 0;
+		windowClass.lpfnWndProc = &onEvent;
+		windowClass.cbClsExtra = 0;
+		windowClass.cbWndExtra = 0;
+		windowClass.hInstance = instance;
+		windowClass.hIcon = nullptr;
+		windowClass.hCursor = nullptr;
+		windowClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BACKGROUND);
+		windowClass.lpszMenuName = nullptr;
+		windowClass.lpszClassName = TEXT("SFML App");
+		RegisterClass(&windowClass);
+
+		// Let's create the main window
+		const HWND mainWindow = CreateWindow(TEXT("SFML App"), TEXT("SFML Win32"), WS_SYSMENU | WS_VISIBLE, 200, 200,
+		                                     800, 640, NULL, NULL, instance, NULL);
+
+		const auto solutionDir = SOLUTION_DIR; // This won't work in release builds as SOLUTION_DIR does not exist then
 		std::string goodGuyPath = solutionDir;
 		goodGuyPath += "Assets/GoodGuy.png";
-		std::string badGuyPath = solutionDir;
-		badGuyPath += "Assets/BadGuy.png";
 
 		auto engine = new Engine::Engine();
-		auto window = new sf::RenderWindow(sf::VideoMode(800, 640), "SFML Renderer!!!");
+		auto window = new sf::RenderWindow(mainWindow);
 		engine->Init(window);
 
 		auto goodGuy = new Core::BaseComponents::Node(); // Good Guy GameObject
-		auto badGuy = new Core::BaseComponents::Node(); // Bad Guy GameObject
-		const auto goodGuyPosition = goodGuy->AddComponent<Core::Components::Transform::Node3D>();
-		goodGuyPosition->GetPosition()->set(400, 320, 0);
-		const auto badGuyPosition = badGuy->AddComponent<Core::Components::Transform::Node3D>();
-		badGuyPosition->GetPosition()->set(10, 100, 0);
+		goodGuy->AddComponent<Core::Components::Transform::Rotate2D>();
+		goodGuy->AddComponent<Core::Components::Transform::Scale2D>();
+		const auto goodGuyPosition = goodGuy->AddComponent<Core::Components::Transform::Node2D>();
+		goodGuyPosition->GetPosition()->set(400, 0);
 		const auto goodGuySprite = goodGuy->AddComponent<Core::Components::Rendering::SpriteRenderer>();
 		goodGuySprite->LoadTexture(goodGuyPath);
-		const auto badGuySprite = badGuy->AddComponent<Core::Components::Rendering::SpriteRenderer>();
-		badGuySprite->LoadTexture(badGuyPath);
+		const auto goodGuyRb = goodGuy->AddComponent<Core::Components::Physics::Rigidbody2D>();
+		
+		const float xVelocity = 100;
+		Math::Point2D velocity(xVelocity, 0);
 
-		while (window->isOpen())
+		// Loop until a WM_QUIT message is received
+		MSG message;
+		message.message = static_cast<UINT>(~WM_QUIT);
+		while (message.message != WM_QUIT)
 		{
-			sf::Event event{};
-			while (window->pollEvent(event))
+			if (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE))
 			{
-				if (event.type == sf::Event::Closed)
-				{
-					window->close();
-				}
-
-				switch (event.type)
-				{
-				case sf::Event::Closed:
-					window->close();
-					break;
-
-				case sf::Event::KeyPressed:
-					{
-						switch (event.key.code)
-						{
-						case sf::Keyboard::A:
-							{
-								const auto position = goodGuyPosition->GetPosition();
-								position->setX(position->X() - 1);
-							}
-							break;
-
-						case sf::Keyboard::D:
-							{
-								const auto position = goodGuyPosition->GetPosition();
-								position->setX(position->X() + 1);
-							}
-							break;
-
-						case sf::Keyboard::Left:
-							{
-								const auto position = badGuyPosition->GetPosition();
-								position->setX(position->X() - 1);
-							}
-							break;
-
-						case sf::Keyboard::Right:
-							{
-								const auto position = badGuyPosition->GetPosition();
-								position->setX(position->X() + 1);
-							}
-							break;
-
-						default:
-							// Do nothing here...
-							break;
-						}
-					}
-					break;
-
-				default:
-					// Do nothing here...
-					break;
-				}
+				// If a message was waiting in the message queue, process it
+				TranslateMessage(&message);
+				DispatchMessage(&message);
 			}
+			else
+			{
+				sf::Event event{};
+				while (window->pollEvent(event))
+				{
+					if (event.type == sf::Event::Closed)
+					{
+						window->close();
+					}
 
-			window->clear();
-			engine->Run();
-			window->display();
+					switch (event.type)
+					{
+					case sf::Event::KeyPressed:
+						{
+							switch (event.key.code)
+							{
+							case sf::Keyboard::Left:
+								{
+									velocity.setX(-xVelocity);
+									goodGuyRb->SetLinearDrag(0.05f);
+									goodGuyRb->SetVelocity(velocity);
+								}
+								break;
+
+							case sf::Keyboard::Right:
+								{
+									velocity.setX(xVelocity);
+									goodGuyRb->SetLinearDrag(0.05f);
+									goodGuyRb->SetVelocity(velocity);
+								}
+								break;
+
+							default:
+								// Don't do anything here...
+								break;
+							}
+						}
+						break;
+
+					default:
+						{
+							// TODO: Remove this later on...
+							velocity.setX(0);
+							goodGuyRb->SetLinearDrag(1);
+							goodGuyRb->SetVelocity(velocity);
+						}
+						break;
+					}
+				}
+
+				window->clear();
+				engine->Run();
+				window->display();
+			}
 		}
 
+		window->close();
+		DestroyWindow(mainWindow); // Destroy the main window (all its child controls will be destroyed)
+		UnregisterClass(TEXT("SFML App"), instance); // Don't forget to unregister the window class
+
 		engine->ShutDown();
-		delete goodGuy;
-		delete badGuy;
 		delete engine;
 	}
-
 
 #ifdef _DEBUG
 	_CrtDumpMemoryLeaks();
 #endif
 
-	(void)_getch();
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

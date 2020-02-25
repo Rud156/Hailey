@@ -8,8 +8,15 @@ namespace Core
 	{
 		namespace Transform
 		{
-			class Node3D;
+			class Node2D;
+			class Rotate2D;
+			class Scale2D;
 		}
+	}
+
+	namespace BaseComponents
+	{
+		class Node;
 	}
 }
 
@@ -25,23 +32,40 @@ namespace Core
 	{
 		namespace Rendering
 		{
+			// TODO: Z Ordering of Sprites
 			class SpriteRenderer final : public BaseComponents::Component
 			{
 			private:
-				Transform::Node3D* _node3d;
+				BaseComponents::Node* _node;
+				
+				Transform::Node2D* _node2d;
+				Transform::Rotate2D* _rotate2d;
+				Transform::Scale2D* _scale2d;
+
 				sf::Sprite* _sprite;
 				sf::Texture* _texture;
+
+				bool _isVisible;
+				float _depthLayer;
 
 			public:
 				SpriteRenderer();
 				~SpriteRenderer();
 
-				void Ready(BaseComponents::Node* node) override;
-				void LoadTexture(const std::string& filePath);
+				// Parent Overrides
+				void Ready(BaseComponents::Node* i_node) override;
+				void SetupRender() override;
+				void Render(sf::RenderWindow* i_window) override;
 
-				void Render(sf::RenderWindow* window) override;
+				void LoadEmpty();
+				void LoadTexture(const std::string& i_filePath);
 
-				sf::Sprite* GetSprite() const;
+				[[nodiscard]] sf::Sprite* GetSprite() const;
+				void SetSpriteDepth(float i_depthLayer);
+				[[nodiscard]] float GetSpriteDepth() const;
+
+				[[nodiscard]] bool GetIsVisible() const;
+				void SetIsVisible(bool i_value);
 			};
 		}
 	}

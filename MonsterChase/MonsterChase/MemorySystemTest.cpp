@@ -61,14 +61,14 @@ bool MemorySystem_UnitTest()
 		const size_t maxTestAllocationSize = 1024;
 		const size_t sizeAlloc = 1 + (rand() & (maxTestAllocationSize - 1));
 
-		void* pPtr = malloc(sizeAlloc);
+		void* pPtr = cMalloc(sizeAlloc);
 
 		// if allocation failed see if garbage collecting will create a large enough block
 		if (pPtr == nullptr)
 		{
 			Collect();
 
-			pPtr = malloc(sizeAlloc);
+			pPtr = cMalloc(sizeAlloc);
 
 			// if not we're done. go on to cleanup phase of test
 			if (pPtr == nullptr)
@@ -89,7 +89,7 @@ bool MemorySystem_UnitTest()
 			void* pPtrToFree = AllocatedAddresses.back();
 			AllocatedAddresses.pop_back();
 
-			free(pPtrToFree);
+			cFree(pPtrToFree);
 			numFrees++;
 		}
 		else if ((rand() % garbageCollectAboutEvery) == 0)
@@ -122,11 +122,11 @@ bool MemorySystem_UnitTest()
 		// our heap should be one single block, all the memory it started with
 
 		// do a large test allocation to see if garbage collection worked
-		void* pPtr = malloc(totalAllocated / 2);
+		void* pPtr = cMalloc(totalAllocated / 2);
 
 		if (pPtr)
 		{
-			free(pPtr);
+			cFree(pPtr);
 		}
 		else
 		{

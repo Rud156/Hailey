@@ -2,6 +2,19 @@
 #include <vector>
 #include "Node.h"
 
+namespace Core::Controllers
+{
+	namespace Rendering
+	{
+		class SpriteRenderController;
+	}
+
+	namespace Physics
+	{
+		class WorldPhysicsController;
+	}
+}
+
 namespace sf
 {
 	class RenderWindow;
@@ -15,6 +28,8 @@ namespace Core
 		{
 		private:
 			std::vector<BaseComponents::Node*> _gameObjects;
+			Rendering::SpriteRenderController* _spriteRenderController;
+			Physics::WorldPhysicsController* _worldPhysicsController;
 
 		public:
 			// Constructor and Destructor
@@ -22,12 +37,12 @@ namespace Core
 			~GameObjectUpdater();
 
 			// External Functions
-			void AddGameObject(BaseComponents::Node* node);
-			void RemoveGameObject(BaseComponents::Node* node);
+			void AddGameObject(BaseComponents::Node* i_node);
+			void RemoveGameObject(BaseComponents::Node* i_node);
 
 			// LifeCycle Functions
-			void Process(float deltaTime);
-			void Render(sf::RenderWindow* window);
+			void Process(float i_deltaTime);
+			void Render(sf::RenderWindow* i_window);
 			void Exit();
 		};
 	}

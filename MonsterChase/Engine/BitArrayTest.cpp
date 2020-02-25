@@ -70,13 +70,13 @@ namespace Containers
 			printf_s("===============================\n");
 		}
 
-		bool GetFirstSetBit(size_t& index, std::vector<bool> fakeBitArray)
+		bool GetFirstSetBit(size_t& i_index, std::vector<bool> i_fakeBitArray)
 		{
-			for (size_t i = 0; i < fakeBitArray.size(); i++)
+			for (size_t i = 0; i < i_fakeBitArray.size(); i++)
 			{
-				if (fakeBitArray[i])
+				if (i_fakeBitArray[i])
 				{
-					index = i;
+					i_index = i;
 					return true;
 				}
 			}
@@ -84,13 +84,13 @@ namespace Containers
 			return false;
 		}
 
-		bool GetFirstClearBit(size_t& index, std::vector<bool> fakeBitArray)
+		bool GetFirstClearBit(size_t& i_index, std::vector<bool> i_fakeBitArray)
 		{
-			for (size_t i = 0; i < fakeBitArray.size(); i++)
+			for (size_t i = 0; i < i_fakeBitArray.size(); i++)
 			{
-				if (!fakeBitArray[i])
+				if (!i_fakeBitArray[i])
 				{
-					index = i;
+					i_index = i;
 					return true;
 				}
 			}

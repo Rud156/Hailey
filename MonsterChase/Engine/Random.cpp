@@ -7,13 +7,13 @@ namespace Utils
 
 	Random::~Random() = default;
 
-	void Random::SetSeed(unsigned int seed)
+	void Random::SetSeed(unsigned int i_seed)
 	{
-		srand(seed);
+		srand(i_seed);
 	}
 
-	int Random::RandomInRange(const int lowerIndex, const int upperIndex)
+	int Random::RandomInRange(const int i_lowerIndex, const int i_upperIndex)
 	{
-		return (rand() % (upperIndex - lowerIndex + 1)) + lowerIndex;
+		return (rand() % (i_upperIndex - i_lowerIndex + 1)) + i_lowerIndex;
 	}
 }

@@ -1,25 +1,19 @@
 #include "Node3D.h"
 
-namespace Core
+namespace Core::Components::Transform
 {
-	namespace Components
+	Node3D::Node3D()
 	{
-		namespace Transform
-		{
-			Node3D::Node3D()
-			{
-				_position = new Math::Point3D();
-			}
+		_position = new Math::Point3D();
+	}
 
-			Node3D::~Node3D()
-			{
-				delete _position;
-			}
+	Node3D::~Node3D()
+	{
+		delete _position;
+	}
 
-			Math::Point3D* Node3D::GetPosition() const
-			{
-				return _position;
-			}
-		}
+	Math::Point3D* Node3D::GetPosition() const
+	{
+		return _position;
 	}
 }

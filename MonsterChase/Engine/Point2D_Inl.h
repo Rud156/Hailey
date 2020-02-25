@@ -68,88 +68,96 @@ namespace Math
 
 	// Basic Operators
 
-	inline Point2D operator+(const Point2D& point2d_1, const Point2D& point2d_2)
+	inline Point2D operator+(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
 	{
-		const float x = point2d_1.X() + point2d_2.X();
-		const float y = point2d_1.Y() + point2d_2.Y();
+		const float x = i_point2d_1.X() + i_point2d_2.X();
+		const float y = i_point2d_1.Y() + i_point2d_2.Y();
 
 		return Point2D(x, y);
 	}
 
-	inline Point2D operator-(const Point2D& point2d_1, const Point2D& point2d_2)
+	inline Point2D operator-(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
 	{
-		const float x = point2d_1.X() - point2d_2.X();
-		const float y = point2d_1.Y() - point2d_2.Y();
+		const float x = i_point2d_1.X() - i_point2d_2.X();
+		const float y = i_point2d_1.Y() - i_point2d_2.Y();
 
 		return Point2D(x, y);
 	}
 
-	inline Point2D operator*(const Point2D& point2d_1, const Point2D& point2d_2)
+	inline Point2D operator*(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
 	{
-		const float x = point2d_1.X() * point2d_2.X();
-		const float y = point2d_1.Y() * point2d_2.Y();
+		const float x = i_point2d_1.X() * i_point2d_2.X();
+		const float y = i_point2d_1.Y() * i_point2d_2.Y();
 
 		return Point2D(x, y);
 	}
 
-	inline Point2D operator*(const Point2D& point2d, const float operation)
+	inline Point2D operator*(const Point2D& i_point2d, const float i_operation)
 	{
-		const float x = point2d._x * operation;
-		const float y = point2d._y * operation;
+		const float x = i_point2d._x * i_operation;
+		const float y = i_point2d._y * i_operation;
 
 		return Point2D(x, y);
 	}
 
-	inline Point2D operator/(const Point2D& point2d, const float operation)
+	inline Point2D operator*(const float operation, const Point2D& point2d)
 	{
-		const float x = point2d._x / operation;
-		const float y = point2d._y / operation;
+		const float x = point2d.X() * operation;
+		const float y = point2d.Y() * operation;
 
 		return Point2D(x, y);
 	}
 
-	inline Point2D operator-(const Point2D& point2d)
+	inline Point2D operator/(const Point2D& i_point2d, const float i_operation)
 	{
-		const float x = -point2d._x;
-		const float y = -point2d._y;
+		const float x = i_point2d._x / i_operation;
+		const float y = i_point2d._y / i_operation;
 
 		return Point2D(x, y);
 	}
 
-	inline Point2D operator/(const Point2D& point2d_1, const Point2D& point2d_2)
+	inline Point2D operator-(const Point2D& i_point2d)
 	{
-		const float x = point2d_1.X() / point2d_2.X();
-		const float y = point2d_1.Y() / point2d_2.Y();
+		const float x = -i_point2d._x;
+		const float y = -i_point2d._y;
 
 		return Point2D(x, y);
 	}
 
-	inline bool operator==(const Point2D& point2d_1, const Point2D& point2d_2)
+	inline Point2D operator/(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
 	{
-		return point2d_1._x == point2d_2._x && point2d_1._y == point2d_2._y;
+		const float x = i_point2d_1.X() / i_point2d_2.X();
+		const float y = i_point2d_1.Y() / i_point2d_2.Y();
+
+		return Point2D(x, y);
 	}
 
-	inline bool operator!=(const Point2D& point2d_1, const Point2D& point2d_2)
+	inline bool operator==(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
 	{
-		return point2d_1._x != point2d_2._x || point2d_1._y != point2d_2._y;
+		return i_point2d_1._x == i_point2d_2._x && i_point2d_1._y == i_point2d_2._y;
+	}
+
+	inline bool operator!=(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
+	{
+		return i_point2d_1._x != i_point2d_2._x || i_point2d_1._y != i_point2d_2._y;
 	}
 
 	// Basic Operators
 
 	// Distance
 
-	inline float Point2D::distance(const Point2D& point2d_1, const Point2D& point2d_2)
+	inline float Point2D::distance(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
 	{
-		const float x = point2d_1._x - point2d_2._x;
-		const float y = point2d_1._y - point2d_2._y;
+		const float x = i_point2d_1._x - i_point2d_2._x;
+		const float y = i_point2d_1._y - i_point2d_2._y;
 
 		return static_cast<float>(sqrt(x * x + y * y));
 	}
 
-	inline float Point2D::distanceSq(const Point2D& point2d_1, const Point2D& point2d_2)
+	inline float Point2D::distanceSq(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
 	{
-		const float x = point2d_1._x - point2d_2._x;
-		const float y = point2d_1._y - point2d_2._y;
+		const float x = i_point2d_1._x - i_point2d_2._x;
+		const float y = i_point2d_1._y - i_point2d_2._y;
 
 		return x * x + y * y;
 	}
@@ -158,10 +166,10 @@ namespace Math
 
 	// Printing
 
-	inline std::ostream& operator<<(std::ostream& stream, const Point2D& point2d)
+	inline std::ostream& operator<<(std::ostream& i_stream, const Point2D& i_point2d)
 	{
-		stream << "( " << point2d._x << ", " << point2d._y << " )";
-		return stream;
+		i_stream << "( " << i_point2d._x << ", " << i_point2d._y << " )";
+		return i_stream;
 	}
 
 	// Printing

@@ -15,30 +15,30 @@ namespace Memory
 
 #pragma region Data Checks
 
-	inline bool MemorySystem::contains(void* pointer) const
+	inline bool MemorySystem::contains(void* i_pointer) const
 	{
 		for (size_t i = 0; i < TotalFixedAllocators; i++)
 		{
-			if (this->_fixedMemoryManagers[i]->contains(pointer))
+			if (this->_fixedMemoryManagers[i]->contains(i_pointer))
 			{
 				return true;
 			}
 		}
 
-		return memoryManager->contains(pointer);
+		return memoryManager->contains(i_pointer);
 	}
 
-	inline bool MemorySystem::isAllocated(void* pointer) const
+	inline bool MemorySystem::isAllocated(void* i_pointer) const
 	{
 		for (size_t i = 0; i < TotalFixedAllocators; i++)
 		{
-			if (this->_fixedMemoryManagers[i]->isAllocated(pointer))
+			if (this->_fixedMemoryManagers[i]->isAllocated(i_pointer))
 			{
 				return true;
 			}
 		}
 
-		return memoryManager->isAllocated(pointer);
+		return memoryManager->isAllocated(i_pointer);
 	}
 
 #pragma endregion

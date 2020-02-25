@@ -92,6 +92,7 @@
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)\SFML-2.5.1-x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -113,6 +114,7 @@
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -135,6 +137,7 @@
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -159,6 +162,7 @@
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)\SFML-2.5.1-x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,15 +176,20 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BitArray.h" />
     <ClInclude Include="BitArrayTest.h" />
+    <ClInclude Include="CircleCollider.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="CoreLoop.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="FixedMemoryManager.h" />
     <ClInclude Include="FixedMemoryManager_Inl.h" />
     <ClInclude Include="GameObjectUpdater.h" />
     <ClInclude Include="GameObjectUpdater_Extern.h" />
+    <ClInclude Include="LoopTimer.h" />
+    <ClInclude Include="MathUtils.h" />
     <ClInclude Include="MemoryManager_Extern.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="MemoryManager.h" />
@@ -195,19 +204,34 @@
     <ClInclude Include="Point3D.h" />
     <ClInclude Include="Point3D_Inl.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="RectangleCollider.h" />
+    <ClInclude Include="Rigidbody2D.h" />
+    <ClInclude Include="Rotate2D.h" />
+    <ClInclude Include="Scale2D.h" />
+    <ClInclude Include="SpriteAnimationSI.h" />
+    <ClInclude Include="SpriteAnimationSS.h" />
     <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="SpriteRenderController.h" />
+    <ClInclude Include="SpriteRenderController_Extern.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Utilities.h" />
+    <ClInclude Include="WorldPhysicsController.h" />
+    <ClInclude Include="WorldPhysicsController_Extern.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BitArray.cpp" />
     <ClCompile Include="BitArrayTest.cpp" />
+    <ClCompile Include="CircleCollider.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="CoreLoop.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FixedMemoryManager.cpp" />
     <ClCompile Include="GameObjectUpdater.cpp" />
+    <ClCompile Include="LoopTimer.cpp" />
+    <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="Node2D.cpp" />
@@ -216,7 +240,14 @@
     <ClCompile Include="Point2D.cpp" />
     <ClCompile Include="Point3D.cpp" />
     <ClCompile Include="Random.cpp" />
+    <ClCompile Include="RectangleCollider.cpp" />
+    <ClCompile Include="Rigidbody2D.cpp" />
+    <ClCompile Include="Rotate2D.cpp" />
+    <ClCompile Include="Scale2D.cpp" />
+    <ClCompile Include="SpriteAnimationSI.cpp" />
+    <ClCompile Include="SpriteAnimationSS.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="SpriteRenderController.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -224,6 +255,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="WorldPhysicsController.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

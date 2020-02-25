@@ -9,7 +9,7 @@ namespace Utils
 		~Random();
 
 	public:
-		static void SetSeed(unsigned int seed);
-		static int RandomInRange(const int lowerIndex, const int upperIndex);
+		static void SetSeed(unsigned int i_seed);
+		[[nodiscard]] static int RandomInRange(const int i_lowerIndex, const int i_upperIndex);
 	};
 }

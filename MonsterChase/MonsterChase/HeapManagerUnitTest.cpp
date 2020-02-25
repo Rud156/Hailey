@@ -8,6 +8,8 @@
 #include <vector>
 #include <ctime>
 
+#include "Allocators.h"
+
 // #define SUPPORTS_REALLOC
 #define SUPPORTS_ALIGNMENT
 #define SUPPORTS_SHOWFREEBLOCKS
@@ -167,7 +169,7 @@ bool HeapManagerUnitTest::HeapManager_UnitTest() const
 		AllocatedAddresses.push_back(pPtr);
 		numAllocs++;
 
-		// randomly free and/or garbage collect during allocation phase
+		// randomly cFree and/or garbage collect during allocation phase
 		const unsigned int freeAboutEvery = 10;
 		const unsigned int garbageCollectAboutEvery = 40;
 
@@ -205,7 +207,7 @@ bool HeapManagerUnitTest::HeapManager_UnitTest() const
 	printf("\n");
 #endif
 
-	// now free those blocks in a random order
+	// now cFree those blocks in a random order
 	if (!AllocatedAddresses.empty())
 	{
 		// randomize the addresses

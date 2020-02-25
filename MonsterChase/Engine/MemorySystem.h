@@ -29,16 +29,17 @@ namespace Memory
 
 	public:
 		// Creation
-		static void create(void* heapMemoryStartAddress, size_t heapMemoryTotalSize, size_t maxBlockDescriptors);
+		static void create(void* i_heapMemoryStartAddress, size_t i_heapMemoryTotalSize, size_t i_maxBlockDescriptors);
 
 		// Allocation
-		static void* allocate(size_t contiguousMemorySizeRequired);
-		static void* allocate(size_t contiguousMemorySizeRequired, unsigned int alignment);
-		static void* reallocate(void* pointer, size_t contiguousMemorySizeRequired);
-		static void* reallocate(void* pointer, size_t contiguousMemorySizeRequired, unsigned int alignment);
+		[[nodiscard]] static void* allocate(size_t i_contiguousMemorySizeRequired);
+		[[nodiscard]] static void* allocate(size_t i_contiguousMemorySizeRequired, unsigned int i_alignment);
+		[[nodiscard]] static void* reallocate(void* i_pointer, size_t i_contiguousMemorySizeRequired);
+		[[nodiscard]] static void* reallocate(void* i_pointer, size_t i_contiguousMemorySizeRequired,
+		                                      unsigned int i_alignment);
 
 		// Free
-		static void freeMem(void* pointer);
+		static void freeMem(void* i_pointer);
 
 		// Destroy
 		static void destroy();
@@ -47,8 +48,8 @@ namespace Memory
 		static inline void collect();
 
 		// Data Checks
-		inline bool contains(void* pointer) const;
-		inline bool isAllocated(void* pointer) const;
+		[[nodiscard]] inline bool contains(void* i_pointer) const;
+		[[nodiscard]] inline bool isAllocated(void* i_pointer) const;
 	};
 }
 

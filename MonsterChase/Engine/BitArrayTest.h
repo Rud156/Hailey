@@ -7,7 +7,7 @@ namespace Containers
 	{
 		void RunBitArrayUnitTest();
 
-		bool GetFirstSetBit(size_t& index, std::vector<bool> fakeBitArray);
-		bool GetFirstClearBit(size_t& index, std::vector<bool> fakeBitArray);
+		bool GetFirstSetBit(size_t& i_index, std::vector<bool> i_fakeBitArray);
+		bool GetFirstClearBit(size_t& i_index, std::vector<bool> i_fakeBitArray);
 	}
 }

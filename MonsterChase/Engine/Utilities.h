@@ -9,7 +9,6 @@ namespace Utils
 		~Utilities();
 
 	public:
-		static size_t GetRoundNextMultiple(size_t number, unsigned int multiple);
-		
+		[[nodiscard]] static size_t GetRoundNextMultiple(size_t i_number, unsigned int i_multiple);
 	};
 }

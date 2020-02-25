@@ -33,21 +33,21 @@ namespace Memory
 		FixedMemoryManager();
 
 		// Setup
-		void create(size_t memoryBlockSize, MemoryManager* memoryManager, long totalBitsCount = 1000);
+		void create(size_t i_memoryBlockSize, MemoryManager* i_memoryManager, long i_totalBitsCount = 1000);
 
 		// Allocation
-		void* allocate(size_t contiguousMemorySize) const;
+		[[nodiscard]] void* allocate(size_t i_contiguousMemorySize) const;
 
 		// Free
-		void freeMem(void* pointer) const;
+		void freeMem(void* i_pointer) const;
 
 		// Destroy
-		void destroy(MemoryManager* memoryManager) const;
+		void destroy(MemoryManager* i_memoryManager) const;
 
 		// Data Checks
-		inline bool canHandleSize(size_t inputSize) const;
-		inline bool contains(void* pointer) const;
-		inline bool isAllocated(void* pointer) const;
+		[[nodiscard]] inline bool canHandleSize(size_t i_inputSize) const;
+		[[nodiscard]] inline bool contains(void* i_pointer) const;
+		[[nodiscard]] inline bool isAllocated(void* i_pointer) const;
 	};
 }
 

@@ -17,7 +17,10 @@ namespace Core
 			std::vector<Component*> _components;
 
 			void SortComponents();
-			static bool ComparePriority(Component* a, Component* b);
+			static bool ComparePriority(Component* i_a, Component* i_b);
+
+			// Component Specific Data for Fast Access
+			float _renderOrder;
 
 		public:
 			// Constructor and Destructor
@@ -36,9 +39,15 @@ namespace Core
 
 			// LifeCycle Methods
 			void Ready();
-			void Process(float deltaTime);
-			void Render(sf::RenderWindow* window);
+			void Process(float i_deltaTime);
+			void PhysicsProcess(float i_fixedDeltaTime);
+			void SetupRender();
+			void Render(sf::RenderWindow* i_window);
 			void Exit();
+
+			// Component Specific Data for Fast Access
+			void SetRenderOrder(float i_renderOrder);
+			float GetRenderOrder() const;
 		};
 
 		template <class T>
@@ -46,7 +55,7 @@ namespace Core
 		{
 			T* t = new T();
 
-			static_cast<Component*>(t)->Ready(this); // TODO: fix this...
+			static_cast<Component*>(t)->Ready(this);
 			_components.push_back(t);
 
 			SortComponents();

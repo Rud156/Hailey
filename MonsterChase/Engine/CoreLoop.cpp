@@ -1,32 +1,30 @@
 #include "CoreLoop.h"
 #include "GameObjectUpdater.h"
+#include "LoopTimer.h"
 #include <SFML/Graphics.hpp>
 
-namespace Core
+namespace Core::Controllers
 {
-	namespace Controllers
+	CoreLoop::CoreLoop() = default;
+
+	CoreLoop::~CoreLoop()
 	{
-		CoreLoop::CoreLoop() = default;
+		delete this->_loopTimer;
+		delete this->_window;
+		delete this->_gameObjectUpdater;
+	}
 
-		CoreLoop::~CoreLoop()
-		{
-			delete this->_clock;
-			delete this->_window;
-			delete this->_gameObjectUpdater;
-		}
+	void CoreLoop::Setup(sf::RenderWindow* i_window)
+	{
+		this->_gameObjectUpdater = new GameObjectUpdater();
+		this->_loopTimer = new LoopTimer();
+		this->_window = i_window;
+	}
 
-		void CoreLoop::Setup(sf::RenderWindow* window)
-		{
-			this->_gameObjectUpdater = new GameObjectUpdater();
-			this->_clock = new sf::Clock();
-			this->_window = window;
-		}
-
-		void CoreLoop::Run() const
-		{
-			const sf::Time elapsedTime = this->_clock->restart();
-			_gameObjectUpdater->Process(elapsedTime.asSeconds());
-			_gameObjectUpdater->Render(this->_window);
-		}
+	void CoreLoop::Run() const
+	{
+		const auto elapsedTime = static_cast<float>(this->_loopTimer->RestartClock());
+		_gameObjectUpdater->Process(elapsedTime);
+		_gameObjectUpdater->Render(this->_window);
 	}
 }

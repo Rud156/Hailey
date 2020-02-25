@@ -12,59 +12,59 @@ namespace Math
 	public:
 		// Constructor
 		Point2D();
-		Point2D(float x, float y);
-		Point2D(const Point2D& point2d);
+		Point2D(float i_x, float i_y);
+		Point2D(const Point2D& i_point2d);
 
 		// Destructor
 		~Point2D();
 
 		// Getters
-		inline float X() const;
-		inline float Y() const;
+		[[nodiscard]] inline float X() const;
+		[[nodiscard]] inline float Y() const;
 
 		// Static Operations
-		inline friend Point2D operator+(const Point2D& point2d_1, const Point2D& point2d_2);
-		inline friend Point2D operator-(const Point2D& point2d_1, const Point2D& point2d_2);
-		inline friend Point2D operator*(const Point2D& point2d_1, const Point2D& point2d_2);
-		inline friend Point2D operator*(const Point2D& point2d, const float operation);
-		inline friend Point2D operator/(const Point2D& point2d_1, const Point2D& point2d_2);
-		inline friend Point2D operator/(const Point2D& point2d, const float operation);
+		inline friend Point2D operator+(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
+		inline friend Point2D operator-(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
+		inline friend Point2D operator*(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
+		inline friend Point2D operator*(const Point2D& i_point2d, const float i_operation);
+		inline friend Point2D operator/(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
+		inline friend Point2D operator/(const Point2D& i_point2d, const float i_operation);
 
-		inline friend bool operator==(const Point2D& point2d_1, const Point2D& point2d_2);
-		inline friend bool operator!=(const Point2D& point2d_1, const Point2D& point2d_2);
+		inline friend bool operator==(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
+		inline friend bool operator!=(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
 
-		inline friend Point2D operator-(const Point2D& point2d);
+		inline friend Point2D operator-(const Point2D& i_point2d);
 
 		// Modifier Operations
-		Point2D operator+=(const Point2D& point2d);
-		Point2D operator-=(const Point2D& point2d);
-		Point2D operator*=(const Point2D& point2d);
-		Point2D operator*=(const float operation);
-		Point2D operator/=(const Point2D& point2d);
-		Point2D operator/=(const float operation);
+		Point2D operator+=(const Point2D& i_point2d);
+		Point2D operator-=(const Point2D& i_point2d);
+		Point2D operator*=(const Point2D& i_point2d);
+		Point2D operator*=(const float i_operation);
+		Point2D operator/=(const Point2D& i_point2d);
+		Point2D operator/=(const float i_operation);
 
-		inline friend std::ostream& operator<<(std::ostream& stream, const Point2D& point2d);
+		inline friend std::ostream& operator<<(std::ostream& i_stream, const Point2D& i_point2d);
 
 		// Utility Methods
-		void set(const Point2D& point2d);
-		void set(float x, float y);
-		void set(int x, int y);
-		void setX(float x);
-		void setX(int x);
-		void setY(float y);
-		void setY(int y);
+		void set(const Point2D& i_point2d);
+		void set(float i_x, float i_y);
+		void set(int i_x, int i_y);
+		void setX(float i_x);
+		void setX(int i_x);
+		void setY(float i_y);
+		void setY(int i_y);
 
-		inline bool isZero() const;
+		[[nodiscard]] inline bool isZero() const;
 
-		inline float length() const;
-		inline float lengthSq() const;
+		[[nodiscard]] inline float length() const;
+		[[nodiscard]] inline float lengthSq() const;
 
-		inline Point2D copy() const;
-		inline Point2D normalize();
+		[[nodiscard]] inline Point2D copy() const;
+		[[nodiscard]] inline Point2D normalize();
 
 		inline static Point2D Zero();
-		inline static float distance(const Point2D& point2d_1, const Point2D& point2d_2);
-		inline static float distanceSq(const Point2D& point2d_1, const Point2D& point2d_2);
+		inline static float distance(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
+		inline static float distanceSq(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
 	};
 }
 

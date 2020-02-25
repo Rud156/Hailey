@@ -6,11 +6,9 @@ namespace Core
 	{
 		// Constructor And Destructor
 
-		Component::Component()
-		= default;
+		Component::Component() = default;
 
-		Component::~Component()
-		= default;
+		Component::~Component() = default;
 
 		// Constructor And Destructor
 
@@ -33,9 +31,18 @@ namespace Core
 		{
 		}
 
+		void Component::PhysicsProcess(float)
+		{
+		}
+
+		void Component::SetupRender()
+		{
+		}
+
 		void Component::Render(sf::RenderWindow*)
 		{
 		}
+
 
 		void Component::Exit()
 		{

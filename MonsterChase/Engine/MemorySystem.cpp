@@ -43,14 +43,14 @@ namespace Memory
 
 #pragma region Creation
 
-	void MemorySystem::create(void* heapMemoryStartAddress, size_t heapMemoryTotalSize,
-	                          size_t maxBlockDescriptors)
+	void MemorySystem::create(void* i_heapMemoryStartAddress, size_t i_heapMemoryTotalSize,
+	                          size_t i_maxBlockDescriptors)
 	{
 		const size_t overlordSize = sizeof(MemorySystem);
-		_instance = new(heapMemoryStartAddress)MemorySystem();
+		_instance = new(i_heapMemoryStartAddress)MemorySystem();
 
-		void* otherUseMemoryStartAddress = static_cast<char*>(heapMemoryStartAddress) + overlordSize;
-		MemoryManager::create(otherUseMemoryStartAddress, heapMemoryTotalSize, maxBlockDescriptors);
+		void* otherUseMemoryStartAddress = static_cast<char*>(i_heapMemoryStartAddress) + overlordSize;
+		MemoryManager::create(otherUseMemoryStartAddress, i_heapMemoryTotalSize, i_maxBlockDescriptors);
 
 		const size_t fixedMemoryManagerSize = sizeof(FixedMemoryManager*);
 		void* fixedArrayMemory = memoryManager->allocate(fixedMemoryManagerSize * TotalFixedAllocators);
@@ -95,7 +95,7 @@ namespace Memory
 
 #pragma region Allocations
 
-	void* MemorySystem::allocate(const size_t contiguousMemorySizeRequired)
+	void* MemorySystem::allocate(const size_t i_contiguousMemorySizeRequired)
 	{
 		if (_instance == nullptr)
 		{
@@ -104,9 +104,9 @@ namespace Memory
 
 		for (size_t i = 0; i < TotalFixedAllocators; i++)
 		{
-			if (_instance->_fixedMemoryManagers[i]->canHandleSize(contiguousMemorySizeRequired))
+			if (_instance->_fixedMemoryManagers[i]->canHandleSize(i_contiguousMemorySizeRequired))
 			{
-				void* memory = _instance->_fixedMemoryManagers[i]->allocate(contiguousMemorySizeRequired);
+				void* memory = _instance->_fixedMemoryManagers[i]->allocate(i_contiguousMemorySizeRequired);
 				if (memory != nullptr)
 				{
 					return memory;
@@ -114,44 +114,44 @@ namespace Memory
 			}
 		}
 
-		return memoryManager->allocate(contiguousMemorySizeRequired);
+		return memoryManager->allocate(i_contiguousMemorySizeRequired);
 	}
 
-	void* MemorySystem::allocate(size_t contiguousMemorySizeRequired, unsigned alignment)
+	void* MemorySystem::allocate(size_t i_contiguousMemorySizeRequired, unsigned i_alignment)
 	{
 		if (_instance == nullptr)
 		{
 			getMemoryFromWindows();
 		}
 
-		return memoryManager->allocate(contiguousMemorySizeRequired, alignment);
+		return memoryManager->allocate(i_contiguousMemorySizeRequired, i_alignment);
 	}
 
-	void* MemorySystem::reallocate(void* pointer, size_t contiguousMemorySizeRequired)
+	void* MemorySystem::reallocate(void* i_pointer, size_t i_contiguousMemorySizeRequired)
 	{
 		if (_instance == nullptr)
 		{
 			getMemoryFromWindows();
 		}
 
-		return memoryManager->reallocate(pointer, contiguousMemorySizeRequired);
+		return memoryManager->reallocate(i_pointer, i_contiguousMemorySizeRequired);
 	}
 
-	void* MemorySystem::reallocate(void* pointer, size_t contiguousMemorySizeRequired, unsigned alignment)
+	void* MemorySystem::reallocate(void* i_pointer, size_t i_contiguousMemorySizeRequired, unsigned i_alignment)
 	{
 		if (_instance == nullptr)
 		{
 			getMemoryFromWindows();
 		}
 
-		return memoryManager->reallocate(pointer, contiguousMemorySizeRequired, alignment);
+		return memoryManager->reallocate(i_pointer, i_contiguousMemorySizeRequired, i_alignment);
 	}
 
 #pragma endregion
 
 #pragma region Free
 
-	void MemorySystem::freeMem(void* pointer)
+	void MemorySystem::freeMem(void* i_pointer)
 	{
 		if (_instance == nullptr)
 		{
@@ -162,14 +162,14 @@ namespace Memory
 
 		for (size_t i = 0; i < TotalFixedAllocators; i++)
 		{
-			if (_instance->_fixedMemoryManagers[i]->contains(pointer))
+			if (_instance->_fixedMemoryManagers[i]->contains(i_pointer))
 			{
-				_instance->_fixedMemoryManagers[i]->freeMem(pointer);
+				_instance->_fixedMemoryManagers[i]->freeMem(i_pointer);
 				return;
 			}
 		}
 
-		memoryManager->freeMem(pointer);
+		memoryManager->freeMem(i_pointer);
 	}
 
 #pragma endregion

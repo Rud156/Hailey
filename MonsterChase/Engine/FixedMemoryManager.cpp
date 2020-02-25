@@ -19,20 +19,20 @@ namespace Memory
 
 #pragma region Setup
 
-	void FixedMemoryManager::create(size_t memoryBlockSize, MemoryManager* memoryManager,
-	                                const long totalBitsCount)
+	void FixedMemoryManager::create(size_t i_memoryBlockSize, MemoryManager* i_memoryManager,
+	                                const long i_totalBitsCount)
 	{
-		assert(totalBitsCount > 0);
-		const size_t totalMemorySizeRequired = totalBitsCount * memoryBlockSize;
+		assert(i_totalBitsCount > 0);
+		const size_t totalMemorySizeRequired = i_totalBitsCount * i_memoryBlockSize;
 
-		this->_totalBitsCount = totalBitsCount;
-		this->_fixedMemoryBlockSize = memoryBlockSize;
+		this->_totalBitsCount = i_totalBitsCount;
+		this->_fixedMemoryBlockSize = i_memoryBlockSize;
 		this->_totalUserMemorySize = totalMemorySizeRequired;
 
-		void* memoryMapperMemory = memoryManager->allocate(sizeof(Containers::BitArray));
-		this->_memoryMapper = new(memoryMapperMemory)Containers::BitArray(totalBitsCount, memoryManager);
+		void* memoryMapperMemory = i_memoryManager->allocate(sizeof(Containers::BitArray));
+		this->_memoryMapper = new(memoryMapperMemory)Containers::BitArray(i_totalBitsCount, i_memoryManager);
 
-		void* userMemory = memoryManager->allocate(totalMemorySizeRequired);
+		void* userMemory = i_memoryManager->allocate(totalMemorySizeRequired);
 		this->_userMemoryStartPointer = userMemory;
 	}
 
@@ -40,9 +40,9 @@ namespace Memory
 
 #pragma region Allocation
 
-	void* FixedMemoryManager::allocate(size_t contiguousMemorySize) const
+	void* FixedMemoryManager::allocate(size_t i_contiguousMemorySize) const
 	{
-		if (contiguousMemorySize > this->_fixedMemoryBlockSize)
+		if (i_contiguousMemorySize > this->_fixedMemoryBlockSize)
 		{
 			return nullptr;
 		}
@@ -69,15 +69,15 @@ namespace Memory
 
 #pragma region Free
 
-	void FixedMemoryManager::freeMem(void* pointer) const
+	void FixedMemoryManager::freeMem(void* i_pointer) const
 	{
-		if (!isAllocated(pointer))
+		if (!isAllocated(i_pointer))
 		{
 			printf_s("Trying to free invalid pointer\n");
 			return;
 		}
 
-		const size_t index = (static_cast<char*>(pointer) - static_cast<char*>(this->_userMemoryStartPointer)) /
+		const size_t index = (static_cast<char*>(i_pointer) - static_cast<char*>(this->_userMemoryStartPointer)) /
 			this->_fixedMemoryBlockSize;
 
 		const bool bitValue = this->_memoryMapper->test(index);
@@ -90,12 +90,12 @@ namespace Memory
 
 #pragma region Destroy
 
-	void FixedMemoryManager::destroy(MemoryManager* memoryManager) const
+	void FixedMemoryManager::destroy(MemoryManager* i_memoryManager) const
 	{
-		memoryManager->freeMem(this->_userMemoryStartPointer);
+		i_memoryManager->freeMem(this->_userMemoryStartPointer);
 
-		this->_memoryMapper->destroy(memoryManager);
-		memoryManager->freeMem(this->_memoryMapper);
+		this->_memoryMapper->destroy(i_memoryManager);
+		i_memoryManager->freeMem(this->_memoryMapper);
 	}
 
 #pragma endregion

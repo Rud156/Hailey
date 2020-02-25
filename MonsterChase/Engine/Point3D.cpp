@@ -9,124 +9,124 @@ namespace Math
 		_z = 0;
 	}
 
-	Point3D::Point3D(const float x, const float y, const float z)
+	Point3D::Point3D(const float i_x, const float i_y, const float i_z)
 	{
-		_x = x;
-		_y = y;
-		_z = z;
+		_x = i_x;
+		_y = i_y;
+		_z = i_z;
 	}
 
-	Point3D::Point3D(const Point3D& point3d)
+	Point3D::Point3D(const Point3D& i_point3d)
 	{
-		_x = point3d._x;
-		_y = point3d._y;
-		_z = point3d._z;
+		_x = i_point3d._x;
+		_y = i_point3d._y;
+		_z = i_point3d._z;
 	}
 
 	Point3D::~Point3D() = default;
 
-	Point3D Point3D::operator+=(const Point3D& point3d)
+	Point3D Point3D::operator+=(const Point3D& i_point3d)
 	{
-		_x += point3d._x;
-		_y += point3d._y;
-		_z += point3d._z;
+		_x += i_point3d._x;
+		_y += i_point3d._y;
+		_z += i_point3d._z;
 
 		return *this;
 	}
 
-	Point3D Point3D::operator-=(const Point3D& point3d)
+	Point3D Point3D::operator-=(const Point3D& i_point3d)
 	{
-		_x -= point3d._x;
-		_y -= point3d._y;
-		_z -= point3d._z;
+		_x -= i_point3d._x;
+		_y -= i_point3d._y;
+		_z -= i_point3d._z;
 
 		return *this;
 	}
 
-	Point3D Point3D::operator*=(const Point3D& point3d)
+	Point3D Point3D::operator*=(const Point3D& i_point3d)
 	{
-		_x *= point3d._x;
-		_y *= point3d._y;
-		_z *= point3d._z;
+		_x *= i_point3d._x;
+		_y *= i_point3d._y;
+		_z *= i_point3d._z;
 
 		return *this;
 	}
 
-	Point3D Point3D::operator*=(const float operation)
+	Point3D Point3D::operator*=(const float i_operation)
 	{
-		_x *= operation;
-		_y *= operation;
-		_z *= operation;
+		_x *= i_operation;
+		_y *= i_operation;
+		_z *= i_operation;
 
 		return *this;
 	}
 
-	Point3D Point3D::operator/=(const Point3D& point3d)
+	Point3D Point3D::operator/=(const Point3D& i_point3d)
 	{
-		_x /= point3d._x;
-		_y /= point3d._y;
-		_z /= point3d._z;
+		_x /= i_point3d._x;
+		_y /= i_point3d._y;
+		_z /= i_point3d._z;
 
 		return *this;
 	}
 
-	Point3D Point3D::operator/=(const float operation)
+	Point3D Point3D::operator/=(const float i_operation)
 	{
-		_x /= operation;
-		_y /= operation;
-		_z /= operation;
+		_x /= i_operation;
+		_y /= i_operation;
+		_z /= i_operation;
 
 		return *this;
 	}
 
-	void Point3D::set(const Point3D& point3d)
+	void Point3D::set(const Point3D& i_point3d)
 	{
-		_x = point3d._x;
-		_y = point3d._y;
-		_z = point3d._z;
+		_x = i_point3d._x;
+		_y = i_point3d._y;
+		_z = i_point3d._z;
 	}
 
-	void Point3D::set(const float x, const float y, const float z)
+	void Point3D::set(const float i_x, const float i_y, const float i_z)
 	{
-		_x = x;
-		_y = y;
-		_z = z;
+		_x = i_x;
+		_y = i_y;
+		_z = i_z;
 	}
 
-	void Point3D::set(const int x, const int y, const int z)
+	void Point3D::set(const int i_x, const int i_y, const int i_z)
 	{
-		_x = static_cast<float>(x);
-		_y = static_cast<float>(y);
-		_z = static_cast<float>(z);
+		_x = static_cast<float>(i_x);
+		_y = static_cast<float>(i_y);
+		_z = static_cast<float>(i_z);
 	}
 
-	void Point3D::setX(const float x)
+	void Point3D::setX(const float i_x)
 	{
-		_x = x;
+		_x = i_x;
 	}
 
-	void Point3D::setX(const int x)
+	void Point3D::setX(const int i_x)
 	{
-		_x = static_cast<float>(x);
+		_x = static_cast<float>(i_x);
 	}
 
-	void Point3D::setY(const float y)
+	void Point3D::setY(const float i_y)
 	{
-		_y = y;
+		_y = i_y;
 	}
 
-	void Point3D::setY(const int y)
+	void Point3D::setY(const int i_y)
 	{
-		_y = static_cast<float>(y);
+		_y = static_cast<float>(i_y);
 	}
 
-	void Point3D::setZ(const float z)
+	void Point3D::setZ(const float i_z)
 	{
-		_z = z;
+		_z = i_z;
 	}
 
-	void Point3D::setZ(const int z)
+	void Point3D::setZ(const int i_z)
 	{
-		_z = static_cast<float>(z);
+		_z = static_cast<float>(i_z);
 	}
 }

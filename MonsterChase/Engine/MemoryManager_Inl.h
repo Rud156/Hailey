@@ -5,12 +5,12 @@ namespace Memory
 {
 	// Data Checks
 
-	inline bool MemoryManager::contains(void* pointer) const
+	inline bool MemoryManager::contains(void* i_pointer) const
 	{
 		void* startPointer = this->_memoryStartPointer;
 		void* endPointer = static_cast<char*>(this->_memoryStartPointer) + this->_maxMemorySize;
 
-		if (pointer >= startPointer && pointer <= endPointer)
+		if (i_pointer >= startPointer && i_pointer <= endPointer)
 		{
 			return true;
 		}
@@ -18,7 +18,7 @@ namespace Memory
 		return false;
 	}
 
-	inline bool MemoryManager::isAllocated(void* pointer) const
+	inline bool MemoryManager::isAllocated(void* i_pointer) const
 	{
 		BlockDescriptor* inUseBlock = this->_inUseBlockDescriptors;
 		if (inUseBlock == nullptr)
@@ -31,7 +31,7 @@ namespace Memory
 			void* startPointer = inUseBlock->memoryStartPointer;
 			void* endPointer = static_cast<char*>(inUseBlock->memoryStartPointer) + inUseBlock->memorySize;
 
-			if (pointer >= startPointer && pointer <= endPointer)
+			if (i_pointer >= startPointer && i_pointer <= endPointer)
 			{
 				return true;
 			}
@@ -101,12 +101,12 @@ namespace Memory
 
 	// Helper Methods
 
-	inline void MemoryManager::printList(const char* headerString, BlockDescriptor* head)
+	inline void MemoryManager::printList(const char* i_headerString, BlockDescriptor* i_head)
 	{
-		printf_s("%s\n", headerString);
+		printf_s("%s\n", i_headerString);
 		printf_s("=====================================\n");
 
-		BlockDescriptor* headBlock = head;
+		BlockDescriptor* headBlock = i_head;
 		while (headBlock != nullptr)
 		{
 			printf_s("Address => %p\t||\tSize => %zu\n", &headBlock->memoryStartPointer, headBlock->memorySize);
