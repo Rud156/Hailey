@@ -1,9 +1,10 @@
 #include "MemoryManager.h"
-#include "Utilities.h"
+#include "MemoryManager_Extern.h"
+#include "MathUtils.h"
+
 #include <memory>
 #include <cassert>
 #include <chrono>
-#include "MemoryManager_Extern.h"
 
 Memory::MemoryManager* memoryManager = nullptr;
 
@@ -25,8 +26,7 @@ namespace Memory
 		// Or a recursive StackOverflow exception will occur
 	}
 
-	MemoryManager::~MemoryManager()
-	= default;
+	MemoryManager::~MemoryManager() = default;
 
 	size_t MemoryManager::getMinimumToLeave() const
 	{
@@ -448,11 +448,10 @@ namespace Memory
 			}
 
 			void* startPosition = freeBlockPointer->memoryStartPointer;
-			void* probableUserMemoryStartPosition = static_cast<void*>(static_cast<char*>(startPosition) +
-				i_initialSizeToLeave);
+			void* probableUserMemoryStartPosition = static_cast<void*>(static_cast<char*>(startPosition) + i_initialSizeToLeave);
 
 			const auto pointerAddress = reinterpret_cast<size_t>(probableUserMemoryStartPosition);
-			const size_t nextClosestMultiple = Utils::Utilities::GetRoundNextMultiple(pointerAddress, i_alignment);
+			const size_t nextClosestMultiple = Utils::MathUtils::GetRoundNextMultiple(pointerAddress, i_alignment);
 			alignmentAmount = nextClosestMultiple - pointerAddress;
 
 			const size_t totalAdjustedSize = i_sizeRequired + alignmentAmount;

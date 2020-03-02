@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -103,6 +104,12 @@
     <Filter Include="Header Files\Core\Controllers\Physics">
       <UniqueIdentifier>{e595178a-c67a-43a0-a5cf-77282dc55e96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utils\Tests">
+      <UniqueIdentifier>{b078af25-b765-4882-a5c2-51f9be95e586}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils\Tests">
+      <UniqueIdentifier>{c815a9d1-7604-43f6-8048-761a0b8b6c00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -119,9 +126,6 @@
     </ClInclude>
     <ClInclude Include="MemoryManager.h">
       <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities.h">
-      <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="MemoryManager_Inl.h">
       <Filter>Header Files\Memory</Filter>
@@ -219,6 +223,12 @@
     <ClInclude Include="MathUtils.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="MathUtils_Inl.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClCompile Include="MathUtilsUnitTest.h">
+      <Filter>Source Files\Utils\Tests</Filter>
+    </ClCompile>
     <ClInclude Include="WorldPhysicsController.h">
       <Filter>Header Files\Core\Controllers\Physics</Filter>
     </ClInclude>
@@ -230,6 +240,12 @@
     </ClInclude>
     <ClInclude Include="SpriteRenderController_Extern.h">
       <Filter>Header Files\Core\Controllers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocators.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="SmartPtr.h">
+      <Filter>Header Files\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -244,9 +260,6 @@
     </ClCompile>
     <ClCompile Include="MemoryManager.cpp">
       <Filter>Source Files\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities.cpp">
-      <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Random.cpp">
       <Filter>Source Files\Utils</Filter>
@@ -320,11 +333,20 @@
     <ClCompile Include="MathUtils.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="MathUtilsUnitTest.cpp">
+      <Filter>Source Files\Utils\Tests</Filter>
+    </ClCompile>
     <ClCompile Include="WorldPhysicsController.cpp">
       <Filter>Source Files\Core\Controllers\Physics</Filter>
     </ClCompile>
     <ClCompile Include="SpriteRenderController.cpp">
       <Filter>Source Files\Core\Controllers\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Allocators.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="SmartPtr.cpp">
+      <Filter>Source Files\Containers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

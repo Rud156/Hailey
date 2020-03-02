@@ -3,6 +3,8 @@
 
 #include "Engine.h"
 #include "Allocators.h"
+#include "MemorySystem.h"
+#include "MathUtilsUnitTest.h"
 #include <SFML/Graphics.hpp>
 
 #include "Point2D.h"
@@ -12,7 +14,6 @@
 #include "Scale2D.h"
 #include "SpriteRenderer.h"
 #include "Rigidbody2D.h"
-#include "Debug.h"
 
 #include <conio.h>
 #include <cassert>
@@ -91,7 +92,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 		const auto goodGuySprite = goodGuy->AddComponent<Core::Components::Rendering::SpriteRenderer>();
 		goodGuySprite->LoadTexture(goodGuyPath);
 		const auto goodGuyRb = goodGuy->AddComponent<Core::Components::Physics::Rigidbody2D>();
-		
+
 		const float xVelocity = 100;
 		Math::Point2D velocity(xVelocity, 0);
 
@@ -111,11 +112,6 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 				sf::Event event{};
 				while (window->pollEvent(event))
 				{
-					if (event.type == sf::Event::Closed)
-					{
-						window->close();
-					}
-
 					switch (event.type)
 					{
 					case sf::Event::KeyPressed:
@@ -125,16 +121,24 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 							case sf::Keyboard::Left:
 								{
 									velocity.setX(-xVelocity);
+
 									goodGuyRb->SetLinearDrag(0.05f);
 									goodGuyRb->SetVelocity(velocity);
+
+									goodGuyRb->SetAngularDrag(0);
+									goodGuyRb->SetAngularVelocity(-xVelocity);
 								}
 								break;
 
 							case sf::Keyboard::Right:
 								{
 									velocity.setX(xVelocity);
+
 									goodGuyRb->SetLinearDrag(0.05f);
 									goodGuyRb->SetVelocity(velocity);
+
+									goodGuyRb->SetAngularDrag(0);
+									goodGuyRb->SetAngularVelocity(xVelocity);
 								}
 								break;
 
@@ -149,8 +153,12 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 						{
 							// TODO: Remove this later on...
 							velocity.setX(0);
+
 							goodGuyRb->SetLinearDrag(1);
 							goodGuyRb->SetVelocity(velocity);
+
+							goodGuyRb->SetAngularDrag(1);
+							goodGuyRb->SetAngularVelocity(0);
 						}
 						break;
 					}
@@ -161,6 +169,10 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 				window->display();
 			}
 		}
+
+		const auto mathTest = new Utils::Tests::MathUtilsUnitTest();
+		mathTest->RunTest();
+		delete mathTest;
 
 		window->close();
 		DestroyWindow(mainWindow); // Destroy the main window (all its child controls will be destroyed)

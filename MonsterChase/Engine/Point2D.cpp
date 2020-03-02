@@ -38,26 +38,10 @@ namespace Math
 		return *this;
 	}
 
-	Point2D Point2D::operator*=(const Point2D& i_point2d)
-	{
-		_x *= i_point2d._x;
-		_y *= i_point2d._y;
-
-		return *this;
-	}
-
 	Point2D Point2D::operator*=(const float i_operation)
 	{
 		_x *= i_operation;
 		_y *= i_operation;
-
-		return *this;
-	}
-
-	Point2D Point2D::operator/=(const Point2D& i_point2d)
-	{
-		_x /= i_point2d._x;
-		_y /= i_point2d._y;
 
 		return *this;
 	}

@@ -19,13 +19,16 @@ namespace Core::Components::Physics
 		this->_currentAcceleration = new Math::Point2D();
 		this->_resultantForce = new Math::Point2D();
 
-		this->_angularVelocity = 0;
+		this->_currentAngularVelocity = 0;
+		this->_targetAngularVelocity = 0;
+		this->_currentAngularAcceleration = 0;
 	}
 
 	Rigidbody2D::~Rigidbody2D()
 	{
 		delete this->_currentVelocity;
 		delete this->_targetVelocity;
+
 		delete this->_currentAcceleration;
 		delete this->_resultantForce;
 	}
@@ -48,8 +51,12 @@ namespace Core::Components::Physics
 
 	void Rigidbody2D::PhysicsProcess(float i_fixedDeltaTime)
 	{
-		ComputerResultantAcceleration();
-		ApplyVelocityAndAcceleration(i_fixedDeltaTime);
+		ComputerResultantLinearAcceleration(i_fixedDeltaTime);
+		ApplyLinearVelocityAndAcceleration(i_fixedDeltaTime);
+
+		ComputeResultantAngularAcceleration(i_fixedDeltaTime);
+		ApplyAngularVelocityAndAcceleration(i_fixedDeltaTime);
+
 		ResetBodyForcesData();
 	}
 
@@ -93,50 +100,75 @@ namespace Core::Components::Physics
 
 	void Rigidbody2D::SetAngularVelocity(const float i_angularVelocity)
 	{
-		this->_angularVelocity = i_angularVelocity;
+		this->_targetAngularVelocity = i_angularVelocity;
 	}
 
 #pragma endregion
 
 #pragma region Force/Velocity
 
-	void Rigidbody2D::ResetBodyForcesData() const
+	void Rigidbody2D::ResetBodyForcesData()
 	{
 		this->_resultantForce->set(0, 0);
 		this->_currentAcceleration->set(0, 0);
+		this->_currentAngularAcceleration = 0;
 	}
 
-	void Rigidbody2D::ApplyVelocityAndAcceleration(float i_deltaTime)
+	void Rigidbody2D::ApplyLinearVelocityAndAcceleration(float i_deltaTime) const
 	{
-		// Angular Motion
-		if (this->_angularDrag > 1)
-		{
-			this->_angularVelocity = 0;
-		}
-		else
-		{
-			this->_angularVelocity -= (this->_angularDrag * this->_angularVelocity);
-		}
-		this->_rotate2d->Rotate(this->_angularVelocity * i_deltaTime);
-
 		// Linear Motion
 		auto newVelocity = *this->_currentVelocity + *this->_currentAcceleration * i_deltaTime;
 		newVelocity = newVelocity * (1 - i_deltaTime * this->_linearDrag);
 		this->_currentVelocity->set(newVelocity.X(), newVelocity.Y());
 
+		// Apply Position
 		Math::Point2D* position = _node2d->GetPosition();
 		const auto newPosition = *position + *this->_currentVelocity * i_deltaTime;
 		position->set(newPosition.X(), newPosition.Y());
 	}
 
-	void Rigidbody2D::ComputerResultantAcceleration() const
+	void Rigidbody2D::ComputerResultantLinearAcceleration(float i_deltaTime) const
 	{
 		const auto velocityAcceleration = *this->_targetVelocity - *this->_currentVelocity;
 		const auto accelerationFromForce = *this->_resultantForce / this->_mass;
 		const auto gravityAcceleration = *worldPhysicsController->GetGravity() * this->_gravityScale;
-		const auto positiveAcceleration = velocityAcceleration + accelerationFromForce + gravityAcceleration;
+		const auto positiveAcceleration = (velocityAcceleration + accelerationFromForce + gravityAcceleration) / i_deltaTime;
 
 		this->_currentAcceleration->set(positiveAcceleration.X(), positiveAcceleration.Y());
+	}
+
+	void Rigidbody2D::AddForce(Math::Point2D& i_force) const
+	{
+		const Math::Point2D newForce = *this->_resultantForce + i_force;
+		this->_resultantForce->set(newForce.X(), newForce.Y());
+	}
+
+#pragma endregion
+
+#pragma region Force/Rotation
+
+	void Rigidbody2D::ComputeResultantAngularAcceleration(const float i_deltaTime)
+	{
+		const auto angularAcceleration = (this->_targetAngularVelocity - this->_currentAngularVelocity) / i_deltaTime;
+		this->_currentAngularAcceleration = angularAcceleration;
+	}
+
+	void Rigidbody2D::ApplyAngularVelocityAndAcceleration(const float i_deltaTime)
+	{
+		// Angular Motion
+		auto newAngularVelocity = this->_currentAngularVelocity + this->_currentAngularAcceleration * i_deltaTime;
+		if (this->_angularDrag > 1)
+		{
+			newAngularVelocity = 0;
+		}
+		else
+		{
+			newAngularVelocity -= (this->_angularDrag * newAngularVelocity);
+		}
+		this->_currentAngularVelocity = newAngularVelocity;
+
+		// Apply Rotation
+		this->_rotate2d->Rotate(this->_currentAngularVelocity * i_deltaTime);
 	}
 
 	void Rigidbody2D::AddForceAtPosition(Math::Point2D& i_force, Math::Point2D& i_position)
@@ -145,13 +177,7 @@ namespace Core::Components::Physics
 		const float angle = atan2(p.X(), p.Y()) - atan2(i_force.X(), i_force.Y());
 		const float t = p.length() * i_force.length() * sin(angle) * Utils::MathUtils::Rad2Deg;
 
-		this->_angularVelocity += t;
-	}
-
-	void Rigidbody2D::AddForce(Math::Point2D& i_force) const
-	{
-		const Math::Point2D newForce = *this->_resultantForce + i_force;
-		this->_resultantForce->set(newForce.X(), newForce.Y());
+		this->_targetAngularVelocity += t;
 	}
 
 #pragma endregion

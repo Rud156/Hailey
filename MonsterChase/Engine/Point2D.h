@@ -25,9 +25,7 @@ namespace Math
 		// Static Operations
 		inline friend Point2D operator+(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
 		inline friend Point2D operator-(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
-		inline friend Point2D operator*(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
 		inline friend Point2D operator*(const Point2D& i_point2d, const float i_operation);
-		inline friend Point2D operator/(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
 		inline friend Point2D operator/(const Point2D& i_point2d, const float i_operation);
 
 		inline friend bool operator==(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
@@ -38,9 +36,7 @@ namespace Math
 		// Modifier Operations
 		Point2D operator+=(const Point2D& i_point2d);
 		Point2D operator-=(const Point2D& i_point2d);
-		Point2D operator*=(const Point2D& i_point2d);
 		Point2D operator*=(const float i_operation);
-		Point2D operator/=(const Point2D& i_point2d);
 		Point2D operator/=(const float i_operation);
 
 		inline friend std::ostream& operator<<(std::ostream& i_stream, const Point2D& i_point2d);
@@ -55,16 +51,19 @@ namespace Math
 		void setY(int i_y);
 
 		[[nodiscard]] inline bool isZero() const;
-
 		[[nodiscard]] inline float length() const;
 		[[nodiscard]] inline float lengthSq() const;
 
 		[[nodiscard]] inline Point2D copy() const;
-		[[nodiscard]] inline Point2D normalize();
+		inline Point2D normalize();
+		[[nodiscard]] inline static Point2D normalize(const Point2D& i_point2d);
 
 		inline static Point2D Zero();
+		inline static float dot(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
+		inline static float angle(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
 		inline static float distance(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
 		inline static float distanceSq(const Point2D& i_point2d_1, const Point2D& i_point2d_2);
+		inline static Point2D lerp(const Point2D& i_point2d_1, const Point2D& i_point2d_2, float i_progress);
 	};
 }
 

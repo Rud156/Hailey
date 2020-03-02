@@ -71,6 +71,17 @@ namespace Math
 		return *this;
 	}
 
+	Point3D Point3D::normalize(const Point3D& i_point3d)
+	{
+		const auto len = i_point3d.length();
+		if (len != 0)
+		{
+			return i_point3d / len;
+		}
+
+		return i_point3d;
+	}
+
 	// Copy and Normalize
 
 	// Basic Operators
@@ -175,6 +186,51 @@ namespace Math
 	}
 
 	// Distance
+
+	// Cross, Dot, Angle
+
+	float Point3D::dot(const Point3D& i_point3d_1, const Point3D& i_point3d_2)
+	{
+		const auto x = i_point3d_1._x * i_point3d_2._x;
+		const auto y = i_point3d_1._y * i_point3d_2._y;
+		const auto z = i_point3d_1._z * i_point3d_2._z;
+
+		return x + y + z;
+	}
+
+	Point3D Point3D::cross(const Point3D& i_point3d_1, const Point3D& i_point3d_2)
+	{
+		const auto x = i_point3d_1._y * i_point3d_2._z - i_point3d_1._z * i_point3d_2._y;
+		const auto y = i_point3d_1._z * i_point3d_2._x - i_point3d_1._x * i_point3d_2._z;
+		const auto z = i_point3d_1._x * i_point3d_2._y + i_point3d_1._y * i_point3d_2._x;
+
+		return Point3D(x, y, z);
+	}
+
+	float Point3D::angle(const Point3D& i_point3d_1, const Point3D& i_point3d_2)
+	{
+		const auto normalized_1 = normalize(i_point3d_1);
+		const auto normalized_2 = normalize(i_point3d_2);
+
+		return acos(dot(normalized_1, normalized_2));
+	}
+
+	// Cross, Dot, Angle
+
+	// Lerp
+
+	Point3D Point3D::lerp(const Point3D& i_point3d_1, const Point3D& i_point3d_2, float i_progress)
+	{
+		const float invertedProgress = 1.0f - i_progress;
+
+		const auto x = (i_point3d_1._x * invertedProgress) + (i_point3d_2._x * i_progress);
+		const auto y = (i_point3d_1._y * invertedProgress) + (i_point3d_2._y * i_progress);
+		const auto z = (i_point3d_1._z * invertedProgress) + (i_point3d_2._z * i_progress);
+
+		return Point3D(x, y, z);
+	}
+
+	// Lerp
 
 	// Printing
 

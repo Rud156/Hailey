@@ -25,6 +25,12 @@
     <Filter Include="Header Files\MemoryTests">
       <UniqueIdentifier>{29ae89cc-987c-4421-a331-a44f2068163b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Tests">
+      <UniqueIdentifier>{f60b6476-e628-4ff2-bfce-890df006970a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests">
+      <UniqueIdentifier>{1b1d0aa4-50c2-4c64-b7b7-543c719c7a28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -48,9 +54,6 @@
     <ClInclude Include="MemorySystemTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Allocators.h">
-      <Filter>Header Files\MemoryTests</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -72,9 +75,6 @@
       <Filter>Source Files\MemoryTests</Filter>
     </ClCompile>
     <ClCompile Include="MemorySystemTest.cpp">
-      <Filter>Source Files\MemoryTests</Filter>
-    </ClCompile>
-    <ClCompile Include="Allocators.cpp">
       <Filter>Source Files\MemoryTests</Filter>
     </ClCompile>
   </ItemGroup>

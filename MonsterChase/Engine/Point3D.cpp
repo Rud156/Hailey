@@ -43,29 +43,11 @@ namespace Math
 		return *this;
 	}
 
-	Point3D Point3D::operator*=(const Point3D& i_point3d)
-	{
-		_x *= i_point3d._x;
-		_y *= i_point3d._y;
-		_z *= i_point3d._z;
-
-		return *this;
-	}
-
 	Point3D Point3D::operator*=(const float i_operation)
 	{
 		_x *= i_operation;
 		_y *= i_operation;
 		_z *= i_operation;
-
-		return *this;
-	}
-
-	Point3D Point3D::operator/=(const Point3D& i_point3d)
-	{
-		_x /= i_point3d._x;
-		_y /= i_point3d._y;
-		_z /= i_point3d._z;
 
 		return *this;
 	}

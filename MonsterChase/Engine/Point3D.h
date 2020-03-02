@@ -27,9 +27,7 @@ namespace Math
 		// Static Operations
 		inline friend Point3D operator+(const Point3D& i_point3d_1, const Point3D& i_point3d_2);
 		inline friend Point3D operator-(const Point3D& i_point3d_1, const Point3D& i_point3d_2);
-		inline friend Point3D operator*(const Point3D& i_point3d_1, const Point3D& i_point3d_2);
 		inline friend Point3D operator*(const Point3D& i_point3d, const float i_operation);
-		inline friend Point3D operator/(const Point3D& i_point3d_1, const Point3D& i_point3d_2);
 		inline friend Point3D operator/(const Point3D& i_point3d, const float i_operation);
 
 		inline friend bool operator==(const Point3D& i_point3d_1, const Point3D& i_point3d_2);
@@ -40,9 +38,7 @@ namespace Math
 		// Modifier Operations
 		Point3D operator+=(const Point3D& i_point3d);
 		Point3D operator-=(const Point3D& i_point3d);
-		Point3D operator*=(const Point3D& i_point3d);
 		Point3D operator*=(const float i_operation);
-		Point3D operator/=(const Point3D& i_point3d);
 		Point3D operator/=(const float i_operation);
 
 		inline friend std::ostream& operator<<(std::ostream& i_stream, const Point3D& i_point3d);
@@ -59,16 +55,20 @@ namespace Math
 		void setZ(int i_z);
 
 		[[nodiscard]] inline bool isZero() const;
-
 		[[nodiscard]] inline float length() const;
 		[[nodiscard]] inline float lengthSq() const;
 
 		[[nodiscard]] inline Point3D copy() const;
-		[[nodiscard]] inline Point3D normalize();
+		inline Point3D normalize();
+		inline static Point3D normalize(const Point3D& i_point3d);
 
 		inline static Point3D Zero();
+		inline static float dot(const Point3D& i_point3d_1, const Point3D& i_point3d_2);
+		inline static Point3D cross(const Point3D& i_point3d_1, const Point3D& i_point3d_2);
+		inline static float angle(const Point3D& i_point3d_1, const Point3D& i_point3d_2);
 		inline static float distance(const Point3D& i_point3d_1, const Point3D& i_point3d_2);
 		inline static float distanceSq(const Point3D& i_point3d_1, const Point3D& i_point3d_2);
+		inline static Point3D lerp(const Point3D& i_point3d_1, const Point3D& i_point3d_2, float i_progress);
 	};
 }
 

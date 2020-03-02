@@ -64,6 +64,18 @@ namespace Math
 		return *this;
 	}
 
+	Point2D Point2D::normalize(const Point2D& i_point2d)
+	{
+		const float len = i_point2d.length();
+
+		if (len != 0)
+		{
+			return i_point2d / len;
+		}
+
+		return i_point2d;
+	}
+
 	// Copy and Normalize
 
 	// Basic Operators
@@ -80,14 +92,6 @@ namespace Math
 	{
 		const float x = i_point2d_1.X() - i_point2d_2.X();
 		const float y = i_point2d_1.Y() - i_point2d_2.Y();
-
-		return Point2D(x, y);
-	}
-
-	inline Point2D operator*(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
-	{
-		const float x = i_point2d_1.X() * i_point2d_2.X();
-		const float y = i_point2d_1.Y() * i_point2d_2.Y();
 
 		return Point2D(x, y);
 	}
@@ -124,14 +128,6 @@ namespace Math
 		return Point2D(x, y);
 	}
 
-	inline Point2D operator/(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
-	{
-		const float x = i_point2d_1.X() / i_point2d_2.X();
-		const float y = i_point2d_1.Y() / i_point2d_2.Y();
-
-		return Point2D(x, y);
-	}
-
 	inline bool operator==(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
 	{
 		return i_point2d_1._x == i_point2d_2._x && i_point2d_1._y == i_point2d_2._y;
@@ -163,6 +159,40 @@ namespace Math
 	}
 
 	// Distance
+
+	// Cross, Dot, Angle
+
+	float Point2D::dot(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
+	{
+		const float x = i_point2d_1._x * i_point2d_2._x;
+		const float y = i_point2d_1._y * i_point2d_2._y;
+
+		return x + y;
+	}
+
+	float Point2D::angle(const Point2D& i_point2d_1, const Point2D& i_point2d_2)
+	{
+		const auto normalized_1 = normalize(i_point2d_1);
+		const auto normalized_2 = normalize(i_point2d_2);
+
+		return acos(dot(normalized_1, normalized_2));
+	}
+
+	// Cross, Dot, Angle
+
+	// Lerp
+
+	Point2D Point2D::lerp(const Point2D& i_point2d_1, const Point2D& i_point2d_2, float i_progress)
+	{
+		const float invertedProgress = 1.0f - i_progress;
+
+		const auto x = (i_point2d_1._x * invertedProgress) + (i_point2d_2._x * i_progress);
+		const auto y = (i_point2d_1._y * invertedProgress) + (i_point2d_2._y * i_progress);
+
+		return Point2D(x, y);
+	}
+
+	// Lerp
 
 	// Printing
 

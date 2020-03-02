@@ -34,7 +34,9 @@ namespace Core
 				Math::Point2D* _currentAcceleration;
 				Math::Point2D* _resultantForce;
 
-				float _angularVelocity;
+				float _currentAngularVelocity;
+				float _targetAngularVelocity;
+				float _currentAngularAcceleration;
 
 				Transform::Node2D* _node2d{};
 				Transform::Rotate2D* _rotate2d{};
@@ -44,9 +46,12 @@ namespace Core
 
 				float _gravityScale{1};
 
-				void ResetBodyForcesData() const;
-				void ApplyVelocityAndAcceleration(float i_deltaTime);
-				void ComputerResultantAcceleration() const;
+				void ResetBodyForcesData();
+				void ComputerResultantLinearAcceleration(float i_deltaTime) const;
+				void ApplyLinearVelocityAndAcceleration(float i_deltaTime) const;
+
+				void ComputeResultantAngularAcceleration(float i_deltaTime);
+				void ApplyAngularVelocityAndAcceleration(float i_deltaTime);
 
 			public:
 				// Constructor and Destructor
