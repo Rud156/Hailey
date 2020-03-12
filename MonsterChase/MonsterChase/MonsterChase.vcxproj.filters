@@ -36,46 +36,46 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameMain.h">
+    <ClInclude Include="Src\MemoryTests\HeapManagerProxy.h">
+      <Filter>Header Files\MemoryTests</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\MemoryTests\HeapManager-Sample.h">
+      <Filter>Header Files\MemoryTests</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\MemoryTests\HeapManagerUnitTest.h">
+      <Filter>Header Files\MemoryTests</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\MemoryTests\MemorySystemTest.h">
+      <Filter>Header Files\MemoryTests</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameMain.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="GridActorController.h">
+    <ClInclude Include="Src\Game\GridActorController.h">
       <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="HeapManagerProxy.h">
-      <Filter>Header Files\MemoryTests</Filter>
-    </ClInclude>
-    <ClInclude Include="HeapManager-Sample.h">
-      <Filter>Header Files\MemoryTests</Filter>
-    </ClInclude>
-    <ClInclude Include="HeapManagerUnitTest.h">
-      <Filter>Header Files\MemoryTests</Filter>
-    </ClInclude>
-    <ClInclude Include="MemorySystemTest.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MonsterChase.cpp">
+    <ClCompile Include="Src\MemoryTests\HeapManagerProxy.cpp">
+      <Filter>Source Files\MemoryTests</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MemoryTests\HeapManagerUnitTest.cpp">
+      <Filter>Source Files\MemoryTests</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MemoryTests\MemorySystemTest.cpp">
+      <Filter>Source Files\MemoryTests</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameMain.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GridActorController.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MonsterChase.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameMain.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="GridActorController.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="HeapManagerProxy.cpp">
-      <Filter>Source Files\MemoryTests</Filter>
-    </ClCompile>
-    <ClCompile Include="HeapManagerUnitTest.cpp">
-      <Filter>Source Files\MemoryTests</Filter>
-    </ClCompile>
-    <ClCompile Include="MemorySystemTest.cpp">
-      <Filter>Source Files\MemoryTests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

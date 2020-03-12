@@ -1,0 +1,19 @@
+{
+  "GOs": [
+    {
+      "Name": "TestSprite",
+      "IniPos": [200, 200],
+      "RB": {
+        "Mass": 1.0,
+        "GraSc": 0,
+        "AngDrg": 0,
+        "AngVel": 200
+      },
+      "Comp": {},
+      "Ren": {
+        "Spr": "/Images/GoodGuy.png",
+        "Ord": 1
+      }
+    }
+  ]
+}

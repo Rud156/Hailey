@@ -88,7 +88,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>SFML_STATIC;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SFML_STATIC;_DEBUG;_LIB;%(PreprocessorDefinitions);SOLUTION_DIR=R"($(SolutionDir)Assets)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)\SFML-2.5.1-x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -110,7 +110,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions);SOLUTION_DIR=R"($(SolutionDir)Assets)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -133,7 +133,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>SFML_STATIC;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SFML_STATIC;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions);SOLUTION_DIR=R"($(SolutionDir)Assets)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -158,7 +158,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>SFML_STATIC;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SFML_STATIC;NDEBUG;_LIB;%(PreprocessorDefinitions);SOLUTION_DIR=R"($(SolutionDir)Assets)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)\SFML-2.5.1-x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -176,91 +176,115 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Allocators.h" />
-    <ClInclude Include="BaseCollider.h" />
-    <ClInclude Include="BitArray.h" />
-    <ClInclude Include="BitArrayTest.h" />
-    <ClInclude Include="CircleCollider.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="CoreLoop.h" />
-    <ClInclude Include="Debug.h" />
-    <ClInclude Include="Engine.h" />
-    <ClInclude Include="FixedMemoryManager.h" />
-    <ClInclude Include="FixedMemoryManager_Inl.h" />
-    <ClInclude Include="GameObjectUpdater.h" />
-    <ClInclude Include="GameObjectUpdater_Extern.h" />
-    <ClInclude Include="LoopTimer.h" />
-    <ClInclude Include="MathUtils.h" />
-    <ClInclude Include="MathUtils_Inl.h" />
-    <ClInclude Include="MathUtilsUnitTest.h" />
-    <ClInclude Include="MemoryManager_Extern.h" />
-    <ClInclude Include="Node.h" />
-    <ClInclude Include="MemoryManager.h" />
-    <ClInclude Include="MemoryManager_Inl.h" />
-    <ClInclude Include="Node2D.h" />
-    <ClInclude Include="MemorySystem.h" />
-    <ClInclude Include="MemorySystem_Extern.h" />
-    <ClInclude Include="MemorySystem_Inl.h" />
-    <ClInclude Include="Node3D.h" />
-    <ClInclude Include="Point2D.h" />
-    <ClInclude Include="Point2D_Inl.h" />
-    <ClInclude Include="Point3D.h" />
-    <ClInclude Include="Point3D_Inl.h" />
-    <ClInclude Include="Random.h" />
-    <ClInclude Include="RectangleCollider.h" />
-    <ClInclude Include="Rigidbody2D.h" />
-    <ClInclude Include="Rotate2D.h" />
-    <ClInclude Include="Scale2D.h" />
-    <ClInclude Include="SmartPtr.h" />
-    <ClInclude Include="SpriteAnimationSI.h" />
-    <ClInclude Include="SpriteAnimationSS.h" />
-    <ClInclude Include="SpriteRenderer.h" />
-    <ClInclude Include="SpriteRenderController.h" />
-    <ClInclude Include="SpriteRenderController_Extern.h" />
+    <ClInclude Include="Src\Externals\StackTrace\call_stack.hpp" />
+    <ClInclude Include="Src\Externals\StackTrace\StackWalker.h" />
+    <ClInclude Include="Src\Externals\StackTrace\stack_exception.hpp" />
+    <ClInclude Include="Src\Utils\Instrumentor.h" />
+    <ClInclude Include="Src\Memory\Allocators.h" />
+    <ClInclude Include="Src\Core\Components\Physics\Colliders\BaseCollider.h" />
+    <ClInclude Include="Src\Containers\BitArray.h" />
+    <ClInclude Include="Src\Containers\Tests\BitArrayTest.h" />
+    <ClInclude Include="Src\Core\Components\Physics\Colliders\CircleCollider.h" />
+    <ClInclude Include="Src\Core\BaseComponents\Component.h" />
+    <ClInclude Include="Src\Core\Controllers\CoreLoop.h" />
+    <ClInclude Include="Src\Utils\Debug.h" />
+    <ClInclude Include="Src\Engine.h" />
+    <ClInclude Include="Src\Core\Loaders\FileLoader.h" />
+    <ClInclude Include="Src\Memory\FixedMemoryManager.h" />
+    <ClInclude Include="Src\Memory\FixedMemoryManager_Inl.h" />
+    <ClInclude Include="Src\Core\Controllers\GameObjectUpdater.h" />
+    <ClInclude Include="Src\Core\Controllers\GameObjectUpdater_Extern.h" />
+    <ClInclude Include="Src\Externals\json.hpp" />
+    <ClInclude Include="Src\Core\Loaders\JsonGOLoader.h" />
+    <ClInclude Include="Src\Core\Controllers\LoopTimer.h" />
+    <ClInclude Include="Src\Utils\MathUtils.h" />
+    <ClInclude Include="Src\Utils\MathUtils_Inl.h" />
+    <ClInclude Include="Src\Utils\Tests\MathUtilsUnitTest.h" />
+    <ClInclude Include="Src\Memory\MemoryManager_Extern.h" />
+    <ClInclude Include="Src\Core\BaseComponents\Node.h" />
+    <ClInclude Include="Src\Memory\MemoryManager.h" />
+    <ClInclude Include="Src\Memory\MemoryManager_Inl.h" />
+    <ClInclude Include="Src\Core\Components\Transform\Node2D.h" />
+    <ClInclude Include="Src\Memory\MemorySystem.h" />
+    <ClInclude Include="Src\Memory\MemorySystem_Extern.h" />
+    <ClInclude Include="Src\Memory\MemorySystem_Inl.h" />
+    <ClInclude Include="Src\Core\Components\Transform\Node3D.h" />
+    <ClInclude Include="Src\Maths\Point2D.h" />
+    <ClInclude Include="Src\Maths\Point2D_Inl.h" />
+    <ClInclude Include="Src\Maths\Point3D.h" />
+    <ClInclude Include="Src\Maths\Point3D_Inl.h" />
+    <ClInclude Include="Src\Containers\Tests\PointerTest.h" />
+    <ClInclude Include="Src\Containers\PtrData.h" />
+    <ClInclude Include="Src\Utils\Random.h" />
+    <ClInclude Include="Src\Core\Components\Physics\Colliders\RectangleCollider.h" />
+    <ClInclude Include="Src\Core\Components\Physics\Rigidbody2D.h" />
+    <ClInclude Include="Src\Core\Components\Transform\Rotate2D.h" />
+    <ClInclude Include="Src\Core\Components\Transform\Scale2D.h" />
+    <ClInclude Include="Src\Containers\SmartPtr.h" />
+    <ClInclude Include="Src\Core\Components\Rendering\SpriteAnimationSI.h" />
+    <ClInclude Include="Src\Core\Components\Rendering\SpriteAnimationSS.h" />
+    <ClInclude Include="Src\Core\Components\Rendering\SpriteRenderer.h" />
+    <ClInclude Include="Src\Core\Controllers\Rendering\SpriteRenderController.h" />
+    <ClInclude Include="Src\Core\Controllers\Rendering\SpriteRenderController_Extern.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="WorldPhysicsController.h" />
-    <ClInclude Include="WorldPhysicsController_Extern.h" />
+    <ClInclude Include="Src\Containers\WeakPtr.h" />
+    <ClInclude Include="Src\Core\Controllers\Physics\WorldPhysicsController.h" />
+    <ClInclude Include="Src\Core\Controllers\Physics\WorldPhysicsController_Extern.h" />
+    <ClInclude Include="Src\Core\Controllers\Rendering\TextureDataCache.h" />
+    <ClInclude Include="Src\Core\Controllers\Rendering\TextureDataCache_Extern.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Allocators.cpp" />
-    <ClCompile Include="BaseCollider.cpp" />
-    <ClCompile Include="BitArray.cpp" />
-    <ClCompile Include="BitArrayTest.cpp" />
-    <ClCompile Include="CircleCollider.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="CoreLoop.cpp" />
-    <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="FixedMemoryManager.cpp" />
-    <ClCompile Include="GameObjectUpdater.cpp" />
-    <ClCompile Include="LoopTimer.cpp" />
-    <ClCompile Include="MathUtils.cpp" />
-    <ClCompile Include="MathUtilsUnitTest.cpp" />
-    <ClCompile Include="Node.cpp" />
-    <ClCompile Include="MemoryManager.cpp" />
-    <ClCompile Include="Node2D.cpp" />
-    <ClCompile Include="MemorySystem.cpp" />
-    <ClCompile Include="Node3D.cpp" />
-    <ClCompile Include="Point2D.cpp" />
-    <ClCompile Include="Point3D.cpp" />
-    <ClCompile Include="Random.cpp" />
-    <ClCompile Include="RectangleCollider.cpp" />
-    <ClCompile Include="Rigidbody2D.cpp" />
-    <ClCompile Include="Rotate2D.cpp" />
-    <ClCompile Include="Scale2D.cpp" />
-    <ClCompile Include="SmartPtr.cpp" />
-    <ClCompile Include="SpriteAnimationSI.cpp" />
-    <ClCompile Include="SpriteAnimationSS.cpp" />
-    <ClCompile Include="SpriteRenderer.cpp" />
-    <ClCompile Include="SpriteRenderController.cpp" />
+    <ClCompile Include="Src\Externals\StackTrace\call_stack_gcc.cpp" />
+    <ClCompile Include="Src\Externals\StackTrace\call_stack_msvc.cpp" />
+    <ClCompile Include="Src\Externals\StackTrace\StackWalker.cpp" />
+    <ClCompile Include="Src\Utils\Instrumentor.cpp" />
+    <ClCompile Include="Src\Memory\Allocators.cpp" />
+    <ClCompile Include="Src\Core\Components\Physics\Colliders\BaseCollider.cpp" />
+    <ClCompile Include="Src\Containers\BitArray.cpp" />
+    <ClCompile Include="Src\Containers\Tests\BitArrayTest.cpp" />
+    <ClCompile Include="Src\Core\Components\Physics\Colliders\CircleCollider.cpp" />
+    <ClCompile Include="Src\Core\BaseComponents\Component.cpp" />
+    <ClCompile Include="Src\Core\Controllers\CoreLoop.cpp" />
+    <ClCompile Include="Src\Utils\Debug.cpp" />
+    <ClCompile Include="Src\Engine.cpp" />
+    <ClCompile Include="Src\Core\Loaders\FileLoader.cpp" />
+    <ClCompile Include="Src\Memory\FixedMemoryManager.cpp" />
+    <ClCompile Include="Src\Core\Controllers\GameObjectUpdater.cpp" />
+    <ClCompile Include="Src\Core\Loaders\JsonGOLoader.cpp" />
+    <ClCompile Include="Src\Core\Controllers\LoopTimer.cpp" />
+    <ClCompile Include="Src\Utils\MathUtils.cpp" />
+    <ClCompile Include="Src\Utils\Tests\MathUtilsUnitTest.cpp" />
+    <ClCompile Include="Src\Core\BaseComponents\Node.cpp" />
+    <ClCompile Include="Src\Memory\MemoryManager.cpp" />
+    <ClCompile Include="Src\Core\Components\Transform\Node2D.cpp" />
+    <ClCompile Include="Src\Memory\MemorySystem.cpp" />
+    <ClCompile Include="Src\Core\Components\Transform\Node3D.cpp" />
+    <ClCompile Include="Src\Maths\Point2D.cpp" />
+    <ClCompile Include="Src\Maths\Point3D.cpp" />
+    <ClCompile Include="Src\Containers\Tests\PointerTest.cpp" />
+    <ClCompile Include="Src\Containers\Tests\PointerTestMockChildImpl.cpp" />
+    <ClCompile Include="Src\Containers\Tests\PointerTestMockParentImpl.cpp" />
+    <ClCompile Include="Src\Containers\PtrData.cpp" />
+    <ClCompile Include="Src\Utils\Random.cpp" />
+    <ClCompile Include="Src\Core\Components\Physics\Colliders\RectangleCollider.cpp" />
+    <ClCompile Include="Src\Core\Components\Physics\Rigidbody2D.cpp" />
+    <ClCompile Include="Src\Core\Components\Transform\Rotate2D.cpp" />
+    <ClCompile Include="Src\Core\Components\Transform\Scale2D.cpp" />
+    <ClCompile Include="Src\Containers\SmartPtr.cpp" />
+    <ClCompile Include="Src\Core\Components\Rendering\SpriteAnimationSI.cpp" />
+    <ClCompile Include="Src\Core\Components\Rendering\SpriteAnimationSS.cpp" />
+    <ClCompile Include="Src\Core\Components\Rendering\SpriteRenderer.cpp" />
+    <ClCompile Include="Src\Core\Controllers\Rendering\SpriteRenderController.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="WorldPhysicsController.cpp" />
+    <ClCompile Include="Src\Containers\WeakPtr.cpp" />
+    <ClCompile Include="Src\Core\Controllers\Physics\WorldPhysicsController.cpp" />
+    <ClCompile Include="Src\Core\Controllers\Rendering\TextureDataCache.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

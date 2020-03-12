@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -110,6 +109,24 @@
     <Filter Include="Source Files\Utils\Tests">
       <UniqueIdentifier>{c815a9d1-7604-43f6-8048-761a0b8b6c00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core\Loaders">
+      <UniqueIdentifier>{b0463eb6-e0b5-4ece-a97e-61c2a43759bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Loaders">
+      <UniqueIdentifier>{bcd48a69-5802-41f8-8605-34f7fd942d01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Externals">
+      <UniqueIdentifier>{4fbe0697-8f79-4f9e-8e1c-126f23f68b24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Externals">
+      <UniqueIdentifier>{19dc6dd3-1f08-4858-9802-17906eb71831}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Externals\StackTrace">
+      <UniqueIdentifier>{3e42b60a-9487-445c-8ca5-1a4c0a355288}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Externals\StackTrace">
+      <UniqueIdentifier>{cb25eb19-0316-4b24-a175-94f6f8007c31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -118,235 +135,307 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Point2D.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManager.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManager_Inl.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="Point2D_Inl.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Random.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Node2D.h">
-      <Filter>Header Files\Core\Components\Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManager_Extern.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="FixedMemoryManager.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="FixedMemoryManager_Inl.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="BitArray.h">
-      <Filter>Header Files\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="MemorySystem.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="MemorySystem_Inl.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="MemorySystem_Extern.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="BitArrayTest.h">
+    <ClInclude Include="Src\Containers\Tests\PointerTest.h">
       <Filter>Header Files\Containers\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Point3D.h">
-      <Filter>Header Files\Math</Filter>
+    <ClInclude Include="Src\Containers\Tests\BitArrayTest.h">
+      <Filter>Header Files\Containers\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Point3D_Inl.h">
-      <Filter>Header Files\Math</Filter>
+    <ClInclude Include="Src\Containers\BitArray.h">
+      <Filter>Header Files\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Node3D.h">
-      <Filter>Header Files\Core\Components\Transform</Filter>
+    <ClInclude Include="Src\Containers\WeakPtr.h">
+      <Filter>Header Files\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Header Files\Core\BaseComponents</Filter>
+    <ClInclude Include="Src\Containers\SmartPtr.h">
+      <Filter>Header Files\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Header Files\Core\BaseComponents</Filter>
+    <ClInclude Include="Src\Containers\PtrData.h">
+      <Filter>Header Files\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectUpdater.h">
+    <ClInclude Include="Src\Core\Loaders\JsonGOLoader.h">
+      <Filter>Header Files\Core\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Loaders\FileLoader.h">
+      <Filter>Header Files\Core\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Controllers\CoreLoop.h">
       <Filter>Header Files\Core\Controllers</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectUpdater_Extern.h">
+    <ClInclude Include="Src\Core\Controllers\LoopTimer.h">
       <Filter>Header Files\Core\Controllers</Filter>
     </ClInclude>
-    <ClInclude Include="CoreLoop.h">
+    <ClInclude Include="Src\Core\Controllers\GameObjectUpdater.h">
       <Filter>Header Files\Core\Controllers</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteRenderer.h">
-      <Filter>Header Files\Core\Components\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="LoopTimer.h">
+    <ClInclude Include="Src\Core\Controllers\GameObjectUpdater_Extern.h">
       <Filter>Header Files\Core\Controllers</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteAnimationSI.h">
-      <Filter>Header Files\Core\Components\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteAnimationSS.h">
-      <Filter>Header Files\Core\Components\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Rigidbody2D.h">
-      <Filter>Header Files\Core\Components\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="CircleCollider.h">
+    <ClInclude Include="Src\Core\Components\Physics\Colliders\CircleCollider.h">
       <Filter>Header Files\Core\Components\Physics\Colliders</Filter>
     </ClInclude>
-    <ClInclude Include="RectangleCollider.h">
+    <ClInclude Include="Src\Core\Components\Physics\Colliders\BaseCollider.h">
       <Filter>Header Files\Core\Components\Physics\Colliders</Filter>
     </ClInclude>
-    <ClInclude Include="BaseCollider.h">
+    <ClInclude Include="Src\Core\Components\Physics\Colliders\RectangleCollider.h">
       <Filter>Header Files\Core\Components\Physics\Colliders</Filter>
     </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Rotate2D.h">
-      <Filter>Header Files\Core\Components\Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="Scale2D.h">
-      <Filter>Header Files\Core\Components\Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="MathUtils.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="MathUtils_Inl.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClCompile Include="MathUtilsUnitTest.h">
-      <Filter>Source Files\Utils\Tests</Filter>
-    </ClCompile>
-    <ClInclude Include="WorldPhysicsController.h">
-      <Filter>Header Files\Core\Controllers\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldPhysicsController_Extern.h">
-      <Filter>Header Files\Core\Controllers\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteRenderController.h">
-      <Filter>Header Files\Core\Controllers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteRenderController_Extern.h">
-      <Filter>Header Files\Core\Controllers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Allocators.h">
+    <ClInclude Include="Src\Memory\Allocators.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="SmartPtr.h">
-      <Filter>Header Files\Containers</Filter>
+    <ClInclude Include="Src\Memory\FixedMemoryManager.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Memory\FixedMemoryManager_Inl.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Memory\MemoryManager.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Memory\MemoryManager_Extern.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Memory\MemoryManager_Inl.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Memory\MemorySystem.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Memory\MemorySystem_Extern.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Memory\MemorySystem_Inl.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\Tests\MathUtilsUnitTest.h">
+      <Filter>Header Files\Utils\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\Debug.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\MathUtils.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\MathUtils_Inl.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\Random.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Maths\Point2D.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Maths\Point2D_Inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Maths\Point3D.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Maths\Point3D_Inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\BaseComponents\Node.h">
+      <Filter>Header Files\Core\BaseComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\BaseComponents\Component.h">
+      <Filter>Header Files\Core\BaseComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Components\Physics\Rigidbody2D.h">
+      <Filter>Header Files\Core\Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Components\Rendering\SpriteAnimationSI.h">
+      <Filter>Header Files\Core\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Components\Rendering\SpriteAnimationSS.h">
+      <Filter>Header Files\Core\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Components\Rendering\SpriteRenderer.h">
+      <Filter>Header Files\Core\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Components\Transform\Rotate2D.h">
+      <Filter>Header Files\Core\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Components\Transform\Scale2D.h">
+      <Filter>Header Files\Core\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Components\Transform\Node2D.h">
+      <Filter>Header Files\Core\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Components\Transform\Node3D.h">
+      <Filter>Header Files\Core\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Controllers\Rendering\SpriteRenderController.h">
+      <Filter>Header Files\Core\Controllers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Controllers\Rendering\SpriteRenderController_Extern.h">
+      <Filter>Header Files\Core\Controllers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Controllers\Physics\WorldPhysicsController.h">
+      <Filter>Header Files\Core\Controllers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Controllers\Physics\WorldPhysicsController_Extern.h">
+      <Filter>Header Files\Core\Controllers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\Instrumentor.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Externals\StackTrace\call_stack.hpp">
+      <Filter>Header Files\Externals\StackTrace</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Externals\StackTrace\stack_exception.hpp">
+      <Filter>Header Files\Externals\StackTrace</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Externals\StackTrace\StackWalker.h">
+      <Filter>Header Files\Externals\StackTrace</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Externals\json.hpp">
+      <Filter>Source Files\Externals</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Controllers\Rendering\TextureDataCache.h">
+      <Filter>Header Files\Core\Controllers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Controllers\Rendering\TextureDataCache_Extern.h">
+      <Filter>Header Files\Core\Controllers\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Point2D.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManager.cpp">
-      <Filter>Source Files\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="Random.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Node2D.cpp">
-      <Filter>Source Files\Core\Components\Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="FixedMemoryManager.cpp">
-      <Filter>Source Files\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="BitArray.cpp">
-      <Filter>Source Files\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="MemorySystem.cpp">
-      <Filter>Source Files\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="BitArrayTest.cpp">
+    <ClCompile Include="Src\Containers\Tests\BitArrayTest.cpp">
       <Filter>Source Files\Containers\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Point3D.cpp">
-      <Filter>Source Files\Math</Filter>
+    <ClCompile Include="Src\Containers\Tests\PointerTest.cpp">
+      <Filter>Source Files\Containers\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Node3D.cpp">
-      <Filter>Source Files\Core\Components\Transform</Filter>
+    <ClCompile Include="Src\Containers\BitArray.cpp">
+      <Filter>Source Files\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Source Files\Core\BaseComponents</Filter>
+    <ClCompile Include="Src\Containers\WeakPtr.cpp">
+      <Filter>Source Files\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp">
-      <Filter>Source Files\Core\BaseComponents</Filter>
+    <ClCompile Include="Src\Containers\SmartPtr.cpp">
+      <Filter>Source Files\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjectUpdater.cpp">
+    <ClCompile Include="Src\Containers\PtrData.cpp">
+      <Filter>Source Files\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Loaders\JsonGOLoader.cpp">
+      <Filter>Source Files\Core\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Loaders\FileLoader.cpp">
+      <Filter>Source Files\Core\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Controllers\CoreLoop.cpp">
       <Filter>Source Files\Core\Controllers</Filter>
     </ClCompile>
-    <ClCompile Include="CoreLoop.cpp">
+    <ClCompile Include="Src\Core\Controllers\LoopTimer.cpp">
       <Filter>Source Files\Core\Controllers</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>Source Files\Core\Components\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="LoopTimer.cpp">
+    <ClCompile Include="Src\Core\Controllers\GameObjectUpdater.cpp">
       <Filter>Source Files\Core\Controllers</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteAnimationSI.cpp">
-      <Filter>Source Files\Core\Components\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteAnimationSS.cpp">
-      <Filter>Source Files\Core\Components\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Rigidbody2D.cpp">
-      <Filter>Source Files\Core\Components\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="CircleCollider.cpp">
+    <ClCompile Include="Src\Core\Components\Physics\Colliders\CircleCollider.cpp">
       <Filter>Source Files\Core\Components\Physics\Colliders</Filter>
     </ClCompile>
-    <ClCompile Include="RectangleCollider.cpp">
+    <ClCompile Include="Src\Core\Components\Physics\Colliders\BaseCollider.cpp">
       <Filter>Source Files\Core\Components\Physics\Colliders</Filter>
     </ClCompile>
-    <ClCompile Include="BaseCollider.cpp">
+    <ClCompile Include="Src\Core\Components\Physics\Colliders\RectangleCollider.cpp">
       <Filter>Source Files\Core\Components\Physics\Colliders</Filter>
     </ClCompile>
-    <ClCompile Include="Debug.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Rotate2D.cpp">
-      <Filter>Source Files\Core\Components\Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="Scale2D.cpp">
-      <Filter>Source Files\Core\Components\Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="MathUtils.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="MathUtilsUnitTest.cpp">
-      <Filter>Source Files\Utils\Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldPhysicsController.cpp">
-      <Filter>Source Files\Core\Controllers\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteRenderController.cpp">
-      <Filter>Source Files\Core\Controllers\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Allocators.cpp">
+    <ClCompile Include="Src\Memory\Allocators.cpp">
       <Filter>Source Files\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="SmartPtr.cpp">
-      <Filter>Source Files\Containers</Filter>
+    <ClCompile Include="Src\Memory\FixedMemoryManager.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Memory\MemoryManager.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Memory\MemorySystem.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utils\Tests\MathUtilsUnitTest.cpp">
+      <Filter>Source Files\Utils\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utils\Debug.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utils\MathUtils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utils\Random.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Maths\Point2D.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Maths\Point3D.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\BaseComponents\Node.cpp">
+      <Filter>Source Files\Core\BaseComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\BaseComponents\Component.cpp">
+      <Filter>Source Files\Core\BaseComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Components\Physics\Rigidbody2D.cpp">
+      <Filter>Source Files\Core\Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Components\Rendering\SpriteAnimationSI.cpp">
+      <Filter>Source Files\Core\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Components\Rendering\SpriteAnimationSS.cpp">
+      <Filter>Source Files\Core\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Components\Rendering\SpriteRenderer.cpp">
+      <Filter>Source Files\Core\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Components\Transform\Rotate2D.cpp">
+      <Filter>Source Files\Core\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Components\Transform\Scale2D.cpp">
+      <Filter>Source Files\Core\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Components\Transform\Node3D.cpp">
+      <Filter>Source Files\Core\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Components\Transform\Node2D.cpp">
+      <Filter>Source Files\Core\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Controllers\Rendering\SpriteRenderController.cpp">
+      <Filter>Source Files\Core\Controllers\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Controllers\Physics\WorldPhysicsController.cpp">
+      <Filter>Source Files\Core\Controllers\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Containers\Tests\PointerTestMockParentImpl.cpp">
+      <Filter>Source Files\Containers\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Containers\Tests\PointerTestMockChildImpl.cpp">
+      <Filter>Source Files\Containers\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utils\Instrumentor.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Externals\StackTrace\call_stack_gcc.cpp">
+      <Filter>Source Files\Externals\StackTrace</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Externals\StackTrace\call_stack_msvc.cpp">
+      <Filter>Source Files\Externals\StackTrace</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Externals\StackTrace\StackWalker.cpp">
+      <Filter>Source Files\Externals\StackTrace</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Controllers\Rendering\TextureDataCache.cpp">
+      <Filter>Source Files\Core\Controllers\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
