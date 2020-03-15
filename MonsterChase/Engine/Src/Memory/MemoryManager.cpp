@@ -138,9 +138,9 @@ namespace Memory
 			if (_availableDescriptors == nullptr)
 			{
 				Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
+				Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
 				const stacktrace::call_stack st;
 				Utils::Debug::LogOutputToWindow(st.to_string().c_str());
-				Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
 
 				this->_memoryManagerMutex.unlock();
 				return nullptr;
@@ -155,7 +155,7 @@ namespace Memory
 		this->_memoryManagerMutex.lock();
 
 		// Return NullPtr if there is no consecutive memory fit available
-		if (memoryAddress == nullptr)
+		if (memoryAddress == nullptr || this->_availableDescriptors == nullptr)
 		{
 			this->_memoryManagerMutex.unlock();
 			this->collect();
@@ -165,12 +165,12 @@ namespace Memory
 			memoryAddress = this->getFirstFittingFreeBlock(totalRequiredMemorySize);
 			this->_memoryManagerMutex.lock();
 
-			if (memoryAddress == nullptr)
+			if (memoryAddress == nullptr || this->_availableDescriptors == nullptr)
 			{
 				Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
+				Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
 				const stacktrace::call_stack st;
 				Utils::Debug::LogOutputToWindow(st.to_string().c_str());
-				Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
 
 				this->_memoryManagerMutex.unlock();
 				return nullptr;
@@ -178,7 +178,6 @@ namespace Memory
 		}
 
 		// At this point we are definitely sure that memory can be provided
-		assert(this->_availableDescriptors != nullptr); // This should never happen
 
 		// Get the head BlockDescriptor address to send to the user
 		BlockDescriptor* headBlockDescriptor = this->_availableDescriptors;
@@ -250,7 +249,7 @@ namespace Memory
 		void* memoryAddress = this->getFirstFittingFreeBlockAligned(totalMemorySize, initialSizeToLeave, i_alignment);
 		this->_memoryManagerMutex.lock();
 
-		if (memoryAddress == nullptr)
+		if (memoryAddress == nullptr || this->_availableDescriptors == nullptr)
 		{
 			this->_memoryManagerMutex.unlock();
 			this->collect();
@@ -260,7 +259,7 @@ namespace Memory
 			memoryAddress = this->getFirstFittingFreeBlockAligned(totalMemorySize, initialSizeToLeave, i_alignment);
 			this->_memoryManagerMutex.lock();
 
-			if (memoryAddress == nullptr)
+			if (memoryAddress == nullptr || this->_availableDescriptors == nullptr)
 			{
 				Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
 				Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
@@ -276,7 +275,6 @@ namespace Memory
 		const size_t totalAdjustedMemorySize = totalMemorySize + alignmentAmount;
 
 		// At this point we are definitely sure that memory can be provided
-		assert(this->_availableDescriptors != nullptr); // This should never happen
 
 		// Get the head BlockDescriptor address to send to the user
 		BlockDescriptor* headBlockDescriptor = this->_availableDescriptors;
@@ -417,7 +415,7 @@ namespace Memory
 		this->_memoryManagerMutex.lock();
 
 		// Return NULL if there are no FreeBlock available
-		if (this->_freeBlocks == nullptr)
+		if (this->_freeBlocks == nullptr || this->_availableDescriptors == nullptr)
 		{
 			this->_memoryManagerMutex.unlock();
 			return nullptr;
@@ -508,7 +506,7 @@ namespace Memory
 		this->_memoryManagerMutex.lock();
 
 		// Return NULL if there are no FreeBlock available
-		if (this->_freeBlocks == nullptr)
+		if (this->_freeBlocks == nullptr || this->_availableDescriptors == nullptr)
 		{
 			this->_memoryManagerMutex.unlock();
 			return nullptr;
@@ -795,14 +793,48 @@ namespace Memory
 		return current;
 	}
 
-	void MemoryManager::quickSort(BlockDescriptor* i_left, BlockDescriptor* i_head) const
+	void MemoryManager::quickSort(BlockDescriptor* i_left, BlockDescriptor* i_right) const
 	{
-		if (i_head != nullptr && i_left != i_head && i_left != i_head->nextBlockDescriptor)
+		// https://stackoverflow.com/a/33884601
+		while (i_left != nullptr && i_right != nullptr &&
+			i_left->memoryStartPointer < i_right->memoryStartPointer)
 		{
-			BlockDescriptor* partitionValue = this->partition(i_left, i_head);
-			this->quickSort(i_left, partitionValue->previousBlockDescriptor);
-			this->quickSort(partitionValue->nextBlockDescriptor, i_head);
+			BlockDescriptor* partitionValue = this->partition(i_left, i_right);
+
+			if (partitionValue == nullptr || partitionValue->nextBlockDescriptor == nullptr)
+			{
+				return;
+			}
+
+			void* combinedLeftPointer = reinterpret_cast<void*>(
+				static_cast<char*>(partitionValue->memoryStartPointer) -
+				static_cast<char*>(i_left->memoryStartPointer)
+			);
+
+			void* combinedRightPointer = reinterpret_cast<void*>(
+				static_cast<char*>(i_right->memoryStartPointer) -
+				static_cast<char*>(partitionValue->nextBlockDescriptor->memoryStartPointer)
+			);
+
+			if (combinedLeftPointer <= combinedRightPointer)
+			{
+				this->quickSort(i_left, partitionValue);
+				i_left = partitionValue->nextBlockDescriptor;
+			}
+			else
+			{
+				this->quickSort(partitionValue->nextBlockDescriptor, i_right);
+				i_right = partitionValue;
+			}
 		}
+
+		// if (i_right != nullptr && i_left != i_right && i_left != i_right->nextBlockDescriptor)
+		//
+		// {
+		// 	BlockDescriptor* partitionValue = this->partition(i_left, i_right);
+		// 	this->quickSort(i_left, partitionValue->previousBlockDescriptor);
+		// 	this->quickSort(partitionValue->nextBlockDescriptor, i_right);
+		// }
 	}
 
 	// Quick Sort

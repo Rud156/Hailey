@@ -55,7 +55,7 @@ namespace Memory
 		static void swap(BlockDescriptor* i_first, BlockDescriptor* i_second);
 		static BlockDescriptor* getLastBlockDescriptor(BlockDescriptor* i_head);
 		BlockDescriptor* partition(BlockDescriptor* i_left, BlockDescriptor* i_head) const;
-		void quickSort(BlockDescriptor* i_left, BlockDescriptor* i_head) const;
+		void quickSort(BlockDescriptor* i_left, BlockDescriptor* i_right) const;
 
 		// Other Helpers
 		inline static void printList(const char* i_headerString, BlockDescriptor* i_head);

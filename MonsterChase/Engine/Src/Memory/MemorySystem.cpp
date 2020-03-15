@@ -23,12 +23,15 @@ namespace Memory
 
 	void MemorySystem::getMemoryFromWindows()
 	{
-		const size_t sizeHeap = 30000000; // This is about 30MB of Memory
-		const unsigned int numDescriptors = 2048;
+		const size_t totalMemoryInMB = 30;
+
+		const size_t sizeHeap = 1024 * 1024 * totalMemoryInMB;
+		const unsigned int numDescriptors = 2048 * totalMemoryInMB;
 		void* pHeapMemory = HeapAlloc(GetProcessHeap(), 0, sizeHeap);
 
 		create(pHeapMemory, sizeHeap, numDescriptors);
 
+		_instance->_totalMemory = totalMemoryInMB;
 		_instance->_heapMemory = pHeapMemory;
 	}
 

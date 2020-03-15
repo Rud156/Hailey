@@ -14,6 +14,7 @@ namespace Memory
 
 		// Memory
 		void* _heapMemory;
+		size_t _totalMemory;
 
 		FixedMemoryManager** _fixedMemoryManagers;
 

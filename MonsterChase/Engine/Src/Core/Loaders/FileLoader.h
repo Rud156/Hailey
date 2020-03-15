@@ -1,10 +1,14 @@
 #pragma once
+#include <mutex>
 #include <string>
 
 namespace Core::Loaders
 {
 	class FileLoader
 	{
+	private:
+		static std::mutex FileMutex;
+
 	public:
 #ifdef NDEBUG
 		static inline const char* const Assets = "./Assets";

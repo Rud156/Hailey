@@ -30,6 +30,7 @@ namespace Core::Loaders
 		static std::mutex JsonMutex;
 		static std::vector<std::future<void>> FutureList;
 
+		static void LoadGoFileDeferred(std::string i_filePath);
 		static void LoadGameObjectDeferred(nlohmann::basic_json<> i_value);
 
 	public:

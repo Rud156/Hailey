@@ -48,6 +48,15 @@ namespace Core::Controllers::Rendering
 
 	bool SpriteRenderController::CompareRenderOrder(BaseComponents::Node* i_a, BaseComponents::Node* i_b)
 	{
+		if (i_a == nullptr)
+		{
+			return true;
+		}
+		else if (i_b == nullptr)
+		{
+			return false;
+		}
+
 		return i_a->GetRenderOrder() < i_b->GetRenderOrder();
 	}
 

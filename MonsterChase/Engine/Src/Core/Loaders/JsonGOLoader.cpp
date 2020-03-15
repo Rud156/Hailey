@@ -29,6 +29,33 @@ std::vector<std::future<void>> Core::Loaders::JsonGOLoader::FutureList;
 
 namespace Core::Loaders
 {
+	void JsonGOLoader::LoadGoFileDeferred(std::string i_filePath)
+	{
+		const std::string jsonDataString = FileLoader::LoadFileAsString(i_filePath);
+		const auto jsonData = json::parse(jsonDataString);
+
+		const bool hasGameObjects = jsonData.contains(JsonGOLoader::GameObjectStr);
+		if (hasGameObjects)
+		{
+			auto gameObjectData = jsonData[JsonGOLoader::GameObjectStr];
+			for (auto& element : gameObjectData.items())
+			{
+				JsonGOLoader::FutureList.push_back(std::async(std::launch::async,
+				                                              JsonGOLoader::LoadGameObjectDeferred,
+				                                              element.value()
+					)
+				);
+
+
+				Utils::Debug::LogOutputToWindow("Loading Json\n");
+			}
+		}
+		else
+		{
+			Utils::Debug::LogOutputToWindow("No GameObjects Found");
+		}
+	}
+
 	void JsonGOLoader::LoadGameObjectDeferred(basic_json<> i_value)
 	{
 		const auto name = i_value[JsonGOLoader::NameStr].get<std::string>();
@@ -120,28 +147,14 @@ namespace Core::Loaders
 			}
 		}
 
-		const std::string jsonDataString = FileLoader::LoadFileAsString(i_filePath);
-		const auto jsonData = json::parse(jsonDataString);
+		// Create a copy of the string as it maybe destroyed before the function runs
+		const std::string filePath(i_filePath);
 
-		const bool hasGameObjects = jsonData.contains(JsonGOLoader::GameObjectStr);
-		if (hasGameObjects)
-		{
-			auto gameObjectData = jsonData[JsonGOLoader::GameObjectStr];
-			for (auto& element : gameObjectData.items())
-			{
-				JsonGOLoader::FutureList.push_back(std::async(std::launch::async,
-				                                              JsonGOLoader::LoadGameObjectDeferred,
-				                                              element.value())
-				);
-
-
-				Utils::Debug::LogOutputToWindow("Loading Json\n");
-			}
-		}
-		else
-		{
-			Utils::Debug::LogOutputToWindow("No GameObjects Found");
-		}
+		JsonGOLoader::FutureList.push_back(std::async(std::launch::async,
+		                                              JsonGOLoader::LoadGoFileDeferred,
+		                                              filePath
+			)
+		);
 	}
 
 	void JsonGOLoader::LoadJsonGameObjectSync(std::string_view i_filePath)
