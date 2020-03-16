@@ -38,8 +38,8 @@ namespace Memory
 	// Singleton
 
 	// Creation
-	void MemoryManager::create(void* i_heapMemoryStartAddress, const size_t i_heapMemoryTotalSize,
-	                           const size_t i_maxBlockDescriptors)
+	MemoryManager* MemoryManager::create(void* i_heapMemoryStartAddress, const size_t i_heapMemoryTotalSize,
+	                                     const size_t i_maxBlockDescriptors)
 	{
 		const size_t memoryManagerSize = sizeof(MemoryManager);
 		_instance = new(i_heapMemoryStartAddress)MemoryManager();
@@ -63,6 +63,7 @@ namespace Memory
 		_instance->createFreeBlock();
 
 		memoryManager = _instance;
+		return _instance;
 	}
 
 	void MemoryManager::createBlockDescriptors()
@@ -131,20 +132,13 @@ namespace Memory
 		// Return NullPtr if there are no BlockDescriptors available
 		if (_availableDescriptors == nullptr)
 		{
+			Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
+			Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
+			// const stacktrace::call_stack st;
+			// Utils::Debug::LogOutputToWindow(st.to_string().c_str());
+
 			this->_memoryManagerMutex.unlock();
-			this->collect();
-			this->_memoryManagerMutex.lock();
-
-			if (_availableDescriptors == nullptr)
-			{
-				Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
-				Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
-				const stacktrace::call_stack st;
-				Utils::Debug::LogOutputToWindow(st.to_string().c_str());
-
-				this->_memoryManagerMutex.unlock();
-				return nullptr;
-			}
+			return nullptr;
 		}
 
 		const size_t totalRequiredMemorySize = this->_blockDescriptorPointerSize + this->_intSize * 2 +
@@ -157,24 +151,13 @@ namespace Memory
 		// Return NullPtr if there is no consecutive memory fit available
 		if (memoryAddress == nullptr || this->_availableDescriptors == nullptr)
 		{
-			this->_memoryManagerMutex.unlock();
-			this->collect();
-			this->_memoryManagerMutex.lock();
+			Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
+			Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
+			// const stacktrace::call_stack st;
+			// Utils::Debug::LogOutputToWindow(st.to_string().c_str());
 
 			this->_memoryManagerMutex.unlock();
-			memoryAddress = this->getFirstFittingFreeBlock(totalRequiredMemorySize);
-			this->_memoryManagerMutex.lock();
-
-			if (memoryAddress == nullptr || this->_availableDescriptors == nullptr)
-			{
-				Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
-				Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
-				const stacktrace::call_stack st;
-				Utils::Debug::LogOutputToWindow(st.to_string().c_str());
-
-				this->_memoryManagerMutex.unlock();
-				return nullptr;
-			}
+			return nullptr;
 		}
 
 		// At this point we are definitely sure that memory can be provided
@@ -226,20 +209,13 @@ namespace Memory
 		// Return NullPtr if there are no BlockDescriptors available
 		if (_availableDescriptors == nullptr)
 		{
+			Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
+			Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
+			// const stacktrace::call_stack st;
+			// Utils::Debug::LogOutputToWindow(st.to_string().c_str());
+
 			this->_memoryManagerMutex.unlock();
-			this->collect();
-			this->_memoryManagerMutex.lock();
-
-			if (_availableDescriptors == nullptr)
-			{
-				Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
-				Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
-				const stacktrace::call_stack st;
-				Utils::Debug::LogOutputToWindow(st.to_string().c_str());
-
-				this->_memoryManagerMutex.unlock();
-				return nullptr;
-			}
+			return nullptr;
 		}
 
 		const size_t initialSizeToLeave = this->_blockDescriptorPointerSize + this->_intSize;
@@ -251,24 +227,13 @@ namespace Memory
 
 		if (memoryAddress == nullptr || this->_availableDescriptors == nullptr)
 		{
-			this->_memoryManagerMutex.unlock();
-			this->collect();
-			this->_memoryManagerMutex.lock();
+			Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
+			Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
+			// const stacktrace::call_stack st;
+			// Utils::Debug::LogOutputToWindow(st.to_string().c_str());
 
 			this->_memoryManagerMutex.unlock();
-			memoryAddress = this->getFirstFittingFreeBlockAligned(totalMemorySize, initialSizeToLeave, i_alignment);
-			this->_memoryManagerMutex.lock();
-
-			if (memoryAddress == nullptr || this->_availableDescriptors == nullptr)
-			{
-				Utils::Debug::LogOutputToWindow("=============Stack Trace==============\n");
-				Utils::Debug::LogOutputToWindow("Out of Memory!!!\n");
-				const stacktrace::call_stack st;
-				Utils::Debug::LogOutputToWindow(st.to_string().c_str());
-
-				this->_memoryManagerMutex.unlock();
-				return nullptr;
-			}
+			return nullptr;
 		}
 
 		const size_t alignmentAmount = *static_cast<size_t*>(memoryAddress);

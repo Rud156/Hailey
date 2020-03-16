@@ -1,20 +1,24 @@
 #include "Node.h"
 #include "../Controllers/GameObjectUpdater_Extern.h"
+#include "../../Utils/Uuid.h"
 
 #include <algorithm>
+#include <utility>
 
 namespace Core::BaseComponents
 {
 	// Constructor And Destructor
 
-	Node::Node(const char* const i_name, bool i_addToGlobalList)
+	Node::Node(std::string i_name, bool i_addToGlobalList)
 	{
 		if (i_addToGlobalList)
 		{
 			gameObjectUpdater->AddGameObject(this);
 		}
 
-		this->_name = i_name;
+		this->_instanceId = Utils::Uuid::getUuid();
+		this->_name = std::move(i_name);
+		this->_tag = "";
 	}
 
 	Node::~Node()
@@ -95,7 +99,31 @@ namespace Core::BaseComponents
 		}
 	}
 
+	size_t Node::GetInstanceId() const
+	{
+		return this->_instanceId;
+	}
+
 	// LifeCycle Methods
+
+	// General Data Access
+
+	std::string Node::GetName() const
+	{
+		return this->_name;
+	}
+
+	std::string Node::GetTag() const
+	{
+		return this->_tag;
+	}
+
+	void Node::SetTag(std::string i_tag)
+	{
+		this->_tag = std::move(i_tag);
+	}
+
+	// General Data Access
 
 	// Component Specific Data for Fast Access
 

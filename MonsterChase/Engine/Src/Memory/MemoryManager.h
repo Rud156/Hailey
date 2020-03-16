@@ -65,7 +65,7 @@ namespace Memory
 		[[nodiscard]] size_t getMinimumToLeave() const;
 
 		// Creation
-		static void create(void* i_heapMemoryStartAddress, size_t i_heapMemoryTotalSize, size_t i_maxBlockDescriptors);
+		static MemoryManager* create(void* i_heapMemoryStartAddress, size_t i_heapMemoryTotalSize, size_t i_maxBlockDescriptors);
 
 		// Allocation
 		void* allocate(size_t i_contiguousMemorySizeRequired);

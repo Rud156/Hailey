@@ -1,5 +1,4 @@
 #include "MemorySystem.h"
-#include "MemoryManager_Extern.h"
 #include "FixedMemoryManager.h"
 
 #include <Windows.h>
@@ -12,33 +11,78 @@ namespace Memory
 
 	MemorySystem* MemorySystem::_instance = nullptr;
 
-	MemorySystem::MemorySystem(): _heapMemory(nullptr), _fixedMemoryManagers(nullptr)
+	MemorySystem::MemorySystem(): _instanceHeapMemory(nullptr), _memoryBlocks(nullptr), _fixedMemoryManagers(nullptr)
 	{
 	}
 
-	MemorySystem::~MemorySystem()
-	= default;
+	MemorySystem::~MemorySystem() = default;
 
 #pragma region Setup And Destory
 
-	void MemorySystem::getMemoryFromWindows()
+	void MemorySystem::createMemorySystem()
 	{
-		const size_t totalMemoryInMB = 30;
+		if (_instance == nullptr) // This means that MemorySystem has not yet been allocated
+		{
+			void* instanceHeapMemory = HeapAlloc(GetProcessHeap(), 0, 1024 * 1024);
+			setupMemorySystem(instanceHeapMemory);
+		}
 
+		createManager();
+	}
+
+	void MemorySystem::createManager()
+	{
+		_instance->_memorySystemMutex.lock();
+
+		_instance->collect();
+
+		if (_instance->_memoryBlocks != nullptr)
+		{
+			_instance->_currentSize *= 2;
+		}
+
+		const size_t totalMemoryInMB = _instance->_currentSize;
 		const size_t sizeHeap = 1024 * 1024 * totalMemoryInMB;
-		const unsigned int numDescriptors = 2048 * totalMemoryInMB;
+		const size_t numDescriptors = 2048 * totalMemoryInMB;
+
 		void* pHeapMemory = HeapAlloc(GetProcessHeap(), 0, sizeHeap);
 
-		create(pHeapMemory, sizeHeap, numDescriptors);
+		if (_instance->_memoryBlocks == nullptr) // This means that no memory has been created and thus needs to be done
+		{
+			Memory::MemorySystem::createInitialMemoryManager(pHeapMemory, sizeHeap, numDescriptors);
+		}
+		else
+		{
+			Utils::Debug::LogOutputToWindow("Creating New Memory Manager\n");
+			Memory::MemorySystem::createOtherMemoryManager(pHeapMemory, sizeHeap, numDescriptors);
+		}
 
-		_instance->_totalMemory = totalMemoryInMB;
-		_instance->_heapMemory = pHeapMemory;
+		_instance->_memorySystemMutex.unlock();
 	}
 
 	void MemorySystem::returnMemoryToWindows()
 	{
-		HeapFree(GetProcessHeap(), 0, _instance->_heapMemory);
+		while (_instance->_memoryBlocks != nullptr)
+		{
+			void* heapMemory = _instance->_memoryBlocks->heapMemory;
+			_instance->_memoryBlocks = _instance->_memoryBlocks->nextBlock;
+
+			HeapFree(GetProcessHeap(), 0, heapMemory);
+		}
+
+		HeapFree(GetProcessHeap(), 0, _instance->_instanceHeapMemory);
 		_instance = nullptr;
+	}
+
+	MemorySystem::MemoryBlock* MemorySystem::getEmptyMemoryBlock(void* i_memory)
+	{
+		const auto memoryBlock = new(i_memory)MemoryBlock();
+
+		memoryBlock->heapMemory = nullptr;
+		memoryBlock->memoryManager = nullptr;
+		memoryBlock->nextBlock = nullptr;
+
+		return memoryBlock;
 	}
 
 #pragma endregion
@@ -47,17 +91,29 @@ namespace Memory
 
 #pragma region Creation
 
-	void MemorySystem::create(void* i_heapMemoryStartAddress, size_t i_heapMemoryTotalSize,
-	                          size_t i_maxBlockDescriptors)
+	void MemorySystem::setupMemorySystem(void* i_heapMemoryStartAddress)
 	{
-		const size_t overlordSize = sizeof(MemorySystem);
 		_instance = new(i_heapMemoryStartAddress)MemorySystem();
+		memorySystem = _instance;
+	}
 
-		void* otherUseMemoryStartAddress = static_cast<char*>(i_heapMemoryStartAddress) + overlordSize;
-		MemoryManager::create(otherUseMemoryStartAddress, i_heapMemoryTotalSize, i_maxBlockDescriptors);
+	void MemorySystem::createInitialMemoryManager(void* i_heapMemory, size_t i_heapTotalSize,
+	                                              size_t i_maxBlockDescriptors)
+	{
+		const size_t memoryBlockSize = sizeof(MemoryBlock);
+		void* otherHeap = static_cast<char*>(i_heapMemory) + memoryBlockSize;
+
+		MemoryManager* memoryManagerInstance = MemoryManager::create(otherHeap, i_heapTotalSize,
+		                                                             i_maxBlockDescriptors);
+
+		MemoryBlock* memoryBlock = MemorySystem::getEmptyMemoryBlock(i_heapMemory);
+		memoryBlock->heapMemory = i_heapMemory;
+		memoryBlock->nextBlock = nullptr;
+		memoryBlock->memoryManager = memoryManagerInstance;
+		_instance->_memoryBlocks = memoryBlock;
 
 		const size_t fixedMemoryManagerSize = sizeof(FixedMemoryManager*);
-		void* fixedArrayMemory = memoryManager->allocate(fixedMemoryManagerSize * TotalFixedAllocators);
+		void* fixedArrayMemory = memoryManagerInstance->allocate(fixedMemoryManagerSize * TotalFixedAllocators);
 		_instance->_fixedMemoryManagers = static_cast<FixedMemoryManager**>(fixedArrayMemory);
 		for (size_t i = 0; i < TotalFixedAllocators; i++)
 		{
@@ -85,14 +141,31 @@ namespace Memory
 				break;
 			}
 
-			void* fixedAllocatorMemory = memoryManager->allocate(sizeof(FixedMemoryManager));
+			void* fixedAllocatorMemory = memoryManagerInstance->allocate(sizeof(FixedMemoryManager));
 			_instance->_fixedMemoryManagers[i] = new(fixedAllocatorMemory)FixedMemoryManager();
 			_instance->_fixedMemoryManagers[i]->create(
-				_instance->AllowedFixedAllocators[i], memoryManager, totalBlockSize
+				_instance->AllowedFixedAllocators[i], memoryManagerInstance, totalBlockSize
 			);
 		}
+	}
 
-		memorySystem = _instance;
+	void MemorySystem::createOtherMemoryManager(void* i_heapMemory, size_t i_heapTotalSize,
+	                                            size_t i_maxBlockDescriptors)
+	{
+		const size_t memoryBlockSize = sizeof(MemoryBlock);
+		void* otherHeap = static_cast<char*>(i_heapMemory) + memoryBlockSize;
+
+		MemoryManager* memoryManagerInstance = MemoryManager::create(otherHeap, i_heapTotalSize,
+		                                                             i_maxBlockDescriptors);
+
+		MemoryBlock* memoryBlock = MemorySystem::getEmptyMemoryBlock(i_heapMemory);
+		memoryBlock->heapMemory = i_heapMemory;
+		memoryBlock->memoryManager = memoryManagerInstance;
+
+		// Put it at the head as there will be less thrashing there
+		memoryBlock->nextBlock = _instance->_memoryBlocks;
+
+		_instance->_memoryBlocks = memoryBlock;
 	}
 
 #pragma endregion
@@ -103,7 +176,7 @@ namespace Memory
 	{
 		if (_instance == nullptr)
 		{
-			getMemoryFromWindows();
+			createMemorySystem();
 		}
 
 		for (size_t i = 0; i < TotalFixedAllocators; i++)
@@ -118,37 +191,115 @@ namespace Memory
 			}
 		}
 
-		return memoryManager->allocate(i_contiguousMemorySizeRequired);
+		_instance->_memorySystemMutex.lock();
+
+		MemoryBlock* head = _instance->_memoryBlocks;
+		while (head != nullptr)
+		{
+			void* memory = head->memoryManager->allocate(i_contiguousMemorySizeRequired);
+			if (memory != nullptr)
+			{
+				_instance->_memorySystemMutex.unlock();
+				return memory;
+			}
+
+			head = head->nextBlock;
+		}
+
+		_instance->_memorySystemMutex.unlock();
+
+		createManager();
+
+		return _instance->_memoryBlocks->memoryManager->allocate(i_contiguousMemorySizeRequired);
 	}
 
 	void* MemorySystem::allocate(size_t i_contiguousMemorySizeRequired, unsigned i_alignment)
 	{
 		if (_instance == nullptr)
 		{
-			getMemoryFromWindows();
+			createMemorySystem();
 		}
 
-		return memoryManager->allocate(i_contiguousMemorySizeRequired, i_alignment);
+		_instance->_memorySystemMutex.lock();
+
+		MemoryBlock* head = _instance->_memoryBlocks;
+		while (head != nullptr)
+		{
+			void* memory = head->memoryManager->allocate(i_contiguousMemorySizeRequired, i_alignment);
+			if (memory != nullptr)
+			{
+				_instance->_memorySystemMutex.unlock();
+				return memory;
+			}
+
+			head = head->nextBlock;
+		}
+
+		_instance->_memorySystemMutex.unlock();
+
+		createManager();
+
+		return _instance->_memoryBlocks->memoryManager->allocate(i_contiguousMemorySizeRequired, i_alignment);
 	}
 
 	void* MemorySystem::reallocate(void* i_pointer, size_t i_contiguousMemorySizeRequired)
 	{
 		if (_instance == nullptr)
 		{
-			getMemoryFromWindows();
+			createMemorySystem();
 		}
 
-		return memoryManager->reallocate(i_pointer, i_contiguousMemorySizeRequired);
+		_instance->_memorySystemMutex.lock();
+
+		MemoryBlock* head = _instance->_memoryBlocks;
+		while (head != nullptr)
+		{
+			void* memory = head->memoryManager->reallocate(i_pointer, i_contiguousMemorySizeRequired);
+			if (memory != nullptr)
+			{
+				_instance->_memorySystemMutex.unlock();
+				return memory;
+			}
+
+			head = head->nextBlock;
+		}
+
+		_instance->_memorySystemMutex.unlock();
+
+		createManager();
+
+		return _instance->_memoryBlocks->memoryManager->reallocate(i_pointer, i_contiguousMemorySizeRequired);
 	}
 
 	void* MemorySystem::reallocate(void* i_pointer, size_t i_contiguousMemorySizeRequired, unsigned i_alignment)
 	{
 		if (_instance == nullptr)
 		{
-			getMemoryFromWindows();
+			createMemorySystem();
 		}
 
-		return memoryManager->reallocate(i_pointer, i_contiguousMemorySizeRequired, i_alignment);
+		_instance->_memorySystemMutex.lock();
+
+		MemoryBlock* head = _instance->_memoryBlocks;
+		while (head != nullptr)
+		{
+			void* memory = head->memoryManager->reallocate(i_pointer, i_contiguousMemorySizeRequired, i_alignment);
+			if (memory != nullptr)
+			{
+				_instance->_memorySystemMutex.unlock();
+				return memory;
+			}
+
+			head = head->nextBlock;
+		}
+
+		_instance->_memorySystemMutex.unlock();
+
+		createManager();
+
+		return _instance->_memoryBlocks->memoryManager->reallocate(i_pointer,
+		                                                           i_contiguousMemorySizeRequired,
+		                                                           i_alignment);
 	}
 
 #pragma endregion
@@ -173,7 +324,17 @@ namespace Memory
 			}
 		}
 
-		memoryManager->freeMem(i_pointer);
+		MemoryBlock* head = _instance->_memoryBlocks;
+		while (head != nullptr)
+		{
+			if (head->memoryManager->contains(i_pointer))
+			{
+				head->memoryManager->freeMem(i_pointer);
+				break;
+			}
+
+			head = head->nextBlock;
+		}
 	}
 
 #pragma endregion
@@ -182,13 +343,20 @@ namespace Memory
 
 	void MemorySystem::destroy()
 	{
-		for (size_t i = 0; i < TotalFixedAllocators; i++)
+		MemoryBlock* memoryManagerBlock = _instance->_memoryBlocks;
+		while (memoryManagerBlock->nextBlock != nullptr)
 		{
-			_instance->_fixedMemoryManagers[i]->destroy(memoryManager);
-			memoryManager->freeMem(_instance->_fixedMemoryManagers[i]);
+			memoryManagerBlock = memoryManagerBlock->nextBlock;
 		}
 
-		memoryManager->freeMem(_instance->_fixedMemoryManagers);
+		for (size_t i = 0; i < TotalFixedAllocators; i++)
+		{
+			_instance->_fixedMemoryManagers[i]->destroy(memoryManagerBlock->memoryManager);
+			memoryManagerBlock->memoryManager->freeMem(_instance->_fixedMemoryManagers[i]);
+		}
+
+		memoryManagerBlock->memoryManager->freeMem(_instance->_fixedMemoryManagers);
+
 		returnMemoryToWindows();
 	}
 

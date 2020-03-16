@@ -233,6 +233,7 @@
     <ClInclude Include="Src\Core\Controllers\Physics\WorldPhysicsController_Extern.h" />
     <ClInclude Include="Src\Core\Controllers\Rendering\TextureDataCache.h" />
     <ClInclude Include="Src\Core\Controllers\Rendering\TextureDataCache_Extern.h" />
+    <ClInclude Include="Src\Utils\Uuid.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Externals\StackTrace\call_stack_gcc.cpp" />
@@ -285,6 +286,7 @@
     <ClCompile Include="Src\Containers\WeakPtr.cpp" />
     <ClCompile Include="Src\Core\Controllers\Physics\WorldPhysicsController.cpp" />
     <ClCompile Include="Src\Core\Controllers\Rendering\TextureDataCache.cpp" />
+    <ClCompile Include="Src\Utils\Uuid.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

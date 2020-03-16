@@ -25,7 +25,6 @@ namespace Core::Controllers::Rendering
 
 		static bool CompareRenderOrder(BaseComponents::Node* i_a,
 		                               BaseComponents::Node* i_b);
-		void SortRenderer(std::vector<BaseComponents::Node*>& nodes) const;
 
 	public:
 		// Constructor/Destructor

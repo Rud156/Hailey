@@ -23,7 +23,7 @@ void RunMemorySystemTest()
 	assert(pHeapMemory);
 
 	// Create your HeapManager and FixedSizeAllocators.
-	InitializeMemorySystem(pHeapMemory, sizeHeap, numDescriptors);
+	InitializeMemorySystem(pHeapMemory);
 
 	const bool success = MemorySystem_UnitTest();
 	assert(success);
@@ -147,9 +147,9 @@ bool MemorySystem_UnitTest()
 	return true;
 }
 
-bool InitializeMemorySystem(void* i_pHeapMemory, size_t i_sizeHeapMemory, unsigned i_OptionalNumDescriptors)
+bool InitializeMemorySystem(void* i_pHeapMemory)
 {
-	Memory::MemorySystem::create(i_pHeapMemory, i_sizeHeapMemory, i_OptionalNumDescriptors);
+	Memory::MemorySystem::setupMemorySystem(i_pHeapMemory);
 	return true;
 }
 

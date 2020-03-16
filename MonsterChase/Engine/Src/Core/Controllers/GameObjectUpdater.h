@@ -1,4 +1,6 @@
 #pragma once
+#include <mutex>
+#include <string_view>
 #include <vector>
 
 namespace Core::BaseComponents
@@ -35,16 +37,22 @@ namespace Core
 			Rendering::SpriteRenderController* _spriteRenderController;
 			Physics::WorldPhysicsController* _worldPhysicsController;
 
+			std::mutex _gameObjectUpdaterLock;
+
 		public:
 			// Constructor and Destructor
 			GameObjectUpdater();
 			~GameObjectUpdater();
 
-			// External Functions
+			// GameObject Array Modification
 			void AddGameObject(BaseComponents::Node* i_node);
 			void RemoveGameObject(BaseComponents::Node* i_node);
-			[[nodiscard]] const std::vector<BaseComponents::Node*>& GetGameObjectsByRef() const;
-			[[nodiscard]] std::vector<BaseComponents::Node*> GetGameObjectsByVal() const;
+
+			// Data Access
+			[[nodiscard]] std::vector<BaseComponents::Node*> GetAllGameObjects();
+			[[nodiscard]] BaseComponents::Node* GetGameObjectByName(std::string_view i_name);
+			[[nodiscard]] BaseComponents::Node* GetGameObjectByTag(std::string_view i_tag);
+			[[nodiscard]] std::vector<BaseComponents::Node*> GetAllGameObjectsByTag(std::string_view i_tag);
 
 			// LifeCycle Functions
 			void Process(float i_deltaTime);

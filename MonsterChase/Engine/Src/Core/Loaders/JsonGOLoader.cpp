@@ -29,10 +29,13 @@ std::vector<std::future<void>> Core::Loaders::JsonGOLoader::FutureList;
 
 namespace Core::Loaders
 {
-	void JsonGOLoader::LoadGoFileDeferred(std::string i_filePath)
+	void JsonGOLoader::LoadGoFileDeferred(const std::string i_filePath)
 	{
 		const std::string jsonDataString = FileLoader::LoadFileAsString(i_filePath);
+
+		JsonGOLoader::JsonMutex.lock();
 		const auto jsonData = json::parse(jsonDataString);
+		JsonGOLoader::JsonMutex.unlock();
 
 		const bool hasGameObjects = jsonData.contains(JsonGOLoader::GameObjectStr);
 		if (hasGameObjects)
@@ -58,8 +61,8 @@ namespace Core::Loaders
 
 	void JsonGOLoader::LoadGameObjectDeferred(basic_json<> i_value)
 	{
-		const auto name = i_value[JsonGOLoader::NameStr].get<std::string>();
-		auto gameObject = new BaseComponents::Node(name.c_str(), false);
+		const auto name = std::string(i_value[JsonGOLoader::NameStr].get<std::string>());
+		auto gameObject = new BaseComponents::Node(name, false);
 
 		gameObject->AddComponent<Components::Transform::Rotate2D>();
 		gameObject->AddComponent<Components::Transform::Scale2D>();
@@ -128,9 +131,8 @@ namespace Core::Loaders
 			}
 		}
 
-		std::lock_guard<std::mutex> lock(JsonGOLoader::JsonMutex); // Basic Mutex
-		gameObjectUpdater->AddGameObject(gameObject);
 
+		gameObjectUpdater->AddGameObject(gameObject);
 		Utils::Debug::LogOutputToWindow("GameObject Loaded\n");
 	}
 
@@ -148,7 +150,7 @@ namespace Core::Loaders
 		}
 
 		// Create a copy of the string as it maybe destroyed before the function runs
-		const std::string filePath(i_filePath);
+		const std::string filePath = std::string(i_filePath);
 
 		JsonGOLoader::FutureList.push_back(std::async(std::launch::async,
 		                                              JsonGOLoader::LoadGoFileDeferred,
@@ -169,7 +171,7 @@ namespace Core::Loaders
 			for (auto& [key, value] : gameObjectData.items())
 			{
 				const auto name = value[JsonGOLoader::NameStr].get<std::string>();
-				auto gameObject = new BaseComponents::Node(name.c_str());
+				auto gameObject = new BaseComponents::Node(name);
 
 				gameObject->AddComponent<Components::Transform::Rotate2D>();
 				gameObject->AddComponent<Components::Transform::Scale2D>();

@@ -48,7 +48,7 @@ namespace Core::Controllers::Physics
 
 		while (this->_accumulator >= WorldPhysicsController::DefaultSimulationTime)
 		{
-			for (auto node : gameObjectUpdater->GetGameObjectsByRef())
+			for (auto node : gameObjectUpdater->GetAllGameObjects())
 			{
 				node->PhysicsProcess(WorldPhysicsController::DefaultSimulationTime);
 			}

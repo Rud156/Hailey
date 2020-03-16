@@ -1,6 +1,6 @@
+#include "BitArray.h"
 #include "../Memory/MemoryManager.h"
 
-#include "BitArray.h"
 #include <cassert>
 #include <cmath>
 #include <intrin0.h>

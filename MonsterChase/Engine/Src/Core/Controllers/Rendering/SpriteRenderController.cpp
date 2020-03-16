@@ -32,8 +32,8 @@ namespace Core::Controllers::Rendering
 
 	void SpriteRenderController::RenderNodes(sf::RenderWindow* i_window) const
 	{
-		auto nodes = gameObjectUpdater->GetGameObjectsByVal();
-		SortRenderer(nodes);
+		auto nodes = gameObjectUpdater->GetAllGameObjects();
+		std::sort(nodes.begin(), nodes.end(), CompareRenderOrder);
 
 		for (auto node : nodes)
 		{
@@ -58,12 +58,6 @@ namespace Core::Controllers::Rendering
 		}
 
 		return i_a->GetRenderOrder() < i_b->GetRenderOrder();
-	}
-
-
-	void SpriteRenderController::SortRenderer(std::vector<BaseComponents::Node*>& nodes) const
-	{
-		std::sort(nodes.begin(), nodes.end(), CompareRenderOrder);
 	}
 
 #pragma endregion

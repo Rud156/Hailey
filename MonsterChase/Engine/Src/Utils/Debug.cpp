@@ -5,11 +5,19 @@
 #include <fstream>
 #include <Windows.h>
 
+#define DEBUG
+
 namespace Utils
 {
-	void Debug::LogToFile(char const* const i_stringFormat, ...)
+	void Debug::LogToFile(
+		char const* const
+#if defined(_DEBUG) && defined(DEBUG)
+		i_stringFormat
+#endif,
+		...
+	)
 	{
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(DEBUG)
 
 		char stringBuffer[2048];
 		va_list argList;
@@ -33,9 +41,15 @@ namespace Utils
 #endif
 	}
 
-	void Debug::LogOutputToWindow(char const* const i_stringFormat, ...)
+	void Debug::LogOutputToWindow(
+		char const* const
+#if defined(_DEBUG) && defined(DEBUG)
+		i_stringFormat
+#endif,
+		...
+	)
 	{
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(DEBUG)
 
 		char stringBuffer[2048];
 		va_list argList;

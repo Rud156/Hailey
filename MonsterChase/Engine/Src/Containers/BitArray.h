@@ -12,7 +12,7 @@ namespace Containers
 	{
 	private:
 #ifdef _WIN64
-		uint64_t* _bitArray64;	
+		uint64_t* _bitArray64;
 #else
 		uint32_t* _bitArray32;
 #endif
@@ -23,7 +23,7 @@ namespace Containers
 
 	public:
 		BitArray(size_t i_numBits, bool i_startSet = true);
-		BitArray(size_t i_numBits, Memory::MemoryManager* i_memoryManager, bool i_startSet = true);
+		BitArray(size_t i_numBits, Memory::MemoryManager* i_memorySystem, bool i_startSet = true);
 		~BitArray();
 
 		// Affect All Bits

@@ -102,10 +102,9 @@ namespace Memory
 
 #pragma region Destroy
 
-	void FixedMemoryManager::destroy(MemoryManager* i_memoryManager) const
+	void FixedMemoryManager::destroy(Memory::MemoryManager* i_memoryManager) const
 	{
 		i_memoryManager->freeMem(this->_userMemoryStartPointer);
-
 		this->_memoryMapper->destroy(i_memoryManager);
 		i_memoryManager->freeMem(this->_memoryMapper);
 	}

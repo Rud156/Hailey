@@ -1,6 +1,8 @@
 #pragma once
 #include "Component.h"
+
 #include <vector>
+#include <string>
 
 namespace sf
 {
@@ -14,7 +16,11 @@ namespace Core
 		class Node
 		{
 		private:
-			const char* _name;
+			size_t _instanceId;
+
+			std::string _name;
+			std::string _tag;
+
 			std::vector<Component*> _components;
 
 			void SortComponents();
@@ -25,7 +31,7 @@ namespace Core
 
 		public:
 			// Constructor and Destructor
-			Node(const char* const i_name, bool i_addToGlobalList = true);
+			Node(std::string i_name, bool i_addToGlobalList = true);
 			~Node();
 
 			// Component
@@ -46,9 +52,15 @@ namespace Core
 			void Render(sf::RenderWindow* i_window);
 			void Exit();
 
+			// General Data Access/Update
+			[[nodiscard]] size_t GetInstanceId() const;
+			[[nodiscard]] std::string GetName() const;
+			[[nodiscard]] std::string GetTag() const;
+			void SetTag(std::string i_tag);
+
 			// Component Specific Data for Fast Access
 			void SetRenderOrder(float i_renderOrder);
-			float GetRenderOrder() const;
+			[[nodiscard]] float GetRenderOrder() const;
 		};
 
 		template <class T>

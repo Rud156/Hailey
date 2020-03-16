@@ -10,6 +10,7 @@
 #include "Src/Utils/Debug.h"
 #include "Src/Core/Controllers/GameObjectUpdater_Extern.h"
 #include "Src/Core/Controllers/LoopTimer.h"
+#include "Src/Utils/Random.h"
 #include <SFML/Graphics.hpp>
 
 #include <conio.h>
@@ -89,6 +90,8 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 		auto engine = new Engine::Engine();
 		auto window = new sf::RenderWindow(mainWindow);
 		engine->Init(window);
+
+		Utils::Random::SetSeed(static_cast<unsigned int>(time(nullptr)));
 
 		std::string fontPath = assetsDir;
 		fontPath += "/Fonts/Oswald-Medium.ttf";
@@ -170,7 +173,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 				if (currentUpdateTime <= 0)
 				{
 					// TODO: Remove this later on...
-					size_t totalObjectsCount = gameObjectUpdater->GetGameObjectsByRef().size();
+					size_t totalObjectsCount = gameObjectUpdater->GetAllGameObjects().size();
 					std::string data = "Total Objects: ";
 					data += std::to_string(totalObjectsCount);
 					gameObjectsText.setString(data);

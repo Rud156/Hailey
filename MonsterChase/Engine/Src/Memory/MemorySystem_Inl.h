@@ -8,7 +8,12 @@ namespace Memory
 
 	inline void MemorySystem::collect()
 	{
-		memoryManager->collect();
+		MemoryBlock* head = _instance->_memoryBlocks;
+		while (head != nullptr)
+		{
+			head->memoryManager->collect();
+			head = head->nextBlock;
+		}
 	}
 
 
@@ -26,7 +31,18 @@ namespace Memory
 			}
 		}
 
-		return memoryManager->contains(i_pointer);
+		MemoryBlock* head = _instance->_memoryBlocks;
+		while (head != nullptr)
+		{
+			if (head->memoryManager->contains(i_pointer))
+			{
+				return true;
+			}
+
+			head = head->nextBlock;
+		}
+
+		return false;
 	}
 
 	inline bool MemorySystem::isAllocated(void* i_pointer) const
@@ -39,7 +55,19 @@ namespace Memory
 			}
 		}
 
-		return memoryManager->isAllocated(i_pointer);
+
+		MemoryBlock* head = _instance->_memoryBlocks;
+		while (head != nullptr)
+		{
+			if (head->memoryManager->isAllocated(i_pointer))
+			{
+				return true;
+			}
+
+			head = head->nextBlock;
+		}
+
+		return false;
 	}
 
 #pragma endregion

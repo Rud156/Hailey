@@ -46,7 +46,7 @@ namespace Memory
 		void freeMem(void* i_pointer);
 
 		// Destroy
-		void destroy(MemoryManager* i_memoryManager) const;
+		void destroy(Memory::MemoryManager* i_memoryManager) const;
 
 		// Data Checks
 		[[nodiscard]] inline bool canHandleSize(size_t i_inputSize) const;
