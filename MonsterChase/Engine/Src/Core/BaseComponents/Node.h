@@ -1,8 +1,13 @@
 #pragma once
 #include "Component.h"
+#include "../../Containers/SmartPtr.h"
+#include "../../Containers/WeakPtr.h"
 
+#include <typeinfo>
 #include <vector>
 #include <string>
+#include <functional>
+#include <mutex>
 
 namespace sf
 {
@@ -11,38 +16,52 @@ namespace sf
 
 namespace Core
 {
+	namespace Components::Physics::Colliders
+	{
+		class BaseCollider;
+	}
+
 	namespace BaseComponents
 	{
+		class Component;
+
 		class Node
 		{
 		private:
 			size_t _instanceId;
+			Containers::SmartPtr<Node> _selfSmartRef;
+			std::recursive_mutex _nodeMutex;
 
 			std::string _name;
 			std::string _tag;
 
-			std::vector<Component*> _components;
+			std::vector<Containers::SmartPtr<Component>> _components;
 
 			void SortComponents();
-			static bool ComparePriority(Component* i_a, Component* i_b);
+			static bool ComparePriority(Containers::SmartPtr<Component> i_a, Containers::SmartPtr<Component> i_b);
 
 			// Component Specific Data for Fast Access
+			std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>)> _collisionCallback;
 			float _renderOrder{};
 
 		public:
 			// Constructor and Destructor
 			Node(std::string i_name, bool i_addToGlobalList = true);
+			Node(const Node& i_node);
+			Node& operator=(const Node& i_node);
+			Node& operator=(Node&& i_node);
+			Node(Node&& i_node);
 			~Node();
 
 			// Component
 			template <class T>
-			T* AddComponent();
+			Containers::WeakPtr<T> AddComponent();
 
 			template <class T>
 			void RemoveComponent();
 
 			template <class T>
-			T* GetComponent();
+			Containers::WeakPtr<T> GetComponent();
 
 			// LifeCycle Methods
 			void Ready();
@@ -50,6 +69,7 @@ namespace Core
 			void PhysicsProcess(float i_fixedDeltaTime);
 			void SetupRender();
 			void Render(sf::RenderWindow* i_window);
+			void RenderDebug(sf::RenderWindow* i_window);
 			void Exit();
 
 			// General Data Access/Update
@@ -58,31 +78,52 @@ namespace Core
 			[[nodiscard]] std::string GetTag() const;
 			void SetTag(std::string i_tag);
 
+			// Pointer Helpers
+			void AddToGlobalList() const;
+			[[nodiscard]] Containers::SmartPtr<Node> GetSmartPointerRef() const;
+			[[nodiscard]] Containers::WeakPtr<Node> GetWeakPointerRef() const;
+
 			// Component Specific Data for Fast Access
+			void __NotifyCollisionCallback(
+				Containers::WeakPtr<Components::Physics::Colliders::BaseCollider> i_collider
+			) const;
+			void SetCollisionCallback(
+				std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>)> i_function
+			);
 			void SetRenderOrder(float i_renderOrder);
 			[[nodiscard]] float GetRenderOrder() const;
 		};
 
 		template <class T>
-		T* Node::AddComponent()
+		Containers::WeakPtr<T> Node::AddComponent()
 		{
-			T* t = new T();
+			_nodeMutex.lock();
 
-			static_cast<Component*>(t)->Ready(this);
-			_components.push_back(t);
+			T* tRawPtr = new T();
+			auto* const tPtr = reinterpret_cast<Component*>(tRawPtr);
+			Containers::SmartPtr<Component> tSmartRef(tPtr);
+
+			const Containers::WeakPtr<Node> weakPtrRef(this->_selfSmartRef);
+			tSmartRef->Ready(weakPtrRef);
+			_components.push_back(tSmartRef);
 
 			SortComponents();
 
-			return t;
+			Containers::WeakPtr<T> weakPtrCopy(tSmartRef);
+
+			_nodeMutex.unlock();
+			return weakPtrCopy;
 		}
 
 		template <class T>
 		void Node::RemoveComponent()
 		{
+			_nodeMutex.lock();
 			int componentIndex = -1;
-			for (Component* component : _components)
+
+			for (auto component : _components)
 			{
-				if (dynamic_cast<T*>(component))
+				if (component.CompareBaseType<T>())
 				{
 					component->Exit();
 					break;
@@ -95,20 +136,30 @@ namespace Core
 			{
 				_components.erase(_components.begin() + componentIndex);
 			}
+
+			_nodeMutex.unlock();
 		}
 
 		template <class T>
-		T* Node::GetComponent()
+		Containers::WeakPtr<T> Node::GetComponent()
 		{
-			for (Component* component : _components)
+			_nodeMutex.lock();
+
+			for (auto component : _components)
 			{
-				if (auto ptr = dynamic_cast<T*>(component))
+				if (component.CompareBaseType<T>())
 				{
-					return ptr;
+					Containers::WeakPtr<T> weakPtrCopy(component);
+
+					_nodeMutex.unlock();
+					return weakPtrCopy;
 				}
 			}
 
-			return nullptr;
+			Containers::WeakPtr<T> weakPtr;
+
+			_nodeMutex.unlock();
+			return weakPtr;
 		}
 	}
 }

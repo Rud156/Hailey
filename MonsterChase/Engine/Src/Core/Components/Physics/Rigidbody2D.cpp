@@ -3,8 +3,7 @@
 #include "../../../Utils/MathUtils.h"
 #include "../../BaseComponents/Node.h"
 #include "../../Controllers/Physics/WorldPhysicsController_Extern.h"
-#include "../Transform/Node2D.h"
-#include "../Transform/Rotate2D.h"
+#include "../../../Containers/PointerIncludes.cpp"
 
 #include <cassert>
 
@@ -37,16 +36,19 @@ namespace Core::Components::Physics
 
 #pragma region Parent Overrides
 
-	void Rigidbody2D::Ready(BaseComponents::Node* i_node)
+	void Rigidbody2D::Ready(Containers::WeakPtr<BaseComponents::Node> i_node)
 	{
-		const auto node2d = i_node->GetComponent<Transform::Node2D>();
-		const auto rotate2d = i_node->GetComponent<Transform::Rotate2D>();
+		Component::Ready(i_node);
 
-		assert(node2d != nullptr);
-		assert(rotate2d != nullptr);
+		Containers::SmartPtr<BaseComponents::Node> gameObject = i_node.Lock();
+		auto node2d = gameObject->GetComponent<Transform::Node2D>();
+		auto rotate2d = gameObject->GetComponent<Transform::Rotate2D>();
 
-		this->_node2d = node2d;
-		this->_rotate2d = rotate2d;
+		assert(node2d);
+		assert(rotate2d);
+
+		this->_node2d = node2d.Lock();
+		this->_rotate2d = rotate2d.Lock();
 	}
 
 	void Rigidbody2D::PhysicsProcess(float i_fixedDeltaTime)
@@ -98,9 +100,19 @@ namespace Core::Components::Physics
 		this->_targetVelocity->set(velocity.X(), velocity.Y());
 	}
 
+	Math::Point2D* Rigidbody2D::GetVelocity() const
+	{
+		return this->_currentVelocity;
+	}
+
 	void Rigidbody2D::SetAngularVelocity(const float i_angularVelocity)
 	{
 		this->_targetAngularVelocity = i_angularVelocity;
+	}
+
+	float Rigidbody2D::GetAngularVelocity() const
+	{
+		return this->_currentAngularVelocity;
 	}
 
 #pragma endregion
@@ -114,7 +126,7 @@ namespace Core::Components::Physics
 		this->_currentAngularAcceleration = 0;
 	}
 
-	void Rigidbody2D::ApplyLinearVelocityAndAcceleration(float i_deltaTime) const
+	void Rigidbody2D::ApplyLinearVelocityAndAcceleration(float i_deltaTime)
 	{
 		// Linear Motion
 		auto newVelocity = *this->_currentVelocity + *this->_currentAcceleration * i_deltaTime;
@@ -122,7 +134,7 @@ namespace Core::Components::Physics
 		this->_currentVelocity->set(newVelocity.X(), newVelocity.Y());
 
 		// Apply Position
-		Math::Point2D* position = _node2d->GetPosition();
+		Math::Point2D* position = this->_node2d->GetPosition();
 		const auto newPosition = *position + *this->_currentVelocity * i_deltaTime;
 		position->set(newPosition.X(), newPosition.Y());
 	}
@@ -132,7 +144,8 @@ namespace Core::Components::Physics
 		const auto velocityAcceleration = *this->_targetVelocity - *this->_currentVelocity;
 		const auto accelerationFromForce = *this->_resultantForce / this->_mass;
 		const auto gravityAcceleration = *worldPhysicsController->GetGravity() * this->_gravityScale;
-		const auto positiveAcceleration = (velocityAcceleration + accelerationFromForce + gravityAcceleration) / i_deltaTime;
+		const auto positiveAcceleration = (velocityAcceleration + accelerationFromForce + gravityAcceleration) /
+			i_deltaTime;
 
 		this->_currentAcceleration->set(positiveAcceleration.X(), positiveAcceleration.Y());
 	}

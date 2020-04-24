@@ -3,6 +3,8 @@
 
 namespace Math
 {
+	class Point2D;
+
 	class Point3D
 	{
 	private:
@@ -15,6 +17,7 @@ namespace Math
 		Point3D();
 		Point3D(float i_x, float i_y, float i_z);
 		Point3D(const Point3D& i_point3d);
+		Point3D(const Point2D& i_point2d, float i_z);
 
 		// Destructor
 		~Point3D();

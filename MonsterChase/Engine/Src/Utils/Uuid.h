@@ -9,6 +9,6 @@ namespace Utils
 		static std::atomic<size_t> uuid;
 
 	public:
-		static size_t getUuid();
+		static size_t GetUuid();
 	};
 }

@@ -1,4 +1,6 @@
 #pragma once
+#include "../../Containers/WeakPtr.h"
+#include "Node.h"
 
 namespace sf
 {
@@ -13,6 +15,9 @@ namespace Core
 
 		class Component
 		{
+		protected:
+			Containers::WeakPtr<Node> _node;
+
 		public:
 			Component();
 			virtual ~Component();
@@ -21,12 +26,16 @@ namespace Core
 			virtual int GetComponentPriority();
 
 			//LifeCycle Functions
-			virtual void Ready(Node*);
+			virtual void Ready(Containers::WeakPtr<Node> i_node);
 			virtual void Process(float);
 			virtual void PhysicsProcess(float);
 			virtual void SetupRender();
 			virtual void Render(sf::RenderWindow* i_window);
+			virtual void RenderDebug(sf::RenderWindow* i_window);
 			virtual void Exit();
+
+			// Utility Methods
+			[[nodiscard]] Containers::WeakPtr<Node> GetNode() const;
 		};
 	}
 }

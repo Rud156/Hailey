@@ -18,12 +18,16 @@ namespace Containers
 
 	void PtrData::AddSmartReference() const
 	{
-		*this->referenceCount += 1;
+		unsigned long x = *(this->referenceCount);
+		x += 1;
+		*this->referenceCount = x;
 	}
 
 	void PtrData::ReleaseSmartReference() const
 	{
-		*this->referenceCount -= 1;
+		unsigned long x = *(this->referenceCount);
+		x -= 1;
+		*this->referenceCount = x;
 	}
 
 #pragma endregion
@@ -32,12 +36,16 @@ namespace Containers
 
 	void PtrData::AddWeakReference() const
 	{
-		*this->weakCount += 1;
+		unsigned long x = *(this->weakCount);
+		x += 1;
+		*this->weakCount = x;
 	}
 
 	void PtrData::ReleaseWeakReference() const
 	{
-		*this->weakCount -= 1;
+		unsigned long x = *(this->weakCount);
+		x -= 1;
+		*this->weakCount = x;
 	}
 
 #pragma endregion

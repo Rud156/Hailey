@@ -2,7 +2,7 @@
 
 namespace Containers
 {
-	struct PtrData;
+	class PtrData;
 
 	template <class D>
 	class SmartPtr;
@@ -20,7 +20,12 @@ namespace Containers
 		WeakPtr(const SmartPtr<T>& i_smartPtr);
 		~WeakPtr();
 
+		template <class U>
+		WeakPtr(const SmartPtr<U>& i_smartPtr);
+
 		// Operators
+		template <class U>
+		WeakPtr& operator=(const WeakPtr<U>& i_weakPtr);
 		WeakPtr& operator=(const WeakPtr& i_weakPtr);
 		explicit operator bool() const;
 

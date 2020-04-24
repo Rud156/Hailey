@@ -27,7 +27,7 @@ namespace Math
 
 	inline bool Point3D::isZero() const
 	{
-		return _x == 0 && _y == 0;
+		return _x == 0 && _y == 0 && _z == 0;
 	}
 
 	inline Point3D Point3D::Zero()
@@ -41,12 +41,12 @@ namespace Math
 
 	inline float Point3D::length() const
 	{
-		return static_cast<float>(sqrt(_x * _x + _y * _y));
+		return static_cast<float>(sqrt(_x * _x + _y * _y + _z * _z));
 	}
 
 	inline float Point3D::lengthSq() const
 	{
-		return _x * _x + _y * _y;
+		return _x * _x + _y * _y + _z * _z;
 	}
 
 	// Length

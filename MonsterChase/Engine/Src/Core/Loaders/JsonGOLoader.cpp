@@ -9,19 +9,13 @@
 #include "../../Utils/Debug.h"
 #include "../../Maths/Point2D.h"
 #include "../Controllers/GameObjectUpdater_Extern.h"
-#include "../../Utils/Random.h"
-#include "../Controllers/CoreLoop.h"
+#include "../../Containers/SmartPtr.h"
+#include "../../Containers/WeakPtr.h"
+#include "../../Containers/PointerIncludes.cpp"
 
 #include <string>
 
 using namespace nlohmann;
-
-// TODO: Remove this later on
-#define DEBUG
-
-#ifdef DEBUG
-#include <SFML/Graphics.hpp>
-#endif
 
 // Define the static data here to create instance...
 std::mutex Core::Loaders::JsonGOLoader::JsonMutex;
@@ -62,41 +56,35 @@ namespace Core::Loaders
 	void JsonGOLoader::LoadGameObjectDeferred(basic_json<> i_value)
 	{
 		const auto name = std::string(i_value[JsonGOLoader::NameStr].get<std::string>());
-		auto gameObject = new BaseComponents::Node(name, false);
+		auto* gameObject = new BaseComponents::Node(name, false);
 
 		gameObject->AddComponent<Components::Transform::Rotate2D>();
 		gameObject->AddComponent<Components::Transform::Scale2D>();
-		const auto gameObjectPosition = gameObject->AddComponent<Components::Transform::Node2D>();
+		auto gameObjectPosition = gameObject->AddComponent<Components::Transform::Node2D>();
 
 		if (i_value.contains(JsonGOLoader::InitialPositionStr))
 		{
 			auto position = i_value[JsonGOLoader::InitialPositionStr].get<std::vector<float>>();
-#ifdef DEBUG
-			const auto windowSize = Controllers::CoreLoop::Window->getSize();
-			position[0] = static_cast<float>(Utils::Random::RandomInRange(0, windowSize.x));
-			position[1] = static_cast<float>(Utils::Random::RandomInRange(0, windowSize.y));
-#endif
-
-			gameObjectPosition->GetPosition()->set(position[0], position[1]);
+			gameObjectPosition.Lock()->GetPosition()->set(position[0], position[1]);
 		}
 
 		if (i_value.contains(JsonGOLoader::RenderDataStr))
 		{
 			const auto rendererData = i_value[JsonGOLoader::RenderDataStr];
-			const auto renderer = gameObject->AddComponent<Components::Rendering::SpriteRenderer>();
+			auto renderer = gameObject->AddComponent<Components::Rendering::SpriteRenderer>();
 
 			const auto texturePath = rendererData[JsonGOLoader::SpriteStr].get<std::string>();
-			const auto assetsDir = FileLoader::Assets;
+			const auto* const assetsDir = FileLoader::Assets;
 
 			std::string finalTexturePath = assetsDir;
 			finalTexturePath += texturePath;
 
-			renderer->LoadTexture(finalTexturePath);
+			renderer.Lock()->LoadTexture(finalTexturePath);
 
 			if (rendererData.contains(JsonGOLoader::RenderOrderStr))
 			{
 				const auto spriteDepth = rendererData[JsonGOLoader::RenderOrderStr].get<float>();
-				renderer->SetSpriteDepth(spriteDepth);
+				renderer.Lock()->SetSpriteDepth(spriteDepth);
 			}
 		}
 
@@ -108,31 +96,31 @@ namespace Core::Loaders
 		if (i_value.contains(JsonGOLoader::RigidbodyDataStr))
 		{
 			const auto rigidbodyData = i_value[JsonGOLoader::RigidbodyDataStr];
-			const auto rigidbody = gameObject->AddComponent<Components::Physics::Rigidbody2D>();
+			auto rigidbody = gameObject->AddComponent<Components::Physics::Rigidbody2D>();
 
 			if (rigidbodyData.contains(JsonGOLoader::MassStr))
 			{
-				rigidbody->SetMass(rigidbodyData[JsonGOLoader::MassStr].get<float>());
+				rigidbody.Lock()->SetMass(rigidbodyData[JsonGOLoader::MassStr].get<float>());
 			}
 
 			if (rigidbodyData.contains(JsonGOLoader::GravityScaleStr))
 			{
-				rigidbody->SetGravityScale(rigidbodyData[JsonGOLoader::GravityScaleStr].get<float>());
+				rigidbody.Lock()->SetGravityScale(rigidbodyData[JsonGOLoader::GravityScaleStr].get<float>());
 			}
 
 			if (rigidbodyData.contains(JsonGOLoader::AngularDragStr))
 			{
-				rigidbody->SetAngularDrag(rigidbodyData[JsonGOLoader::AngularDragStr].get<float>());
+				rigidbody.Lock()->SetAngularDrag(rigidbodyData[JsonGOLoader::AngularDragStr].get<float>());
 			}
 
 			if (rigidbodyData.contains(JsonGOLoader::AngularVelocityStr))
 			{
-				rigidbody->SetAngularVelocity(rigidbodyData[JsonGOLoader::AngularVelocityStr].get<float>());
+				rigidbody.Lock()->SetAngularVelocity(rigidbodyData[JsonGOLoader::AngularVelocityStr].get<float>());
 			}
 		}
 
 
-		gameObjectUpdater->AddGameObject(gameObject);
+		gameObject->AddToGlobalList();
 		Utils::Debug::LogOutputToWindow("GameObject Loaded\n");
 	}
 
@@ -175,18 +163,18 @@ namespace Core::Loaders
 
 				gameObject->AddComponent<Components::Transform::Rotate2D>();
 				gameObject->AddComponent<Components::Transform::Scale2D>();
-				const auto gameObjectPosition = gameObject->AddComponent<Components::Transform::Node2D>();
+				auto gameObjectPosition = gameObject->AddComponent<Components::Transform::Node2D>();
 
 				if (value.contains(JsonGOLoader::InitialPositionStr))
 				{
 					auto position = value[JsonGOLoader::InitialPositionStr].get<std::vector<float>>();
-					gameObjectPosition->GetPosition()->set(position[0], position[1]);
+					gameObjectPosition.Lock()->GetPosition()->set(position[0], position[1]);
 				}
 
 				if (value.contains(JsonGOLoader::RenderDataStr))
 				{
 					const auto rendererData = value[JsonGOLoader::RenderDataStr];
-					const auto renderer = gameObject->AddComponent<Components::Rendering::SpriteRenderer>();
+					auto renderer = gameObject->AddComponent<Components::Rendering::SpriteRenderer>();
 
 					const auto texturePath = rendererData[JsonGOLoader::SpriteStr].get<std::string>();
 					const auto assetsDir = FileLoader::Assets;
@@ -194,12 +182,12 @@ namespace Core::Loaders
 					std::string finalTexturePath = assetsDir;
 					finalTexturePath += texturePath;
 
-					renderer->LoadTexture(finalTexturePath);
+					renderer.Lock()->LoadTexture(finalTexturePath);
 
 					if (rendererData.contains(JsonGOLoader::RenderOrderStr))
 					{
 						const auto spriteDepth = rendererData[JsonGOLoader::RenderOrderStr].get<float>();
-						renderer->SetSpriteDepth(spriteDepth);
+						renderer.Lock()->SetSpriteDepth(spriteDepth);
 					}
 				}
 
@@ -211,26 +199,28 @@ namespace Core::Loaders
 				if (value.contains(JsonGOLoader::RigidbodyDataStr))
 				{
 					const auto rigidbodyData = value[JsonGOLoader::RigidbodyDataStr];
-					const auto rigidbody = gameObject->AddComponent<Components::Physics::Rigidbody2D>();
+					auto rigidbody = gameObject->AddComponent<Components::Physics::Rigidbody2D>();
 
 					if (rigidbodyData.contains(JsonGOLoader::MassStr))
 					{
-						rigidbody->SetMass(rigidbodyData[JsonGOLoader::MassStr].get<float>());
+						rigidbody.Lock()->SetMass(rigidbodyData[JsonGOLoader::MassStr].get<float>());
 					}
 
 					if (rigidbodyData.contains(JsonGOLoader::GravityScaleStr))
 					{
-						rigidbody->SetGravityScale(rigidbodyData[JsonGOLoader::GravityScaleStr].get<float>());
+						rigidbody.Lock()->SetGravityScale(rigidbodyData[JsonGOLoader::GravityScaleStr].get<float>());
 					}
 
 					if (rigidbodyData.contains(JsonGOLoader::AngularDragStr))
 					{
-						rigidbody->SetAngularDrag(rigidbodyData[JsonGOLoader::AngularDragStr].get<float>());
+						rigidbody.Lock()->SetAngularDrag(rigidbodyData[JsonGOLoader::AngularDragStr].get<float>());
 					}
 
 					if (rigidbodyData.contains(JsonGOLoader::AngularVelocityStr))
 					{
-						rigidbody->SetAngularVelocity(rigidbodyData[JsonGOLoader::AngularVelocityStr].get<float>());
+						rigidbody.Lock()->SetAngularVelocity(
+							rigidbodyData[JsonGOLoader::AngularVelocityStr].get<float>()
+						);
 					}
 				}
 			}

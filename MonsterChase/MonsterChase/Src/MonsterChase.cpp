@@ -1,22 +1,21 @@
 // MonsterChase.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "Src/Containers/Tests/PointerTest.h"
 #include "Src/Core/Loaders/FileLoader.h"
 #include "Src/Core/Loaders/JsonGOLoader.h"
 #include "Src/Engine.h"
 #include "Src/Memory/MemorySystem.h"
-#include "Src/Utils/Tests/MathUtilsUnitTest.h"
 #include "Src/Utils/Debug.h"
-#include "Src/Core/Controllers/GameObjectUpdater_Extern.h"
-#include "Src/Core/Controllers/LoopTimer.h"
 #include "Src/Utils/Random.h"
+#include "Src/Containers/SmartPtr.h"
 #include <SFML/Graphics.hpp>
+
+#include "Src/Memory/Allocators.h"
+#include "Game/GameMain.h"
 
 #include <conio.h>
 #include <cassert>
 #include <iostream>
-#include <string>
 #include <Windows.h>
 
 #pragma region RunBeforeMain
@@ -73,52 +72,19 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 
 		// Let's create the main window
 		const auto mainWindow = CreateWindow(TEXT("SFML App"), TEXT("SFML Win32"), WS_SYSMENU | WS_VISIBLE, 200, 200,
-		                                     800, 640, NULL, NULL, instance, NULL);
+		                                     600, 800, NULL, NULL, instance, NULL);
 
-		const auto assetsDir = Core::Loaders::FileLoader::Assets;
-
-		// TODO: Remove this later on...
-		const auto updateTime = 0.3f;
-		double currentUpdateTime = 0;
-
-		std::string jsonDataPath = assetsDir;
-		jsonDataPath += "/Data/TestData.json";
-
-		std::string goodGuyPath = assetsDir;
-		goodGuyPath += "/Images/GoodGuy.png";
+		sf::ContextSettings settings;
+		settings.antialiasingLevel = 8;
 
 		auto engine = new Engine::Engine();
-		auto window = new sf::RenderWindow(mainWindow);
+		auto window = new sf::RenderWindow(mainWindow, settings);
 		engine->Init(window);
 
 		Utils::Random::SetSeed(static_cast<unsigned int>(time(nullptr)));
 
-		std::string fontPath = assetsDir;
-		fontPath += "/Fonts/Oswald-Medium.ttf";
-		sf::Font font;
-		if (!font.loadFromFile(fontPath))
-		{
-			Utils::Debug::LogOutputToWindow("Invalid File Path");
-			assert(false);
-		}
-
-		sf::Text headerText;
-		headerText.setFont(font);
-		headerText.setString("Press SPACE");
-		headerText.setCharacterSize(24);
-		headerText.setFillColor(sf::Color::White);
-		headerText.setPosition(320, 0);
-
-		sf::Text gameObjectsText;
-		gameObjectsText.setFont(font);
-		gameObjectsText.setCharacterSize(24);
-		gameObjectsText.setFillColor(sf::Color::White);
-
-		sf::Text fpsText;
-		fpsText.setFont(font);
-		fpsText.setCharacterSize(24);
-		fpsText.setFillColor(sf::Color::White);
-		fpsText.setPosition(0, 100);
+		auto gameMain = new Game::GameMain();
+		gameMain->Init();
 
 		// Loop until a WM_QUIT message is received
 		MSG message;
@@ -136,72 +102,22 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 				sf::Event event{};
 				while (window->pollEvent(event))
 				{
-					switch (event.type)
-					{
-					case sf::Event::KeyPressed:
-						{
-							switch (event.key.code)
-							{
-							case sf::Keyboard::Space:
-								{
-									for (int i = 0; i < 10; i++)
-									{
-										Core::Loaders::JsonGOLoader::LoadJsonGameObjectAsync(jsonDataPath.c_str());
-									}
-								}
-								break;
-
-							default:
-								// Don't do anything here...
-								break;
-							}
-						}
-						break;
-
-					default:
-						{
-						}
-						break;
-					}
 				}
 
 				window->clear();
+
+				gameMain->Update();
 				engine->Run();
-
-				// TODO: Remove this later on...
-				currentUpdateTime -= Core::Controllers::LoopTimer::DeltaTime;
-				if (currentUpdateTime <= 0)
-				{
-					// TODO: Remove this later on...
-					size_t totalObjectsCount = gameObjectUpdater->GetAllGameObjects().size();
-					std::string data = "Total Objects: ";
-					data += std::to_string(totalObjectsCount);
-					gameObjectsText.setString(data);
-
-					// TODO: Remove this later on...
-					double fps = 1.0 / Core::Controllers::LoopTimer::DeltaTime;
-					std::string fpsData = "FPS: ";
-					fpsData += std::to_string(fps);
-					fpsText.setString(fpsData);
-
-					currentUpdateTime = updateTime;
-				}
-
-				window->draw(gameObjectsText);
-				window->draw(headerText);
-				window->draw(fpsText);
 
 				window->display();
 			}
 		}
 
-		// Unit Tests
-		Utils::Tests::MathUtilsUnitTest::RunTest();
-		Containers::Tests::PointerTest::RunPointerUnitTest();
+		delete gameMain;
 
 		window->close();
 		DestroyWindow(mainWindow); // Destroy the main window (all its child controls will be destroyed)
-		UnregisterClass(TEXT("SFML App"), instance); // Don't forget to unregister the window class
+		UnregisterClass(TEXT("SFML App"), instance); // Don't forget to un-register the window class
 
 		engine->ShutDown();
 		delete engine;

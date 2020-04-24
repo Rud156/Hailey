@@ -60,9 +60,47 @@ namespace Containers
 		}
 	}
 
+	template <class T>
+	template <class U>
+	WeakPtr<T>::WeakPtr(const SmartPtr<U>& i_smartPtr)
+	{
+		this->_objectPtr = reinterpret_cast<T*>(i_smartPtr._objectPtr);
+		this->_dataCounter = i_smartPtr._dataCounter;
+
+		if (this->_dataCounter != nullptr)
+		{
+			this->_dataCounter->AddWeakReference();
+		}
+	}
+
 #pragma endregion
 
 #pragma region Operator
+
+	template <class T>
+	template <class U>
+	WeakPtr<T>& WeakPtr<T>::operator=(const WeakPtr<U>& i_weakPtr)
+	{
+		if (&i_weakPtr == this)
+		{
+			return *this;
+		}
+
+		if (this->_dataCounter != nullptr)
+		{
+			this->_dataCounter->ReleaseWeakReference();
+		}
+
+		this->_objectPtr = reinterpret_cast<T*>(i_weakPtr._objectPtr);
+		this->_dataCounter = i_weakPtr._dataCounter;
+
+		if (this->_dataCounter != nullptr)
+		{
+			this->_dataCounter->AddWeakReference();
+		}
+
+		return *this;
+	}
 
 	template <class T>
 	WeakPtr<T>& WeakPtr<T>::operator=(const WeakPtr& i_weakPtr)

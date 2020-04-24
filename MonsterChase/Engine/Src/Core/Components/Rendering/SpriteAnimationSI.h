@@ -1,5 +1,8 @@
 #pragma once
 #include "../../BaseComponents/Component.h"
+#include "../../../Containers/SmartPtr.h"
+#include "../../../Containers/WeakPtr.h"
+#include "../../BaseComponents/Node.h"
 
 #include <vector>
 
@@ -57,7 +60,7 @@ namespace Core
 				void SetIsRepeating(bool i_value);
 
 				// LifeCycle Functions
-				void Ready(BaseComponents::Node* i_node) override;
+				void Ready(Containers::WeakPtr<BaseComponents::Node> i_node) override;
 				void Process(float i_deltaTime) override;
 				void Exit() override;
 			};

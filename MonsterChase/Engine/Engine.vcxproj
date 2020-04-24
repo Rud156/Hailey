@@ -176,6 +176,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Core\Controllers\Physics\WorldCollisionController_Extern.h" />
+    <ClInclude Include="Src\Maths\Matrix4.h" />
+    <ClInclude Include="Src\Maths\Matrix4_Inl.h" />
+    <ClInclude Include="Src\Maths\Point4D_Inl.h" />
+    <ClInclude Include="Src\Maths\Point4D.h" />
     <ClInclude Include="Src\Externals\StackTrace\call_stack.hpp" />
     <ClInclude Include="Src\Externals\StackTrace\StackWalker.h" />
     <ClInclude Include="Src\Externals\StackTrace\stack_exception.hpp" />
@@ -234,8 +239,12 @@
     <ClInclude Include="Src\Core\Controllers\Rendering\TextureDataCache.h" />
     <ClInclude Include="Src\Core\Controllers\Rendering\TextureDataCache_Extern.h" />
     <ClInclude Include="Src\Utils\Uuid.h" />
+    <ClInclude Include="Src\Core\Controllers\Physics\WorldCollisionController.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Containers\PointerIncludes.cpp" />
+    <ClCompile Include="Src\Maths\Matrix4.cpp" />
+    <ClCompile Include="Src\Maths\Point4D.cpp" />
     <ClCompile Include="Src\Externals\StackTrace\call_stack_gcc.cpp" />
     <ClCompile Include="Src\Externals\StackTrace\call_stack_msvc.cpp" />
     <ClCompile Include="Src\Externals\StackTrace\StackWalker.cpp" />
@@ -287,6 +296,7 @@
     <ClCompile Include="Src\Core\Controllers\Physics\WorldPhysicsController.cpp" />
     <ClCompile Include="Src\Core\Controllers\Rendering\TextureDataCache.cpp" />
     <ClCompile Include="Src\Utils\Uuid.cpp" />
+    <ClCompile Include="Src\Core\Controllers\Physics\WorldCollisionController.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

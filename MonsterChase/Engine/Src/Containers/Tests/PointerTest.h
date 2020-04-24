@@ -9,13 +9,15 @@ namespace Containers::Tests
 		class MockParent
 		{
 		public:
+			virtual ~MockParent() = default;
 			virtual void SayHello();
 		};
 
-		class MockChild : public MockParent
+		class MockChild final : public MockParent
 		{
 		public:
 			void SayHello() override;
+			~MockChild() override;
 		};
 
 		static void RunPointerUnitTest();

@@ -1,21 +1,14 @@
 #pragma once
 #include "../../BaseComponents/Component.h"
+#include "../../../Containers/SmartPtr.h"
+#include "../../../Containers/WeakPtr.h"
+#include "../Transform/Node2D.h"
+#include "../Transform/Rotate2D.h"
+
 
 namespace Math
 {
 	class Point2D;
-}
-
-namespace Core
-{
-	namespace Components
-	{
-		namespace Transform
-		{
-			class Node2D;
-			class Rotate2D;
-		}
-	}
 }
 
 namespace Core
@@ -38,8 +31,8 @@ namespace Core
 				float _targetAngularVelocity;
 				float _currentAngularAcceleration;
 
-				Transform::Node2D* _node2d{};
-				Transform::Rotate2D* _rotate2d{};
+				Containers::SmartPtr<Transform::Node2D> _node2d{};
+				Containers::SmartPtr<Transform::Rotate2D> _rotate2d{};
 				float _mass{1};
 				float _linearDrag{};
 				float _angularDrag{};
@@ -48,7 +41,7 @@ namespace Core
 
 				void ResetBodyForcesData();
 				void ComputerResultantLinearAcceleration(float i_deltaTime) const;
-				void ApplyLinearVelocityAndAcceleration(float i_deltaTime) const;
+				void ApplyLinearVelocityAndAcceleration(float i_deltaTime);
 
 				void ComputeResultantAngularAcceleration(float i_deltaTime);
 				void ApplyAngularVelocityAndAcceleration(float i_deltaTime);
@@ -67,14 +60,16 @@ namespace Core
 				// Velocity
 				void SetVelocity(float i_x, float i_y) const;
 				void SetVelocity(Math::Point2D& velocity) const;
+				Math::Point2D* GetVelocity() const;
 				void SetAngularVelocity(float i_angularVelocity);
+				float GetAngularVelocity() const;
 
 				// Force
 				void AddForceAtPosition(Math::Point2D& i_force, Math::Point2D& i_position);
 				void AddForce(Math::Point2D& i_force) const;
 
 				// Parent Overrides
-				void Ready(BaseComponents::Node* i_node) override;
+				void Ready(Containers::WeakPtr<BaseComponents::Node> i_node) override;
 				void PhysicsProcess(float i_fixedDeltaTime) override;
 			};
 		}

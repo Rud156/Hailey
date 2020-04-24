@@ -17,6 +17,8 @@ namespace Containers::Tests
 		Utils::Debug::LogToFile("Hello From Child\n");
 	}
 
+	PointerTest::MockChild::~MockChild() = default;
+
 	void PointerTest::RunPointerUnitTest()
 	{
 		WeakPtr<MockParent> weakPtr;
@@ -40,6 +42,8 @@ namespace Containers::Tests
 		{
 			SmartPtr<MockParent> smChildParent(new MockChild());
 			smChildParent->SayHello();
+
+			WeakPtr<MockParent> parentPtr(smChildParent);
 		}
 	}
 }

@@ -3,7 +3,7 @@
 
 namespace Containers
 {
-	struct PtrData;
+	class PtrData;
 
 	template <class T>
 	class SmartPtr
@@ -23,9 +23,6 @@ namespace Containers
 		SmartPtr(T* i_objectPtr, PtrData* i_dataCounter);
 		~SmartPtr();
 
-		// template <class U>
-		// friend class SmartPtr<U>; // TODO: Check if this is actually required
-
 		template <class U>
 		SmartPtr(const SmartPtr<U>& i_smartPtr);
 
@@ -34,12 +31,15 @@ namespace Containers
 		T* operator->();
 
 		// Operators
+		template <class D>
+		bool CompareBaseType();
+
 		SmartPtr& operator=(const SmartPtr& i_smartPtr);
 		explicit operator bool() const;
 
 		// Utils
 		bool IsValid();
-		void SetCustomDeleter(void i_function(T));
+		void SetCustomDeleter(std::function<void(T)> i_function);
 		std::function<void(T)> GetCustomDeleter();
 
 		// Friends

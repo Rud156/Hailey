@@ -1,8 +1,9 @@
 #include "GameObjectUpdater.h"
 #include "GameObjectUpdater_Extern.h"
-#include "../BaseComponents/Node.h"
+#include "Physics/WorldCollisionController.h"
 #include "Physics/WorldPhysicsController.h"
 #include "Rendering/SpriteRenderController.h"
+#include "../../Containers/PointerIncludes.cpp"
 
 Core::Controllers::GameObjectUpdater* gameObjectUpdater = nullptr;
 
@@ -15,21 +16,17 @@ namespace Core::Controllers
 		gameObjectUpdater = this;
 		_spriteRenderController = new Rendering::SpriteRenderController();
 		_worldPhysicsController = new Physics::WorldPhysicsController();
+		_worldCollisionController = new Physics::WorldCollisionController();
 	}
 
 	GameObjectUpdater::~GameObjectUpdater()
 	{
 		Exit();
-
-		for (auto gameObject : _gameObjects)
-		{
-			delete gameObject;
-		}
-
 		this->_gameObjects.clear();
 
 		delete this->_spriteRenderController;
 		delete this->_worldPhysicsController;
+		delete this->_worldCollisionController;
 
 		gameObjectUpdater = nullptr;
 	}
@@ -38,7 +35,7 @@ namespace Core::Controllers
 
 #pragma region GameObject Array Modification
 
-	void GameObjectUpdater::AddGameObject(BaseComponents::Node* i_node)
+	void GameObjectUpdater::AddGameObject(Containers::SmartPtr<BaseComponents::Node> i_node)
 	{
 		this->_gameObjectUpdaterLock.lock();
 
@@ -48,11 +45,17 @@ namespace Core::Controllers
 		this->_gameObjectUpdaterLock.unlock();
 	}
 
-	void GameObjectUpdater::RemoveGameObject(BaseComponents::Node* i_node)
+	void GameObjectUpdater::RemoveGameObject(Containers::SmartPtr<BaseComponents::Node> i_node)
 	{
 		this->_gameObjectUpdaterLock.lock();
 
-		const auto position = std::find(this->_gameObjects.begin(), this->_gameObjects.end(), i_node);
+		size_t instanceId = i_node->GetInstanceId();
+		const auto position = std::find_if(this->_gameObjects.begin(), this->_gameObjects.end(),
+		                                   [&instanceId](Containers::SmartPtr<BaseComponents::Node> gameObject)
+		                                   {
+			                                   return gameObject->GetInstanceId() == instanceId;
+		                                   }
+		);
 		if (position != this->_gameObjects.end())
 		{
 			this->_gameObjects.erase(position);
@@ -65,52 +68,78 @@ namespace Core::Controllers
 
 #pragma region Data Access
 
-	std::vector<BaseComponents::Node*> GameObjectUpdater::GetAllGameObjects()
+	std::vector<Containers::SmartPtr<BaseComponents::Node>> GameObjectUpdater::GetAllGameObjects()
 	{
 		this->_gameObjectUpdaterLock.lock();
-		std::vector<BaseComponents::Node*> nodesCopy(this->_gameObjects);
+
+		std::vector<Containers::SmartPtr<BaseComponents::Node>> nodesCopy;
+		nodesCopy.reserve(this->_gameObjects.size());
+
+		for (const auto& node : this->_gameObjects)
+		{
+			Containers::SmartPtr<BaseComponents::Node> smartPtrCopy(node);
+			nodesCopy.push_back(smartPtrCopy);
+		}
+
 		this->_gameObjectUpdaterLock.unlock();
 
 		return nodesCopy;
 	}
 
-	BaseComponents::Node* GameObjectUpdater::GetGameObjectByName(std::string_view i_name)
+	Containers::WeakPtr<BaseComponents::Node> GameObjectUpdater::GetGameObjectByName(std::string_view i_name)
 	{
+		this->_gameObjectUpdaterLock.lock();
 		for (auto node : this->_gameObjects)
 		{
 			if (node->GetName() == i_name)
 			{
-				return node;
+				this->_gameObjectUpdaterLock.unlock();
+
+				Containers::WeakPtr<BaseComponents::Node> weakPtrCopy(node);
+				return weakPtrCopy;
 			}
 		}
+		this->_gameObjectUpdaterLock.unlock();
 
-		return nullptr;
+		Containers::WeakPtr<BaseComponents::Node> weakPtr;
+		return weakPtr;
 	}
 
-	BaseComponents::Node* GameObjectUpdater::GetGameObjectByTag(std::string_view i_tag)
+	Containers::WeakPtr<BaseComponents::Node> GameObjectUpdater::GetGameObjectByTag(std::string_view i_tag)
 	{
+		this->_gameObjectUpdaterLock.lock();
 		for (auto node : this->_gameObjects)
 		{
 			if (node->GetTag() == i_tag)
 			{
-				return node;
+				this->_gameObjectUpdaterLock.unlock();
+
+				Containers::WeakPtr<BaseComponents::Node> weakPtrCopy(node);
+				return weakPtrCopy;
 			}
 		}
+		this->_gameObjectUpdaterLock.unlock();
 
-		return nullptr;
+		Containers::WeakPtr<BaseComponents::Node> weakPtr;
+		return weakPtr;
 	}
 
-	std::vector<BaseComponents::Node*> GameObjectUpdater::GetAllGameObjectsByTag(std::string_view i_tag)
+	std::vector<Containers::WeakPtr<BaseComponents::Node>> GameObjectUpdater::GetAllGameObjectsByTag(
+		std::string_view i_tag
+	)
 	{
-		std::vector<BaseComponents::Node*> commonGameObjects;
+		std::vector<Containers::WeakPtr<BaseComponents::Node>> commonGameObjects;
 
+		this->_gameObjectUpdaterLock.lock();
 		for (auto node : this->_gameObjects)
 		{
 			if (node->GetTag() == i_tag)
 			{
-				commonGameObjects.push_back(node);
+				Containers::WeakPtr<BaseComponents::Node> weakPtrCopy(node);
+				commonGameObjects.push_back(weakPtrCopy);
 			}
 		}
+		this->_gameObjectUpdaterLock.unlock();
 
 		return commonGameObjects;
 	}
@@ -125,7 +154,9 @@ namespace Core::Controllers
 		{
 			node->Process(i_deltaTime);
 		}
+
 		this->_worldPhysicsController->RunPhysicsProcess(i_deltaTime);
+		this->_worldCollisionController->Process(i_deltaTime);
 	}
 
 	void GameObjectUpdater::Render(sf::RenderWindow* i_window)
@@ -135,11 +166,15 @@ namespace Core::Controllers
 			node->SetupRender();
 		}
 		this->_spriteRenderController->RenderNodes(i_window);
+
+		Physics::WorldCollisionController::RenderDebug(i_window);
 	}
 
 
 	void GameObjectUpdater::Exit()
 	{
+		this->_worldCollisionController->Exit();
+
 		for (auto node : this->_gameObjects)
 		{
 			node->Exit();

@@ -303,6 +303,24 @@
     <ClInclude Include="Src\Utils\Uuid.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Maths\Point4D.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Maths\Point4D_Inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Maths\Matrix4.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Maths\Matrix4_Inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Controllers\Physics\WorldCollisionController.h">
+      <Filter>Header Files\Core\Controllers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Controllers\Physics\WorldCollisionController_Extern.h">
+      <Filter>Header Files\Core\Controllers\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -442,6 +460,18 @@
     </ClCompile>
     <ClCompile Include="Src\Utils\Uuid.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Maths\Point4D.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Maths\Matrix4.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Containers\PointerIncludes.cpp">
+      <Filter>Source Files\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Controllers\Physics\WorldCollisionController.cpp">
+      <Filter>Source Files\Core\Controllers\Physics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

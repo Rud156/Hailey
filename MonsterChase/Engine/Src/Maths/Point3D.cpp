@@ -1,4 +1,5 @@
 #include "Point3D.h"
+#include "Point2D.h"
 
 namespace Math
 {
@@ -21,6 +22,13 @@ namespace Math
 		_x = i_point3d._x;
 		_y = i_point3d._y;
 		_z = i_point3d._z;
+	}
+
+	Point3D::Point3D(const Point2D& i_point2d, const float i_z)
+	{
+		_x = i_point2d.X();
+		_y = i_point2d.Y();
+		_z = i_z;
 	}
 
 	Point3D::~Point3D() = default;

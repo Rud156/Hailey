@@ -187,8 +187,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Game\GameObjects\Player\PlayerShooting.h" />
+    <ClInclude Include="Src\Game\GameObjects\Common\Projectile.h" />
+    <ClInclude Include="Src\Game\Commands\InputHandler.h" />
+    <ClInclude Include="Src\Game\Commands\BackwardCommand.h" />
+    <ClInclude Include="Src\Game\Commands\ForwardCommand.h" />
+    <ClInclude Include="Src\Game\GameObjects\Player\PlayerMovement.h" />
+    <ClInclude Include="Src\Game\Commands\RightCommand.h" />
+    <ClInclude Include="Src\Game\Commands\ShootCommand.h" />
+    <ClInclude Include="Src\Game\Commands\LeftCommand.h" />
+    <ClInclude Include="Src\Game\Commands\Command.h" />
+    <ClInclude Include="Src\Game\GameObjects\Player\Player.h" />
+    <ClInclude Include="Src\Game\Scenes\BaseScene.h" />
+    <ClInclude Include="Src\Game\Scenes\MainScene.h" />
     <ClInclude Include="Src\Game\GameMain.h" />
-    <ClInclude Include="Src\Game\GridActorController.h" />
     <ClInclude Include="Src\MemoryTests\HeapManager-Sample.h" />
     <ClInclude Include="Src\MemoryTests\HeapManagerProxy.h" />
     <ClInclude Include="Src\MemoryTests\HeapManagerUnitTest.h" />
@@ -196,8 +208,20 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Game\GameObjects\Player\PlayerShooting.cpp" />
+    <ClCompile Include="Src\Game\GameObjects\Common\Projectile.cpp" />
+    <ClCompile Include="Src\Game\Commands\InputHandler.cpp" />
+    <ClCompile Include="Src\Game\Commands\BackwardCommand.cpp" />
+    <ClCompile Include="Src\Game\Commands\ForwardCommand.cpp" />
+    <ClCompile Include="Src\Game\GameObjects\Player\PlayerMovement.cpp" />
+    <ClCompile Include="Src\Game\Commands\RightCommand.cpp" />
+    <ClCompile Include="Src\Game\Commands\ShootCommand.cpp" />
+    <ClCompile Include="Src\Game\Commands\LeftCommand.cpp" />
+    <ClCompile Include="Src\Game\Commands\Command.cpp" />
+    <ClCompile Include="Src\Game\GameObjects\Player\Player.cpp" />
+    <ClCompile Include="Src\Game\Scenes\BaseScene.cpp" />
+    <ClCompile Include="Src\Game\Scenes\MainScene.cpp" />
     <ClCompile Include="Src\Game\GameMain.cpp" />
-    <ClCompile Include="Src\Game\GridActorController.cpp" />
     <ClCompile Include="Src\MemoryTests\HeapManagerProxy.cpp" />
     <ClCompile Include="Src\MemoryTests\HeapManagerUnitTest.cpp" />
     <ClCompile Include="Src\MemoryTests\MemorySystemTest.cpp" />

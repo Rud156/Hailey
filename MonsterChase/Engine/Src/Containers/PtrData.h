@@ -2,8 +2,9 @@
 
 namespace Containers
 {
-	struct PtrData
+	class PtrData
 	{
+	public:
 		unsigned long* referenceCount;
 		unsigned long* weakCount;
 

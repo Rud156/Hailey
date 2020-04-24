@@ -1,6 +1,6 @@
 #include "SpriteAnimationSS.h"
 #include "SpriteRenderer.h"
-#include "../../BaseComponents/Node.h"
+#include "../../../Containers/PointerIncludes.cpp"
 
 #include "SFML/Graphics.hpp"
 #include <cassert>
@@ -76,10 +76,12 @@ namespace Core::Components::Rendering
 
 #pragma region LifeCycle Functions
 
-	void SpriteAnimationSS::Ready(BaseComponents::Node* i_node)
+	void SpriteAnimationSS::Ready(Containers::WeakPtr<BaseComponents::Node> i_node)
 	{
-		const auto spriteRenderer = i_node->GetComponent<Rendering::SpriteRenderer>();
-		assert(spriteRenderer != nullptr); // Break if this happens
+		Component::Ready(i_node);
+
+		auto spriteRenderer = i_node.Lock()->GetComponent<Rendering::SpriteRenderer>().Lock();
+		assert(spriteRenderer.IsValid()); // Break if this happens
 
 		spriteRenderer->LoadEmpty();
 		this->_targetSprite = spriteRenderer->GetSprite();

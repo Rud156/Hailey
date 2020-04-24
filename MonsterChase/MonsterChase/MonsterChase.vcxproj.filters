@@ -31,6 +31,30 @@
     <Filter Include="Source Files\Tests">
       <UniqueIdentifier>{1b1d0aa4-50c2-4c64-b7b7-543c719c7a28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\Scenes">
+      <UniqueIdentifier>{8feae11b-956a-40c3-b113-b7363b22ea83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scenes">
+      <UniqueIdentifier>{de2f2cd8-9501-49e2-a54d-a8cef923c8cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\GameObjects">
+      <UniqueIdentifier>{45ab1535-fbbd-4e50-b787-d9550afa9aef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\GameObjects\Player">
+      <UniqueIdentifier>{6a8e5659-3075-4612-9b7c-6b228e88a563}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\GameObjects">
+      <UniqueIdentifier>{383ddd7a-aa39-42ac-9962-4854b01fa080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\GameObjects\Player">
+      <UniqueIdentifier>{3a86ed1b-068c-471f-ba2f-8d3e52d3d083}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\Commands">
+      <UniqueIdentifier>{1a50881f-c8f3-402a-8fd6-3649b62deca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Commands">
+      <UniqueIdentifier>{b5f00240-d90e-49cf-8f8f-f9368f58f42c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -51,8 +75,44 @@
     <ClInclude Include="Src\Game\GameMain.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Game\GridActorController.h">
-      <Filter>Header Files\Game</Filter>
+    <ClInclude Include="Src\Game\Scenes\BaseScene.h">
+      <Filter>Header Files\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Scenes\MainScene.h">
+      <Filter>Header Files\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Player\Player.h">
+      <Filter>Header Files\Game\GameObjects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Commands\Command.h">
+      <Filter>Header Files\Game\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Commands\LeftCommand.h">
+      <Filter>Header Files\Game\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Commands\BackwardCommand.h">
+      <Filter>Header Files\Game\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Commands\ForwardCommand.h">
+      <Filter>Header Files\Game\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Commands\RightCommand.h">
+      <Filter>Header Files\Game\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Commands\ShootCommand.h">
+      <Filter>Header Files\Game\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Player\PlayerMovement.h">
+      <Filter>Header Files\Game\GameObjects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Commands\InputHandler.h">
+      <Filter>Header Files\Game\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Player\PlayerShooting.h">
+      <Filter>Header Files\Game\GameObjects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Common\Projectile.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -68,13 +128,49 @@
     <ClCompile Include="Src\MemoryTests\MemorySystemTest.cpp">
       <Filter>Source Files\MemoryTests</Filter>
     </ClCompile>
+    <ClCompile Include="Src\MonsterChase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Src\Game\GameMain.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Game\GridActorController.cpp">
-      <Filter>Source Files\Game</Filter>
+    <ClCompile Include="Src\Game\Scenes\BaseScene.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Src\MonsterChase.cpp">
+    <ClCompile Include="Src\Game\Scenes\MainScene.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Player\Player.cpp">
+      <Filter>Source Files\Game\GameObjects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Commands\LeftCommand.cpp">
+      <Filter>Source Files\Game\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Commands\Command.cpp">
+      <Filter>Source Files\Game\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Commands\BackwardCommand.cpp">
+      <Filter>Source Files\Game\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Commands\ForwardCommand.cpp">
+      <Filter>Source Files\Game\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Commands\RightCommand.cpp">
+      <Filter>Source Files\Game\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Commands\ShootCommand.cpp">
+      <Filter>Source Files\Game\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Player\PlayerMovement.cpp">
+      <Filter>Source Files\Game\GameObjects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Commands\InputHandler.cpp">
+      <Filter>Source Files\Game\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Player\PlayerShooting.cpp">
+      <Filter>Source Files\Game\GameObjects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Common\Projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

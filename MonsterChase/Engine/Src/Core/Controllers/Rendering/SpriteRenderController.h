@@ -1,13 +1,8 @@
 #pragma once
-#include <vector>
+#include "../../../Containers/SmartPtr.h"
+#include "../../BaseComponents/Node.h"
 
-namespace Core
-{
-	namespace BaseComponents
-	{
-		class Node;
-	}
-}
+#include <vector>
 
 namespace sf
 {
@@ -23,8 +18,9 @@ namespace Core::Controllers::Rendering
 	private:
 		TextureDataCache* _textureDataCache;
 
-		static bool CompareRenderOrder(BaseComponents::Node* i_a,
-		                               BaseComponents::Node* i_b);
+		static bool CompareRenderOrder(Containers::SmartPtr<BaseComponents::Node> i_a,
+		                               Containers::SmartPtr<BaseComponents::Node> i_b
+		);
 
 	public:
 		// Constructor/Destructor

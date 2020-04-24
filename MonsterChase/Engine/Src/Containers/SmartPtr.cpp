@@ -48,13 +48,19 @@ namespace Containers
 	template <class T>
 	SmartPtr<T>::SmartPtr(T* i_objectPtr)
 	{
-		assert(i_objectPtr != nullptr);
+		this->_customDeleter = nullptr;
+
+		if (i_objectPtr == nullptr)
+		{
+			this->_objectPtr = nullptr;
+			this->_dataCounter = nullptr;
+			return;
+		}
 
 		this->_dataCounter = new PtrData();
 		this->_dataCounter->AddSmartReference();
 
 		this->_objectPtr = i_objectPtr;
-		this->_customDeleter = nullptr;
 	}
 
 	template <class T>
@@ -105,6 +111,20 @@ namespace Containers
 		return this->_objectPtr != nullptr;
 	}
 
+	template <class T>
+	template <class D>
+	bool SmartPtr<T>::CompareBaseType()
+	{
+		if (dynamic_cast<D*>(this->_objectPtr))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 #pragma endregion
 
 #pragma region Utils
@@ -116,7 +136,7 @@ namespace Containers
 	}
 
 	template <class T>
-	void SmartPtr<T>::SetCustomDeleter(void i_function(T))
+	void SmartPtr<T>::SetCustomDeleter(std::function<void(T)> i_function)
 	{
 		this->_customDeleter = i_function;
 	}
@@ -158,17 +178,16 @@ namespace Containers
 		// As a weak pointer might have a reference to the object
 		if (*this->_dataCounter->referenceCount == 0)
 		{
-			if (this->_customDeleter != nullptr)
+			if (this->_customDeleter)
 			{
 				this->_customDeleter(*this->_objectPtr);
 			}
 
-			delete this->_dataCounter;
 			delete this->_objectPtr;
 		}
 
 		// Only delete when the weak count goes to zero
-		if (*this->_dataCounter->weakCount <= 0)
+		if (*this->_dataCounter->weakCount == 0 && *this->_dataCounter->referenceCount == 0)
 		{
 			delete this->_dataCounter;
 		}
