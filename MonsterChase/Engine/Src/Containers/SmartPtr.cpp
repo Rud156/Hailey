@@ -174,9 +174,7 @@ namespace Containers
 
 		this->_dataCounter->ReleaseSmartReference();
 
-		// Delete only the object pointer when it is zero
-		// As a weak pointer might have a reference to the object
-		if (*this->_dataCounter->referenceCount == 0)
+		if (this->_objectPtr && *this->_dataCounter->referenceCount == 0)
 		{
 			if (this->_customDeleter)
 			{
@@ -187,7 +185,7 @@ namespace Containers
 		}
 
 		// Only delete when the weak count goes to zero
-		if (*this->_dataCounter->weakCount == 0 && *this->_dataCounter->referenceCount == 0)
+		if (*this->_dataCounter->weakCount == 0 && *this->_dataCounter->referenceCount == 0 && this->_dataCounter)
 		{
 			delete this->_dataCounter;
 		}

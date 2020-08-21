@@ -321,6 +321,9 @@
     <ClInclude Include="Src\Core\Controllers\Physics\WorldCollisionController_Extern.h">
       <Filter>Header Files\Core\Controllers\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Utils\CollisionUtils.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -472,6 +475,9 @@
     </ClCompile>
     <ClCompile Include="Src\Core\Controllers\Physics\WorldCollisionController.cpp">
       <Filter>Source Files\Core\Controllers\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utils\CollisionUtils.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

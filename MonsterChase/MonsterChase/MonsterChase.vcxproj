@@ -187,6 +187,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Game\Scenes\SceneData.h" />
+    <ClInclude Include="Src\Game\Scenes\GameOverScene.h" />
+    <ClInclude Include="Src\Game\Scenes\HomeScene.h" />
+    <ClInclude Include="Src\Game\GameObjects\Common\HealthDisplay.h" />
+    <ClInclude Include="Src\Game\GameObjects\Enemy\DualShotAttack.h" />
+    <ClInclude Include="Src\Game\GameObjects\Enemy\SingleShotAttack.h" />
+    <ClInclude Include="Src\Game\GameObjects\Enemy\SprayShotAttack.h" />
+    <ClInclude Include="Src\Game\GameObjects\Enemy\EnemyAttackController.h" />
+    <ClInclude Include="Src\Game\GameObjects\Enemy\EnemyMovement.h" />
+    <ClInclude Include="Src\Game\GameObjects\Enemy\Enemy.h" />
+    <ClInclude Include="Src\Game\Utils\GameConfig.h" />
     <ClInclude Include="Src\Game\GameObjects\Player\PlayerShooting.h" />
     <ClInclude Include="Src\Game\GameObjects\Common\Projectile.h" />
     <ClInclude Include="Src\Game\Commands\InputHandler.h" />
@@ -208,6 +219,17 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Game\Scenes\SceneData.cpp" />
+    <ClCompile Include="Src\Game\Scenes\GameOverScene.cpp" />
+    <ClCompile Include="Src\Game\Scenes\HomeScene.cpp" />
+    <ClCompile Include="Src\Game\GameObjects\Common\HealthDisplay.cpp" />
+    <ClCompile Include="Src\Game\GameObjects\Enemy\DualShotAttack.cpp" />
+    <ClCompile Include="Src\Game\GameObjects\Enemy\SingleShotAttack.cpp" />
+    <ClCompile Include="Src\Game\GameObjects\Enemy\SprayShotAttack.cpp" />
+    <ClCompile Include="Src\Game\GameObjects\Enemy\EnemyAttackController.cpp" />
+    <ClCompile Include="Src\Game\GameObjects\Enemy\EnemyMovement.cpp" />
+    <ClCompile Include="Src\Game\GameObjects\Enemy\Enemy.cpp" />
+    <ClCompile Include="Src\Game\Utils\GameConfig.cpp" />
     <ClCompile Include="Src\Game\GameObjects\Player\PlayerShooting.cpp" />
     <ClCompile Include="Src\Game\GameObjects\Common\Projectile.cpp" />
     <ClCompile Include="Src\Game\Commands\InputHandler.cpp" />

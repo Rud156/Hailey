@@ -60,9 +60,9 @@ namespace Core
 				// Velocity
 				void SetVelocity(float i_x, float i_y) const;
 				void SetVelocity(Math::Point2D& velocity) const;
-				Math::Point2D* GetVelocity() const;
+				[[nodiscard]] Math::Point2D* GetVelocity() const;
 				void SetAngularVelocity(float i_angularVelocity);
-				float GetAngularVelocity() const;
+				[[nodiscard]] float GetAngularVelocity() const;
 
 				// Force
 				void AddForceAtPosition(Math::Point2D& i_force, Math::Point2D& i_position);

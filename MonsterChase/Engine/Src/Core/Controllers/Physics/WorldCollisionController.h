@@ -1,11 +1,13 @@
 #pragma once
 #include "../../../Containers/SmartPtr.h"
-#include "../../Components/Physics/Colliders/BaseCollider.h"
 #include "../../../Maths/Matrix4.h"
+#include "../../../Maths/Point2D.h"
+#include "../../../Maths/Point3D.h"
 #include "../../../Maths/Point4D.h"
+#include "../../Components/Physics/Colliders/BaseCollider.h"
 
+#include <mutex>
 #include <vector>
-#include <future>
 
 namespace sf
 {
@@ -24,6 +26,16 @@ namespace Core::Controllers::Physics
 			Math::Matrix4 objectToWorld;
 			Math::Point4D centerInWorld;
 			Math::Point3D velocity;
+			Math::Point2D colliderExtents;
+
+			std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>, Math::Point2D)>
+			collisionCallback;
+		};
+
+		struct CollisionHitResult
+		{
+			bool collided;
+			Math::Point2D collisionNormal;
 		};
 
 		std::vector<CollisionCacheData> _worldObjectColliders;
@@ -32,8 +44,9 @@ namespace Core::Controllers::Physics
 		// Collision
 		void ProcessCollisions(float i_deltaTime);
 		void UpdateCollisionCheckData();
-		bool CheckCollision(CollisionCacheData& i_collision_1, CollisionCacheData& i_collision_2,
-		                    float i_deltaTime) const;
+		[[nodiscard]] CollisionHitResult CheckCollision(CollisionCacheData& i_collision_1,
+		                                                CollisionCacheData& i_collision_2,
+		                                                float i_deltaTime) const;
 
 	public:
 		// Constructor and Destructor

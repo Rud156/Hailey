@@ -1,10 +1,13 @@
 #include "MainScene.h"
+
+#include "../Utils/GameConfig.h"
 #include "Src/Core/BaseComponents/Node.h"
 #include "Src/Core/Components/Transform/Node2D.h"
 #include "Src/Core/Components/Transform/Rotate2D.h"
 #include "Src/Core/Components/Physics/Colliders/RectangleCollider.h"
 #include "Src/Maths/Point2D.h"
 #include "Src/Containers/PointerIncludes.cpp"
+#include "Src/Utils/Debug.h"
 
 namespace Game::Scenes
 {
@@ -12,16 +15,11 @@ namespace Game::Scenes
 
 	MainScene::MainScene()
 	{
-		const Containers::SmartPtr<GameObjects::Player::Player> player(new GameObjects::Player::Player());
-		this->_player = player;
-
-		auto* const testCollider = new Core::BaseComponents::Node("TestCollider");
-		testCollider->AddComponent<Core::Components::Transform::Node2D>().Lock()->GetPosition()->set(300, 200);
-		testCollider->AddComponent<Core::Components::Transform::Rotate2D>();
-
-		auto collider = testCollider->AddComponent<Core::Components::Physics::Colliders::RectangleCollider>();
-		collider.Lock()->SetColliderExtents(50, 50);
-		collider.Lock()->AddToWorld();
+		// const Containers::SmartPtr<GameObjects::Player::Player> player(new GameObjects::Player::Player());
+		// this->_player = player;
+		//
+		// const Containers::SmartPtr<GameObjects::Enemy::Enemy> enemy(new GameObjects::Enemy::Enemy());
+		// this->_enemy = enemy;
 	}
 
 	MainScene::~MainScene() = default;
@@ -33,12 +31,17 @@ namespace Game::Scenes
 
 	void MainScene::Init(Containers::SmartPtr<Commands::InputHandler> i_inputHandler)
 	{
-		this->_player->Init(i_inputHandler);
+		// this->_player->Init(i_inputHandler);
+		// this->_enemy->Init();
 	}
 
-	void MainScene::Update(float i_deltaTime)
+	bool MainScene::Update(float)
 	{
-		this->_player->Update(i_deltaTime);
+		// this->_player->Update(i_deltaTime);
+		// this->_enemy->Update(i_deltaTime);
+
+
+		return false;
 	}
 
 	void MainScene::SwitchSceneLoad()

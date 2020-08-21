@@ -9,8 +9,13 @@ namespace Game
 
 	GameMain::GameMain()
 	{
+		const Containers::SmartPtr<Scenes::HomeScene> homeScene(new Scenes::HomeScene());
 		const Containers::SmartPtr<Scenes::MainScene> mainScene(new Scenes::MainScene());
+		const Containers::SmartPtr<Scenes::GameOverScene> gameOverScene(new Scenes::GameOverScene());
+
+		this->_homeScene = homeScene;
 		this->_mainScene = mainScene;
+		this->_gameOverScene = gameOverScene;
 
 		const Containers::SmartPtr<Commands::InputHandler> inputHandler(new Commands::InputHandler());
 		this->_inputHandler = inputHandler;
@@ -26,9 +31,11 @@ namespace Game
 
 	void GameMain::Init()
 	{
+		_homeScene->Init(this->_inputHandler);
 		_mainScene->Init(this->_inputHandler);
+		_gameOverScene->Init(this->_inputHandler);
 
-		SetSceneType(SceneType::Main);
+		SetSceneType(SceneType::Home);
 	}
 
 	void GameMain::Update()
@@ -37,13 +44,75 @@ namespace Game
 		switch (this->_sceneType)
 		{
 		case SceneType::Home:
+			{
+				const bool switchScene = this->_homeScene->Update(deltaTime);
+				if (switchScene)
+				{
+					SwitchScene(SceneType::GameOver); // TODO: Change this later on...
+				}
+			}
 			break;
 
 		case SceneType::Main:
-			this->_mainScene->Update(deltaTime);
+			{
+				const bool switchScene = this->_mainScene->Update(deltaTime);
+				if (switchScene)
+				{
+					SwitchScene(SceneType::GameOver);
+				}
+			}
 			break;
 
 		case SceneType::GameOver:
+			{
+				const bool switchScene = this->_gameOverScene->Update(deltaTime);
+				if (switchScene)
+				{
+					SwitchScene(SceneType::Home);
+				}
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	void GameMain::Render(sf::RenderWindow* i_window)
+	{
+		switch (this->_sceneType)
+		{
+		case SceneType::Home:
+			this->_homeScene->Render(i_window);
+			break;
+
+		case SceneType::Main:
+			this->_mainScene->Render(i_window);
+			break;
+
+		case SceneType::GameOver:
+			this->_gameOverScene->Render(i_window);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	void GameMain::LMBClicked(sf::RenderWindow* i_window)
+	{
+		switch (this->_sceneType)
+		{
+		case SceneType::Home:
+			this->_homeScene->LMBClicked(i_window);
+			break;
+
+		case SceneType::Main:
+			this->_mainScene->LMBClicked(i_window);
+			break;
+
+		case SceneType::GameOver:
+			this->_gameOverScene->LMBClicked(i_window);
 			break;
 
 		default:
@@ -53,7 +122,9 @@ namespace Game
 
 	void GameMain::Destroy()
 	{
+		this->_homeScene->RemoveSceneElements();
 		this->_mainScene->RemoveSceneElements();
+		this->_gameOverScene->RemoveSceneElements();
 	}
 
 #pragma endregion
@@ -71,6 +142,7 @@ namespace Game
 		switch (i_sceneType)
 		{
 		case SceneType::Home:
+			this->_homeScene->SwitchSceneLoad();
 			break;
 
 		case SceneType::Main:
@@ -78,6 +150,7 @@ namespace Game
 			break;
 
 		case SceneType::GameOver:
+			this->_gameOverScene->SwitchSceneLoad();
 			break;
 
 		default:
@@ -95,6 +168,10 @@ namespace Game
 		switch (i_sceneType)
 		{
 		case SceneType::Home:
+			{
+				const Containers::WeakPtr<Scenes::BaseScene> homeSceneRef(this->_homeScene);
+				this->_currentScene = homeSceneRef;
+			}
 			break;
 
 		case SceneType::Main:
@@ -105,6 +182,10 @@ namespace Game
 			break;
 
 		case SceneType::GameOver:
+			{
+				const Containers::WeakPtr<Scenes::BaseScene> gameOverSceneRef(this->_gameOverScene);
+				this->_currentScene = gameOverSceneRef;
+			}
 			break;
 		}
 	}

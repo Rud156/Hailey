@@ -1,9 +1,11 @@
 #pragma once
 #include "Src/Containers/SmartPtr.h"
+#include "Src/Containers/WeakPtr.h"
 #include "Src/Core/BaseComponents/Component.h"
 #include "Src/Core/Components/Transform/Node2D.h"
 #include "Src/Core/BaseComponents/Node.h"
 #include "Src/Core/Components/Transform/Rotate2D.h"
+#include "Src/Core/Components/Physics/Colliders/BaseCollider.h"
 
 namespace Math
 {

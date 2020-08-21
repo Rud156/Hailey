@@ -69,9 +69,9 @@ namespace Core::Components::Rendering
 			textureDataCache->AddTexture(i_filePath, texture);
 		}
 
-		const auto position = _node2d->GetPosition();
+		auto* const position = _node2d->GetPosition();
 
-		auto sprite = new sf::Sprite(*texture);
+		auto* sprite = new sf::Sprite(*texture);
 		sprite->setPosition(position->X(), position->Y());
 
 		this->_sprite = sprite;
@@ -88,9 +88,9 @@ namespace Core::Components::Rendering
 			return;
 		}
 
-		const auto position = this->_node2d->GetPosition();
+		auto* const position = this->_node2d->GetPosition();
 		const auto angle = this->_rotate2d->GetAngle();
-		const auto scale = this->_scale2d->GetScale();
+		auto* const scale = this->_scale2d->GetScale();
 
 		this->_sprite->setPosition(position->X(), position->Y());
 		this->_sprite->setRotation(angle);

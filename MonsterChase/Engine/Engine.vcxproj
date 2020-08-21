@@ -176,6 +176,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Utils\CollisionUtils.h" />
     <ClInclude Include="Src\Core\Controllers\Physics\WorldCollisionController_Extern.h" />
     <ClInclude Include="Src\Maths\Matrix4.h" />
     <ClInclude Include="Src\Maths\Matrix4_Inl.h" />
@@ -242,6 +243,7 @@
     <ClInclude Include="Src\Core\Controllers\Physics\WorldCollisionController.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Utils\CollisionUtils.cpp" />
     <ClCompile Include="Src\Containers\PointerIncludes.cpp" />
     <ClCompile Include="Src\Maths\Matrix4.cpp" />
     <ClCompile Include="Src\Maths\Point4D.cpp" />

@@ -49,12 +49,7 @@ namespace Containers
 
 		this->_dataCounter->ReleaseWeakReference();
 
-		if (*this->_dataCounter->referenceCount <= 0)
-		{
-			delete this->_objectPtr;
-		}
-
-		if (UseCount() <= 0)
+		if (*this->_dataCounter->weakCount == 0 && *this->_dataCounter->referenceCount == 0 && this->_dataCounter)
 		{
 			delete this->_dataCounter;
 		}
@@ -187,6 +182,18 @@ namespace Containers
 		{
 			return SmartPtr<T>(this->_objectPtr, this->_dataCounter);
 		}
+	}
+
+	template <class T>
+	void WeakPtr<T>::ClearWeakRef()
+	{
+		this->_objectPtr = nullptr;
+		if (this->_dataCounter != nullptr)
+		{
+			this->_dataCounter->ReleaseWeakReference();
+		}
+
+		this->_dataCounter = nullptr;
 	}
 
 #pragma endregion

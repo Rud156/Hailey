@@ -1,9 +1,16 @@
 #pragma once
-#include "Scenes/BaseScene.h"
-#include "Scenes/MainScene.h"
 #include "Commands/InputHandler.h"
+#include "Scenes/BaseScene.h"
+#include "Scenes/GameOverScene.h"
+#include "Scenes/HomeScene.h"
+#include "Scenes/MainScene.h"
 #include "Src/Containers/SmartPtr.h"
 #include "Src/Containers/WeakPtr.h"
+
+namespace sf
+{
+	class RenderWindow;
+}
 
 namespace Game
 {
@@ -19,7 +26,9 @@ namespace Game
 
 		SceneType _sceneType;
 		Containers::WeakPtr<Scenes::BaseScene> _currentScene;
+		Containers::SmartPtr<Scenes::HomeScene> _homeScene;
 		Containers::SmartPtr<Scenes::MainScene> _mainScene;
+		Containers::SmartPtr<Scenes::GameOverScene> _gameOverScene;
 		Containers::SmartPtr<Commands::InputHandler> _inputHandler;
 
 		// Utility Functions
@@ -34,6 +43,8 @@ namespace Game
 		// LifeCycle Functions
 		void Init();
 		void Update();
+		void Render(sf::RenderWindow* i_window);
+		void LMBClicked(sf::RenderWindow* i_window);
 		void Destroy();
 	};
 }

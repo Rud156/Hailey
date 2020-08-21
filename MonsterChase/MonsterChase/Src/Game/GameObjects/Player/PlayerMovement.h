@@ -80,6 +80,6 @@ namespace Game::GameObjects::Player
 		void MoveBackward();
 
 		// Utility Functions
-		void SetSpriteSize(float i_width, float i_height);
+		void SetSpriteInfo(float i_width, float i_height);
 	};
 }

@@ -22,19 +22,21 @@ namespace Game::GameObjects::Common
 		Containers::SmartPtr<Core::Components::Transform::Node2D> _node2d;
 		Containers::SmartPtr<Core::Components::Physics::Rigidbody2D> _projectileRb;
 
+		float _projectileDamage;
 		float _currentLifeTime;
 		Math::Point2D* _launchDirection;
 
 	public:
 		// Parent Overrides
 		Projectile();
-		~Projectile() override;
 		void Ready(Containers::WeakPtr<Core::BaseComponents::Node> i_node) override;
 		void Process(float deltaTime) override;
 		void Exit() override;
 
 		// External Functions
 		void LaunchProjectile(Math::Point2D* i_launchDirection);
+		void SetDamageAmount(float i_damageAmount);
+		float GetDamageAmount() const;
 
 		// Utility Functions
 		void DestroyProjectile();

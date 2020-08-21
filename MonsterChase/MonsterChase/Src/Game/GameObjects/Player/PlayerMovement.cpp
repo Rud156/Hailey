@@ -249,7 +249,7 @@ namespace Game::GameObjects::Player
 		SetVerticalDirection(VerticalDirection::NoDirection);
 	}
 
-	void PlayerMovement::SetSpriteSize(const float i_width, const float i_height)
+	void PlayerMovement::SetSpriteInfo(const float i_width, const float i_height)
 	{
 		this->_width = i_width;
 		this->_height = i_height;

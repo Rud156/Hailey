@@ -55,6 +55,24 @@
     <Filter Include="Source Files\Game\Commands">
       <UniqueIdentifier>{b5f00240-d90e-49cf-8f8f-f9368f58f42c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Utils">
+      <UniqueIdentifier>{cf522a6d-6fde-42fc-8a2f-88b954f7a3ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\Utils">
+      <UniqueIdentifier>{94eeaa96-880e-4385-ab62-c7a32f6b3178}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\GameObjects\Common">
+      <UniqueIdentifier>{50cfc895-ed60-4a1a-8ee8-943b885c3990}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\GameObjects\Common">
+      <UniqueIdentifier>{53fca70f-14c9-4899-9aed-c1a4633954fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\GameObjects\Enemy">
+      <UniqueIdentifier>{f0c41ffc-c1cb-4a42-be6b-2a44d17857a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\GameObjects\Enemy">
+      <UniqueIdentifier>{4ce4a1c2-90dd-4a9b-b51a-04c2ed9a19a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -111,8 +129,41 @@
     <ClInclude Include="Src\Game\GameObjects\Player\PlayerShooting.h">
       <Filter>Header Files\Game\GameObjects\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Game\Utils\GameConfig.h">
+      <Filter>Header Files\Game\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Game\GameObjects\Common\Projectile.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Game\GameObjects\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Enemy\Enemy.h">
+      <Filter>Header Files\Game\GameObjects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Enemy\EnemyMovement.h">
+      <Filter>Header Files\Game\GameObjects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Enemy\DualShotAttack.h">
+      <Filter>Header Files\Game\GameObjects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Enemy\SingleShotAttack.h">
+      <Filter>Header Files\Game\GameObjects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Enemy\SprayShotAttack.h">
+      <Filter>Header Files\Game\GameObjects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Enemy\EnemyAttackController.h">
+      <Filter>Header Files\Game\GameObjects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameObjects\Common\HealthDisplay.h">
+      <Filter>Header Files\Game\GameObjects\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Scenes\GameOverScene.h">
+      <Filter>Header Files\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Scenes\HomeScene.h">
+      <Filter>Header Files\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Scenes\SceneData.h">
+      <Filter>Header Files\Game\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -127,9 +178,6 @@
     </ClCompile>
     <ClCompile Include="Src\MemoryTests\MemorySystemTest.cpp">
       <Filter>Source Files\MemoryTests</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\MonsterChase.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Src\Game\GameMain.cpp">
       <Filter>Source Files\Game</Filter>
@@ -170,8 +218,44 @@
     <ClCompile Include="Src\Game\GameObjects\Player\PlayerShooting.cpp">
       <Filter>Source Files\Game\GameObjects\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\Utils\GameConfig.cpp">
+      <Filter>Source Files\Game\Utils</Filter>
+    </ClCompile>
     <ClCompile Include="Src\Game\GameObjects\Common\Projectile.cpp">
+      <Filter>Source Files\Game\GameObjects\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Enemy\Enemy.cpp">
+      <Filter>Source Files\Game\GameObjects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Enemy\EnemyMovement.cpp">
+      <Filter>Source Files\Game\GameObjects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Enemy\DualShotAttack.cpp">
+      <Filter>Source Files\Game\GameObjects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Enemy\SingleShotAttack.cpp">
+      <Filter>Source Files\Game\GameObjects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Enemy\SprayShotAttack.cpp">
+      <Filter>Source Files\Game\GameObjects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Enemy\EnemyAttackController.cpp">
+      <Filter>Source Files\Game\GameObjects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GameObjects\Common\HealthDisplay.cpp">
+      <Filter>Source Files\Game\GameObjects\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Scenes\SceneData.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MonsterChase.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Scenes\GameOverScene.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Scenes\HomeScene.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

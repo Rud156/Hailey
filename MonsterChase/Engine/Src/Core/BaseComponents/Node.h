@@ -3,15 +3,19 @@
 #include "../../Containers/SmartPtr.h"
 #include "../../Containers/WeakPtr.h"
 
+#include <functional>
+#include <string>
 #include <typeinfo>
 #include <vector>
-#include <string>
-#include <functional>
-#include <mutex>
 
 namespace sf
 {
 	class RenderWindow;
+}
+
+namespace Math
+{
+	class Point2D;
 }
 
 namespace Core
@@ -29,8 +33,7 @@ namespace Core
 		{
 		private:
 			size_t _instanceId;
-			Containers::SmartPtr<Node> _selfSmartRef;
-			std::recursive_mutex _nodeMutex;
+			Containers::WeakPtr<Node> _selfWeakRef;
 
 			std::string _name;
 			std::string _tag;
@@ -41,7 +44,8 @@ namespace Core
 			static bool ComparePriority(Containers::SmartPtr<Component> i_a, Containers::SmartPtr<Component> i_b);
 
 			// Component Specific Data for Fast Access
-			std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>)> _collisionCallback;
+			std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>, Math::Point2D)>
+			_collisionCallback;
 			float _renderOrder{};
 
 		public:
@@ -79,16 +83,16 @@ namespace Core
 			void SetTag(std::string i_tag);
 
 			// Pointer Helpers
-			void AddToGlobalList() const;
-			[[nodiscard]] Containers::SmartPtr<Node> GetSmartPointerRef() const;
+			void AddToGlobalList();
 			[[nodiscard]] Containers::WeakPtr<Node> GetWeakPointerRef() const;
 
 			// Component Specific Data for Fast Access
-			void __NotifyCollisionCallback(
-				Containers::WeakPtr<Components::Physics::Colliders::BaseCollider> i_collider
-			) const;
+			[[nodiscard]] std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>,
+			                                 Math::Point2D)>
+			__GetCollisionCallback() const;
 			void SetCollisionCallback(
-				std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>)> i_function
+				std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>,
+				                   Math::Point2D)> i_function
 			);
 			void SetRenderOrder(float i_renderOrder);
 			[[nodiscard]] float GetRenderOrder() const;
@@ -97,28 +101,23 @@ namespace Core
 		template <class T>
 		Containers::WeakPtr<T> Node::AddComponent()
 		{
-			_nodeMutex.lock();
-
 			T* tRawPtr = new T();
 			auto* const tPtr = reinterpret_cast<Component*>(tRawPtr);
 			Containers::SmartPtr<Component> tSmartRef(tPtr);
 
-			const Containers::WeakPtr<Node> weakPtrRef(this->_selfSmartRef);
+			const Containers::WeakPtr<Node> weakPtrRef(this->_selfWeakRef);
 			tSmartRef->Ready(weakPtrRef);
 			_components.push_back(tSmartRef);
 
 			SortComponents();
 
 			Containers::WeakPtr<T> weakPtrCopy(tSmartRef);
-
-			_nodeMutex.unlock();
 			return weakPtrCopy;
 		}
 
 		template <class T>
 		void Node::RemoveComponent()
 		{
-			_nodeMutex.lock();
 			int componentIndex = -1;
 
 			for (auto component : _components)
@@ -136,29 +135,22 @@ namespace Core
 			{
 				_components.erase(_components.begin() + componentIndex);
 			}
-
-			_nodeMutex.unlock();
 		}
 
 		template <class T>
 		Containers::WeakPtr<T> Node::GetComponent()
 		{
-			_nodeMutex.lock();
-
 			for (auto component : _components)
 			{
 				if (component.CompareBaseType<T>())
 				{
 					Containers::WeakPtr<T> weakPtrCopy(component);
 
-					_nodeMutex.unlock();
 					return weakPtrCopy;
 				}
 			}
 
-			Containers::WeakPtr<T> weakPtr;
-
-			_nodeMutex.unlock();
+			Containers::WeakPtr<T> weakPtr(nullptr);
 			return weakPtr;
 		}
 	}

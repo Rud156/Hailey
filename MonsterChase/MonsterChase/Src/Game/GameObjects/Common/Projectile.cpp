@@ -1,10 +1,10 @@
 #include "Projectile.h"
 #include "Src/Containers/PointerIncludes.cpp"
-#include "Src/Core/Components/Transform/Rotate2D.h"
 #include "Src/Core/Components/Rendering/SpriteRenderer.h"
-#include "Src/Maths/Point2D.h"
+#include "Src/Core/Components/Transform/Rotate2D.h"
 #include "Src/Core/Controllers/GameObjectUpdater.h"
 #include "Src/Core/Controllers/GameObjectUpdater_Extern.h"
+#include "Src/Maths/Point2D.h"
 
 #include <cassert>
 
@@ -16,9 +16,8 @@ namespace Game::GameObjects::Common
 	{
 		this->_launchDirection = new Math::Point2D();
 		this->_currentLifeTime = Projectile::DestroyLifetime;
+		this->_projectileDamage = 0;
 	}
-
-	Projectile::~Projectile() = default;
 
 	void Projectile::Ready(Containers::WeakPtr<Core::BaseComponents::Node> i_node)
 	{
@@ -66,6 +65,16 @@ namespace Game::GameObjects::Common
 		Math::Point2D projectileVelocity = Projectile::ProjectileVelocity * *this->_launchDirection;
 		this->_projectileRb->SetVelocity(projectileVelocity);
 		this->_currentLifeTime = Projectile::DestroyLifetime;
+	}
+
+	void Projectile::SetDamageAmount(const float i_damageAmount)
+	{
+		this->_projectileDamage = i_damageAmount;
+	}
+
+	float Projectile::GetDamageAmount() const
+	{
+		return this->_projectileDamage;
 	}
 
 #pragma endregion

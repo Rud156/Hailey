@@ -1,17 +1,20 @@
 #include "PlayerShooting.h"
+#include "../../Utils/GameConfig.h"
+#include "../Common/Projectile.h"
 #include "Src/Containers/PointerIncludes.cpp"
-#include "Src/Utils/MathUtils.h"
 #include "Src/Core/Components/Physics/Rigidbody2D.h"
-#include "Src/Maths/Point2D.h"
+#include "Src/Core/Components/Physics/Colliders/RectangleCollider.h"
 #include "Src/Core/Components/Rendering/SpriteRenderer.h"
-#include "Src/Core/Loaders/FileLoader.h"
 #include "Src/Core/Components/Transform/Scale2D.h"
+#include "Src/Core/Loaders/FileLoader.h"
+#include "Src/Maths/Point2D.h"
+#include "Src/Utils/Debug.h"
+#include "Src/Utils/MathUtils.h"
 
 #include <cassert>
 #include <cmath>
+#include <functional>
 #include <string>
-
-#include "../Common/Projectile.h"
 
 namespace Game::GameObjects::Player
 {
@@ -37,13 +40,13 @@ namespace Game::GameObjects::Player
 		_shootingTimer = ShootDelay;
 
 		auto* const projectileGameObject = new Core::BaseComponents::Node("PlayerProj");
-		auto projectileRef = projectileGameObject->GetSmartPointerRef();
 		auto projectileNode2D = projectileGameObject->AddComponent<Core::Components::Transform::Node2D>();
 		auto projectileRotation = projectileGameObject->AddComponent<Core::Components::Transform::Rotate2D>();
 		auto projectileScale = projectileGameObject->AddComponent<Core::Components::Transform::Scale2D>();
 		auto projectileRenderer = projectileGameObject->AddComponent<Core::Components::Rendering::SpriteRenderer>();
 		projectileGameObject->AddComponent<Core::Components::Physics::Rigidbody2D>();
-		auto projectile = projectileRef->AddComponent<Common::Projectile>();
+		auto projectile = projectileGameObject->AddComponent<Common::Projectile>();
+		projectileGameObject->SetTag(Utils::GameConfig::PlayerProjTag);
 
 		projectileRotation.Lock()->SetAngle(this->_rotate2d->GetAngle());
 
@@ -51,15 +54,23 @@ namespace Game::GameObjects::Player
 		const auto launchPosition = *playerPosition + *this->_launchOffset;
 		projectileNode2D.Lock()->GetPosition()->set(launchPosition.X(), launchPosition.Y());
 
-		const float xVelocity = std::sin(this->_rotate2d->GetAngle() * Utils::MathUtils::Deg2Rad);
-		const float yVelocity = -std::cos(this->_rotate2d->GetAngle() * Utils::MathUtils::Deg2Rad);
+		const float xVelocity = std::sin(this->_rotate2d->GetAngle() * ::Utils::MathUtils::Deg2Rad);
+		const float yVelocity = -std::cos(this->_rotate2d->GetAngle() * ::Utils::MathUtils::Deg2Rad);
 		projectile.Lock()->LaunchProjectile(new Math::Point2D(xVelocity, yVelocity));
+		projectile.Lock()->SetDamageAmount(Utils::GameConfig::PlayerProjectileDamage);
 
 		projectileScale.Lock()->GetScale()->set(0.75f, 0.75f);
 
 		std::string filePath = Core::Loaders::FileLoader::Assets;
 		filePath += "/Images/Bullet.png";
 		projectileRenderer.Lock()->LoadTexture(filePath);
+
+		auto projectileCollider = projectileGameObject->AddComponent
+			<Core::Components::Physics::Colliders::RectangleCollider>();
+		auto colliderInstance = projectileCollider.Lock();
+		colliderInstance->SetGroupIndex(Utils::GameConfig::PlayerGroup);
+		colliderInstance->SetCategoryBits(Utils::GameConfig::PlayerProjectileCat);
+		colliderInstance->SetMaskBits(Utils::GameConfig::EnemyCat);
 	}
 
 #pragma endregion

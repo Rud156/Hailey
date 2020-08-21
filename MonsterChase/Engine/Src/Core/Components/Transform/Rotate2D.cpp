@@ -1,5 +1,7 @@
 #include "Rotate2D.h"
 
+#include "../../../Utils/Debug.h"
+
 namespace Core::Components::Transform
 {
 	void Rotate2D::Rotate(const float i_degrees)

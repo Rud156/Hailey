@@ -1,11 +1,18 @@
 #include "Node.h"
-#include "../Controllers/GameObjectUpdater_Extern.h"
+#include "../../Containers/PointerIncludes.cpp"
+#include "../../Maths/Point2D.h"
+#include "../../Utils/Debug.h"
 #include "../../Utils/Uuid.h"
 #include "../Components/Physics/Colliders/BaseCollider.h"
-#include "../../Containers/PointerIncludes.cpp"
+#include "../Controllers/GameObjectUpdater_Extern.h"
 
 #include <algorithm>
 #include <utility>
+
+namespace Utils
+{
+	class Debug;
+}
 
 namespace Core::BaseComponents
 {
@@ -14,11 +21,11 @@ namespace Core::BaseComponents
 	Node::Node(std::string i_name, bool i_addToGlobalList)
 	{
 		this->_instanceId = Utils::Uuid::GetUuid();
-		this->_name = std::move(i_name);
+		this->_name = i_name;
 		this->_tag = "";
 
 		const Containers::SmartPtr<Node> selfSmartPtr(this);
-		this->_selfSmartRef = selfSmartPtr;
+		this->_selfWeakRef = selfSmartPtr;
 
 		if (i_addToGlobalList)
 		{
@@ -102,7 +109,7 @@ namespace Core::BaseComponents
 
 	Node::~Node()
 	{
-		_components.clear();
+		Utils::Debug::LogOutputToWindow("Node Removed\n");
 	}
 
 	// Constructor And Destructor
@@ -127,7 +134,7 @@ namespace Core::BaseComponents
 	{
 		for (auto component : _components)
 		{
-			component->Ready(Containers::WeakPtr<Node>(this->_selfSmartRef));
+			component->Ready(Containers::WeakPtr<Node>(this->_selfWeakRef));
 		}
 	}
 
@@ -178,6 +185,9 @@ namespace Core::BaseComponents
 		{
 			component->Exit();
 		}
+
+		_components.clear();
+		this->_selfWeakRef.ClearWeakRef();
 	}
 
 	size_t Node::GetInstanceId() const
@@ -201,42 +211,31 @@ namespace Core::BaseComponents
 
 	void Node::SetTag(std::string i_tag)
 	{
-		this->_tag = std::move(i_tag);
+		this->_tag = i_tag;
 	}
 
 	// General Data Access
 
 	// Pointer Helpers
 
-	void Node::AddToGlobalList() const
+	void Node::AddToGlobalList()
 	{
-		const Containers::SmartPtr<Node> smartPtrCopy(this->_selfSmartRef);
-		gameObjectUpdater->AddGameObject(smartPtrCopy);
-	}
-
-	Containers::SmartPtr<Node> Node::GetSmartPointerRef() const
-	{
-		Containers::SmartPtr<Node> smartPtrCopy(this->_selfSmartRef);
-		return smartPtrCopy;
+		gameObjectUpdater->AddGameObject(this->_selfWeakRef.Lock());
 	}
 
 	Containers::WeakPtr<Node> Node::GetWeakPointerRef() const
 	{
-		Containers::WeakPtr<Node> weakPtrCopy(this->_selfSmartRef);
-		return weakPtrCopy;
+		return this->_selfWeakRef;
 	}
 
-	void Node::__NotifyCollisionCallback(
-		const Containers::WeakPtr<Components::Physics::Colliders::BaseCollider> i_collider) const
+	std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>, Math::Point2D)>
+	Node::__GetCollisionCallback() const
 	{
-		if (this->_collisionCallback)
-		{
-			this->_collisionCallback(i_collider);
-		}
+		return this->_collisionCallback;
 	}
 
 	void Node::SetCollisionCallback(
-		std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>)> i_function
+		std::function<void(Containers::WeakPtr<Components::Physics::Colliders::BaseCollider>, Math::Point2D)> i_function
 	)
 	{
 		this->_collisionCallback = i_function;

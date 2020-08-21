@@ -4,6 +4,7 @@
 #include "Physics/WorldPhysicsController.h"
 #include "Rendering/SpriteRenderController.h"
 #include "../../Containers/PointerIncludes.cpp"
+#include "../../Utils/Debug.h"
 
 Core::Controllers::GameObjectUpdater* gameObjectUpdater = nullptr;
 
@@ -23,6 +24,7 @@ namespace Core::Controllers
 	{
 		Exit();
 		this->_gameObjects.clear();
+		this->_gameObjectsAddedThisFrame.clear();
 
 		delete this->_spriteRenderController;
 		delete this->_worldPhysicsController;
@@ -39,26 +41,38 @@ namespace Core::Controllers
 	{
 		this->_gameObjectUpdaterLock.lock();
 
-		this->_gameObjects.push_back(i_node);
+		this->_gameObjectsAddedThisFrame.push_back(i_node);
 		i_node->Ready();
 
 		this->_gameObjectUpdaterLock.unlock();
 	}
 
-	void GameObjectUpdater::RemoveGameObject(Containers::SmartPtr<BaseComponents::Node> i_node)
+	void GameObjectUpdater::RemoveGameObject(const Containers::SmartPtr<BaseComponents::Node> i_node)
+	{
+		this->_gameObjectUpdaterLock.lock();
+
+		const Containers::WeakPtr<BaseComponents::Node> weakPtr = Containers::WeakPtr<BaseComponents::Node>(i_node);
+		this->_gameObjectsToBeRemoved.push_back(weakPtr);
+
+		this->_gameObjectUpdaterLock.unlock();
+	}
+
+	void GameObjectUpdater::RemoveGameObjectImmediate(Containers::SmartPtr<BaseComponents::Node> i_node)
 	{
 		this->_gameObjectUpdaterLock.lock();
 
 		size_t instanceId = i_node->GetInstanceId();
-		const auto position = std::find_if(this->_gameObjects.begin(), this->_gameObjects.end(),
+		const auto position = std::find_if(this->_gameObjectsAddedThisFrame.begin(),
+		                                   this->_gameObjectsAddedThisFrame.end(),
 		                                   [&instanceId](Containers::SmartPtr<BaseComponents::Node> gameObject)
 		                                   {
 			                                   return gameObject->GetInstanceId() == instanceId;
 		                                   }
 		);
-		if (position != this->_gameObjects.end())
+		if (position != this->_gameObjectsAddedThisFrame.end())
 		{
-			this->_gameObjects.erase(position);
+			(*position)->Exit();
+			this->_gameObjectsAddedThisFrame.erase(position);
 		}
 
 		this->_gameObjectUpdaterLock.unlock();
@@ -73,9 +87,9 @@ namespace Core::Controllers
 		this->_gameObjectUpdaterLock.lock();
 
 		std::vector<Containers::SmartPtr<BaseComponents::Node>> nodesCopy;
-		nodesCopy.reserve(this->_gameObjects.size());
+		// nodesCopy.reserve(this->_gameObjects.size());
 
-		for (const auto& node : this->_gameObjects)
+		for (const auto node : this->_gameObjects)
 		{
 			Containers::SmartPtr<BaseComponents::Node> smartPtrCopy(node);
 			nodesCopy.push_back(smartPtrCopy);
@@ -150,6 +164,36 @@ namespace Core::Controllers
 
 	void GameObjectUpdater::Process(float i_deltaTime)
 	{
+		for (auto node : this->_gameObjectsToBeRemoved)
+		{
+			size_t instanceId = node.Lock()->GetInstanceId();
+			const auto position = std::find_if(this->_gameObjects.begin(), this->_gameObjects.end(),
+			                                   [&instanceId](Containers::SmartPtr<BaseComponents::Node> gameObject)
+			                                   {
+				                                   return gameObject->GetInstanceId() == instanceId;
+			                                   }
+			);
+
+			if (position != this->_gameObjects.end())
+			{
+				(*position)->Exit();
+				this->_gameObjects.erase(position);
+			}
+		}
+		this->_gameObjectsToBeRemoved.clear();
+
+		for (auto node : this->_gameObjectsAddedThisFrame)
+		{
+			auto collider = node->GetComponent<Components::Physics::Colliders::BaseCollider>();
+			if (collider)
+			{
+				this->_worldCollisionController->AddColliderToWorld(collider.Lock());
+			}
+
+			this->_gameObjects.push_back(node);
+		}
+		this->_gameObjectsAddedThisFrame.clear();
+
 		for (auto node : this->_gameObjects)
 		{
 			node->Process(i_deltaTime);
@@ -176,6 +220,11 @@ namespace Core::Controllers
 		this->_worldCollisionController->Exit();
 
 		for (auto node : this->_gameObjects)
+		{
+			node->Exit();
+		}
+
+		for (auto node : this->_gameObjectsAddedThisFrame)
 		{
 			node->Exit();
 		}

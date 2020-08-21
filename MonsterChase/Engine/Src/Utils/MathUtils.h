@@ -24,7 +24,9 @@ namespace Utils
 		[[nodiscard]] inline static float LerpAngleDeg(float i_fromDegrees, float i_toDegrees, float i_progress);
 
 		[[nodiscard]] inline static size_t GetRoundNextMultiple(size_t i_number, unsigned int i_multiple);
-		[[nodiscard]] inline static float Map(float i_inRangeStart, float i_inRangeEnd, float i_outRangeStart, float i_outRangeEnd, float i_value);
+		[[nodiscard]] inline static float Map(float i_inRangeStart, float i_inRangeEnd, float i_outRangeStart,
+		                                      float i_outRangeEnd, float i_value);
+		[[nodiscard]] inline static float To360Deg(float i_angle);
 
 		[[nodiscard]] inline static bool IsZero(float i_value);
 		[[nodiscard]] inline static bool IsZero(float i_value, float i_tolerance);
@@ -32,7 +34,8 @@ namespace Utils
 
 		[[nodiscard]] inline static bool IsEqual(float i_a, float i_b);
 		[[nodiscard]] inline static bool IsEqual(float i_a, float i_b, float i_tolerance);
-		[[nodiscard]] inline static bool AlmostEqualRelativeAndAbs(float i_a, float i_b, float i_tolerance, float i_relTolerance);
+		[[nodiscard]] inline static bool AlmostEqualRelativeAndAbs(float i_a, float i_b, float i_tolerance,
+		                                                           float i_relTolerance);
 	};
 }
 

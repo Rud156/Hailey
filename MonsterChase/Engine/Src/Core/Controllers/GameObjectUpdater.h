@@ -34,6 +34,8 @@ namespace Core
 		{
 		private:
 			std::vector<Containers::SmartPtr<BaseComponents::Node>> _gameObjects;
+			std::vector<Containers::SmartPtr<BaseComponents::Node>> _gameObjectsAddedThisFrame;
+			std::vector<Containers::WeakPtr<BaseComponents::Node>> _gameObjectsToBeRemoved;
 			Rendering::SpriteRenderController* _spriteRenderController;
 			Physics::WorldPhysicsController* _worldPhysicsController;
 			Physics::WorldCollisionController* _worldCollisionController;
@@ -48,6 +50,7 @@ namespace Core
 			// GameObject Array Modification
 			void AddGameObject(Containers::SmartPtr<BaseComponents::Node> i_node);
 			void RemoveGameObject(Containers::SmartPtr<BaseComponents::Node> i_node);
+			void RemoveGameObjectImmediate(Containers::SmartPtr<BaseComponents::Node> i_node);
 
 			// Data Access
 			[[nodiscard]] std::vector<Containers::SmartPtr<BaseComponents::Node>> GetAllGameObjects();

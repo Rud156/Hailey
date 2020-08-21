@@ -1,8 +1,8 @@
 #include "RectangleCollider.h"
+#include "../../../../Containers/PointerIncludes.cpp"
 #include "../../../../Maths/Point2D.h"
 #include "../../../Components/Rendering/SpriteRenderer.h"
 #include "../../../Components/Transform/Scale2D.h"
-#include "../../../../Containers/PointerIncludes.cpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -42,8 +42,8 @@ namespace Core::Components::Physics::Colliders
 
 		if (renderer)
 		{
-			const auto sprite = renderer.Lock()->GetSprite();
-			const auto texture = sprite->getTexture();
+			auto* const sprite = renderer.Lock()->GetSprite();
+			const auto* const texture = sprite->getTexture();
 			const auto textureSize = texture->getSize();
 			auto x = static_cast<float>(textureSize.x);
 			auto y = static_cast<float>(textureSize.y);

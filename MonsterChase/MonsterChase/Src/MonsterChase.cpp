@@ -71,19 +71,19 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 		RegisterClass(&windowClass);
 
 		// Let's create the main window
-		const auto mainWindow = CreateWindow(TEXT("SFML App"), TEXT("SFML Win32"), WS_SYSMENU | WS_VISIBLE, 200, 200,
-		                                     600, 800, NULL, NULL, instance, NULL);
+		auto* const mainWindow = CreateWindow(TEXT("SFML App"), TEXT("SFML Win32"), WS_SYSMENU | WS_VISIBLE, 200, 200,
+		                                      600, 800, NULL, NULL, instance, NULL);
 
 		sf::ContextSettings settings;
 		settings.antialiasingLevel = 8;
 
-		auto engine = new Engine::Engine();
-		auto window = new sf::RenderWindow(mainWindow, settings);
+		auto* engine = new Engine::Engine();
+		auto* window = new sf::RenderWindow(mainWindow, settings);
 		engine->Init(window);
 
 		Utils::Random::SetSeed(static_cast<unsigned int>(time(nullptr)));
 
-		auto gameMain = new Game::GameMain();
+		Game::GameMain* gameMain = new Game::GameMain();
 		gameMain->Init();
 
 		// Loop until a WM_QUIT message is received
@@ -102,17 +102,26 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 				sf::Event event{};
 				while (window->pollEvent(event))
 				{
+					if (event.type == sf::Event::MouseButtonPressed)
+					{
+						if (event.mouseButton.button == sf::Mouse::Left)
+						{
+							gameMain->LMBClicked(window);
+						}
+					}
 				}
 
 				window->clear();
 
 				gameMain->Update();
+				gameMain->Render(window);
 				engine->Run();
 
 				window->display();
 			}
 		}
 
+		gameMain->Destroy();
 		delete gameMain;
 
 		window->close();

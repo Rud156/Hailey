@@ -34,5 +34,6 @@ namespace Containers
 		unsigned long WeakCount();
 		bool Expired();
 		SmartPtr<T> Lock();
+		void ClearWeakRef();
 	};
 }

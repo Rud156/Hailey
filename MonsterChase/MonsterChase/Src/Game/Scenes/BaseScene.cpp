@@ -10,7 +10,16 @@ namespace Game::Scenes
 	{
 	}
 
-	void BaseScene::Update(float)
+	bool BaseScene::Update(float)
+	{
+		return false;
+	}
+
+	void BaseScene::Render(sf::RenderWindow*)
+	{
+	}
+
+	void BaseScene::LMBClicked(sf::RenderWindow*)
 	{
 	}
 

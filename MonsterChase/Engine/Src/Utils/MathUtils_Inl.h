@@ -64,9 +64,28 @@ namespace Utils
 		return i_number + i_multiple - remainder;
 	}
 
-	float MathUtils::Map(const float i_inRangeStart, const float i_inRangeEnd, const float i_outRangeStart, const float i_outRangeEnd, const float i_value)
+	float MathUtils::Map(const float i_inRangeStart, const float i_inRangeEnd, const float i_outRangeStart,
+	                     const float i_outRangeEnd, const float i_value)
 	{
-		return i_outRangeStart + (i_value - i_inRangeStart) * (i_outRangeEnd - i_outRangeStart) / (i_inRangeEnd - i_inRangeStart);
+		return i_outRangeStart + (i_value - i_inRangeStart) *
+			(i_outRangeEnd - i_outRangeStart) / (i_inRangeEnd - i_inRangeStart);
+	}
+
+	float MathUtils::To360Deg(const float i_angle)
+	{
+		float angle = i_angle;
+
+		while (angle < 0.0f)
+		{
+			angle += 360.0f;
+		}
+		while (angle >= 360.0f)
+		{
+			angle -= 360.0f;
+		}
+		
+
+		return angle;
 	}
 
 	bool MathUtils::IsZero(const float i_value)

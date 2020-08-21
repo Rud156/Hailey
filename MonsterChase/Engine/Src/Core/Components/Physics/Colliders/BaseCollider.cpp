@@ -1,10 +1,10 @@
 #include "BaseCollider.h"
 #include "../../../../Containers/PointerIncludes.cpp"
-#include "../../../../Maths/Point2D.h"
 #include "../../../../Containers/WeakPtr.h"
+#include "../../../../Maths/Point2D.h"
+#include "../../../../Utils/Debug.h"
 #include "../../../../Utils/Uuid.h"
 #include "../../../Controllers/Physics/WorldCollisionController_Extern.h"
-#include "../../../../Utils/Debug.h"
 
 #include <cassert>
 
@@ -16,6 +16,10 @@ namespace Core::Components::Physics::Colliders
 		this->_center = new Math::Point2D();
 		this->_offset = new Math::Point2D();
 		this->_colliderType = ColliderType::None;
+
+		this->_groupIndex = 0;
+		this->_categoryBits = 0x0001;
+		this->_maskBits = 0xFFFF;
 	}
 
 	BaseCollider::~BaseCollider()
@@ -76,14 +80,14 @@ namespace Core::Components::Physics::Colliders
 		return this->_rotate2d->GetAngle();
 	}
 
-	Math::Point2D* BaseCollider::GetColliderCenter() const
+	Math::Point2D BaseCollider::GetColliderCenter() const
 	{
-		return this->_center;
+		return *this->_center;
 	}
 
-	Math::Point2D* BaseCollider::GetColliderOffset() const
+	Math::Point2D BaseCollider::GetColliderOffset() const
 	{
-		return this->_offset;
+		return *this->_offset;
 	}
 
 	Math::Point2D BaseCollider::GetColliderExtents()
@@ -107,10 +111,38 @@ namespace Core::Components::Physics::Colliders
 		this->_center->set(position->X() + i_point2d.X(), position->Y() + i_point2d.Y());
 	}
 
-	void BaseCollider::AddToWorld()
+#pragma endregion
+
+#pragma region Category, Mask And Group
+
+	short BaseCollider::GetGroupIndex() const
 	{
-		const Containers::SmartPtr<BaseCollider> smartRef = this->_node.Lock()->GetComponent<BaseCollider>().Lock();
-		worldCollisionController->AddColliderToWorld(smartRef);
+		return this->_groupIndex;
+	}
+
+	void BaseCollider::SetGroupIndex(const __int16 i_groupIndex)
+	{
+		this->_groupIndex = i_groupIndex;
+	}
+
+	uint16_t BaseCollider::GetCategoryBits() const
+	{
+		return this->_categoryBits;
+	}
+
+	void BaseCollider::SetCategoryBits(const uint16_t i_categoryBits)
+	{
+		this->_categoryBits = i_categoryBits;
+	}
+
+	uint16_t BaseCollider::GetMaskBits() const
+	{
+		return this->_maskBits;
+	}
+
+	void BaseCollider::SetMaskBits(const uint16_t i_maskBits)
+	{
+		this->_maskBits = i_maskBits;
 	}
 
 #pragma endregion
