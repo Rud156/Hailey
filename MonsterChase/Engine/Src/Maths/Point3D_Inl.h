@@ -202,7 +202,7 @@ namespace Math
 	{
 		const auto x = i_point3d_1._y * i_point3d_2._z - i_point3d_1._z * i_point3d_2._y;
 		const auto y = i_point3d_1._z * i_point3d_2._x - i_point3d_1._x * i_point3d_2._z;
-		const auto z = i_point3d_1._x * i_point3d_2._y + i_point3d_1._y * i_point3d_2._x;
+		const auto z = i_point3d_1._x * i_point3d_2._y - i_point3d_1._y * i_point3d_2._x;
 
 		return Point3D(x, y, z);
 	}
