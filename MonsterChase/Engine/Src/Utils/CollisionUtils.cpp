@@ -52,7 +52,7 @@ namespace Utils
 
 		if (isLeftNormal)
 		{
-			normal.setX(-(i_y2 - i_y1));
+			normal.setY(-(i_y2 - i_y1));
 			normal.setX(i_x2 - i_x1);
 		}
 		else
