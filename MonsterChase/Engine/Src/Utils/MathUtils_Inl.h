@@ -33,7 +33,7 @@ namespace Utils
 
 	float MathUtils::Lerp(const float i_fromValue, const float i_toValue, const float i_progress)
 	{
-		return i_fromValue + (i_fromValue - i_toValue) * i_progress;
+		return i_fromValue + (i_toValue - i_fromValue) * i_progress;
 	}
 
 	float MathUtils::LerpAngle(const float i_fromRadians, const float i_toRadians, const float i_progress)
